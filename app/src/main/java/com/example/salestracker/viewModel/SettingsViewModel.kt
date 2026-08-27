@@ -3,7 +3,7 @@ package com.example.salestracker.viewModel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.salestracker.data.model.ProductItem
+import com.example.salestracker.data.model.Product
 import com.example.salestracker.data.repository.ProductRepository
 import com.example.salestracker.ui.screens.settings.SETTAG
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,7 +38,7 @@ class SettingsViewModel @Inject constructor(
     val settingsUIState = _settingsUIState.asStateFlow()
 
     // This replaces your manual _settingsUIState for the list
-    val productsList: StateFlow<List<ProductItem>> = repository.productsList
+    val productsList: StateFlow<List<Product>> = repository.productsList
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),  // keeps flowing while screen subscribed (stops 5s after unsubscribed)
@@ -61,7 +61,7 @@ class SettingsViewModel @Inject constructor(
 
     //Drawer sheet UI functions
 
-    fun addEditProduct(product: ProductItem? = null) {
+    fun addEditProduct(product: Product? = null) {
         _showAddProductSheet.value = true
 
         if (product == null) {
@@ -110,7 +110,7 @@ class SettingsViewModel @Inject constructor(
         if (userMessage == null) {
             _showAddProductSheet.value = false
             saveProduct(
-                ProductItem(
+                Product(
                     id = currentProductID ?: UUID.randomUUID().toString(),
                     name = _settingsUIState.value.productName,
                     defaultPrice = _settingsUIState.value.productPrice.toDoubleOrNull() ?: 0.0,
@@ -172,10 +172,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun saveProduct(productItem: ProductItem) {
-        Log.d(SETTAG, "save product called with product ${productItem.name}")
+    private fun saveProduct(product: Product) {
+        Log.d(SETTAG, "save product called with product ${product.name}")
         viewModelScope.launch {
-            repository.upsertProductItem(productItem)
+            repository.upsertProductItem(product)
         }
     }
 

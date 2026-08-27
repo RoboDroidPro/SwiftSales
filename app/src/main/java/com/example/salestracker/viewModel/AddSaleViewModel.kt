@@ -6,12 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.salestracker.Sale
 import com.example.salestracker.SaleRepository
-import com.example.salestracker.data.model.ProductItem
-import com.example.salestracker.data.model.ProductSale
+import com.example.salestracker.data.model.Product
+import com.example.salestracker.data.model.SaleItem
+import com.example.salestracker.data.model.SaleWithItems
 import com.example.salestracker.data.repository.ProductRepository
 import com.example.salestracker.ui.navigation.ADD_RESULT_OK
-import com.example.salestracker.ui.navigation.EDIT_RESULT_OK
-import com.example.salestracker.ui.navigation.SaleDestinationsArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,9 +27,9 @@ import javax.inject.Inject
 
 private const val TAG = "ArduinoAESVM"
 
-data class AddEditState(
+data class AddSaleUIState(
     val buyer: String = "",
-    val selectedProduct: ProductItem? = null,
+    val selectedProduct: Product? = null,
     val quantity: Int? = 0,
     val totalSalePrice: String = "",
     val notes: String = "",
@@ -39,16 +38,16 @@ data class AddEditState(
 )
 
 @HiltViewModel
-class AddEditSaleVM @Inject constructor(
+class AddSaleViewModel @Inject constructor(
     private val saleRepository: SaleRepository,
     private val productRepository: ProductRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val saleId: String? = savedStateHandle[SaleDestinationsArgs.SALE_ID_ARG]
+//    private val saleId: String? = savedStateHandle[SaleDestinationsArgs.SALE_ID_ARG]
 
-    private val _addEditState = MutableStateFlow(AddEditState())
-    val uiState: StateFlow<AddEditState> = _addEditState.asStateFlow()
+    private val _addSaleUIState = MutableStateFlow(AddSaleUIState())
+    val uiState: StateFlow<AddSaleUIState> = _addSaleUIState.asStateFlow()
 
     /**
      * variable to share a flow of events of the AddEditScreen. AddEditScreen listens to this flow
@@ -66,44 +65,16 @@ class AddEditSaleVM @Inject constructor(
         initialValue = emptyList()                      // shown immediately before DB loads
     )
 
-    init {
-//        viewModelScope.launch {
-//            _productList = saleRepository.getProductList()
-//        }
-
-        if (saleId != null) {
-            //call the loadSale
-            viewModelScope.launch {
-                displaySale(saleRepository.getSaleById(saleId))
-            }
-        }
-    }
-
-    private fun displaySale(productSale: ProductSale?) {
-        if (productSale != null) {
-            _addEditState.update { currentState ->
-                currentState.copy(
-                    buyer = productSale.sale.buyer,
-                    selectedProduct = productSale.product,
-                    quantity = productSale.sale.quantity,
-                    totalSalePrice = productSale.sale.totalSalePrice.toString(),
-                    notes = productSale.sale.saleNotes ?: "",
-                    date = productSale.sale.date
-                )
-            }
-        }
-    }
-
     fun buyerChanged(newValue: String) {
-        _addEditState.update { currentState ->
+        _addSaleUIState.update { currentState ->
             currentState.copy(
                 buyer = newValue
             )
         }
     }
 
-    fun selectedProductChanged(newProduct: ProductItem) {
-        _addEditState.update { currentState ->
+    fun selectedProductChanged(newProduct: Product) {
+        _addSaleUIState.update { currentState ->
             currentState.copy(
                 selectedProduct = newProduct,
                 totalSalePrice = calculatePrice(productPrice = newProduct.defaultPrice)
@@ -112,7 +83,7 @@ class AddEditSaleVM @Inject constructor(
     }
 
     fun quantityChanged(newQuantity: Int?) {
-        _addEditState.update { currentState ->
+        _addSaleUIState.update { currentState ->
             currentState.copy(
                 quantity = newQuantity,
                 totalSalePrice = calculatePrice(quantity = newQuantity ?: 0)
@@ -122,7 +93,7 @@ class AddEditSaleVM @Inject constructor(
     }
 
     fun totalSalePriceChanged(newSalePrice: String) {
-        _addEditState.update { currentState ->
+        _addSaleUIState.update { currentState ->
             currentState.copy(
                 totalSalePrice = newSalePrice
             )
@@ -130,7 +101,7 @@ class AddEditSaleVM @Inject constructor(
     }
 
     fun notesChanged(newNotesValue: String) {
-        _addEditState.update { currentState ->
+        _addSaleUIState.update { currentState ->
             currentState.copy(
                 notes = newNotesValue
             )
@@ -143,13 +114,6 @@ class AddEditSaleVM @Inject constructor(
 
         return if (price != 0.0) price.toString() else ""
     }
-
-//    val testNullProductItem = ProductItem(
-//        name = "ERROR",
-//        defaultPrice = 0.0,
-//        notes = "This is an error. Debugging needed",
-//        orderIndex = 1
-//    )
 
     /*fun changeDate() {
         //Todo this is called when the user clicks the "date" field in addEdit
@@ -171,24 +135,30 @@ class AddEditSaleVM @Inject constructor(
         }
 
         if (userMessage != null) {
-            _addEditState.update { currentState ->
+            _addSaleUIState.update { currentState ->
                 currentState.copy(
                     userMessage = userMessage
                 )
             }
         } else {
             viewModelScope.launch {
-                Log.d(TAG , "sale id is: $saleId")
-                saleRepository.upsertSale(
-                    Sale( //todo we need to somehow get the productId for product field
-                        id = saleId ?: UUID.randomUUID().toString(), //generate the id here so it is not optional.
-                        date = _addEditState.value.date, //todo these should perhaps be uiState.value instead
-//                        product = _addEditState.value.selectedProduct!!,
-                        productId = _addEditState.value.selectedProduct!!.id,
-                        buyer = _addEditState.value.buyer,
-                        quantity = _addEditState.value.quantity ?: 0,
-                        totalSalePrice = priceStr.toDouble(),
-                        saleNotes = _addEditState.value.notes
+                val saleId = UUID.randomUUID().toString()
+                saleRepository.upsertSaleWithItems(
+                    SaleWithItems(
+                        sale = Sale( //todo we need to somehow get the productId for product field
+                            id = saleId, //generate the id here so it is not optional.
+                            date = _addSaleUIState.value.date, //todo these should perhaps be uiState.value instead
+                            buyer = _addSaleUIState.value.buyer,
+                            totalSalePrice = priceStr.toDouble(),
+                            saleNotes = _addSaleUIState.value.notes
+                        ),
+                        saleItem = SaleItem(
+                            id = UUID.randomUUID().toString(),
+                            saleId = saleId, //todo might need some work yet
+                            productName = _addSaleUIState.value.selectedProduct!!.name,
+                            productPrice = _addSaleUIState.value.selectedProduct!!.defaultPrice,
+                            quantity = _addSaleUIState.value.quantity ?: 1
+                        )
                     )
                 )
                 /**
@@ -196,12 +166,12 @@ class AddEditSaleVM @Inject constructor(
                  * displayed, follow the numbers #1.
                  * This is number #1. Next is in [_addEditEvents]
                  */
-                _addEditEvents.emit(  //emits a event into the flow for AddEditSale to collect
+                _addEditEvents.emit(  //emits an event into the flow for AddEditSale to collect
                     UIEvent.NavigateBack(
-                        resultCode = if (saleId == null) ADD_RESULT_OK else EDIT_RESULT_OK //passing the success of the save. Edit, or add
+                        resultCode = ADD_RESULT_OK
                     )
                 )
-                Log.d(TAG, "addEditEvents.emitted result: ${if (saleId == null) ADD_RESULT_OK else EDIT_RESULT_OK}")
+                Log.d(TAG, "addEditEvents.emitted result: $ADD_RESULT_OK")
             }
         }
     }

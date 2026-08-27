@@ -38,7 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.salestracker.ui.components.ProductDropdown
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
-import com.example.salestracker.viewModel.AddEditSaleVM
+import com.example.salestracker.viewModel.AddSaleViewModel
 import com.example.salestracker.viewModel.UIEvent
 
 private const val TAG = "ArduinoAESS"
@@ -48,7 +48,7 @@ private const val TAG = "ArduinoAESS"
 fun AddEditSaleScreen(
     modifier: Modifier = Modifier,
     onNavigateToAllSales: (String) -> Unit, //accepts a success code string
-    viewModel: AddEditSaleVM = hiltViewModel(),
+    viewModel: AddSaleViewModel = hiltViewModel(),
     snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onBackClicked: () -> Unit,
     screenTitle: String = "Add Edit Sale"
@@ -71,7 +71,7 @@ fun AddEditSaleScreen(
                     Log.d(TAG, "addEditEvent is show snackbar '${context.getString(event.messageRes)}'")
                 }
                 /**
-                 * This below contains the navigateBack event sent from [AddEditSaleVM.saveSale]
+                 * This below contains the navigateBack event sent from [AddSaleViewModel.saveSale]
                  * Here we pass the result sent by saveSale as a param to the lambda param
                  * [onNavigateToAllSales],calling step 4# at [com.example.salestracker.ui.navigation.SaleNavGraph]
                  * in the AddEditSaleScreen call in the composable{} block
@@ -118,7 +118,7 @@ fun AddEditSaleScreen(
 @Composable
 fun AddEditSale(
     modifier: Modifier = Modifier,
-    viewModel: AddEditSaleVM,
+    viewModel: AddSaleViewModel,
     onNavigateToAllSales: () -> Unit
 ) {
     val addEditUIState by viewModel.uiState.collectAsStateWithLifecycle()

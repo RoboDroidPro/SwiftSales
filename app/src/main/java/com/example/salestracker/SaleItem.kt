@@ -19,12 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.salestracker.data.model.ProductSale
+import com.example.salestracker.data.model.SaleWithItems
 
 @Composable
 fun SaleItem(
     modifier: Modifier = Modifier,
-    productSale: ProductSale,
+    saleWithItems: SaleWithItems,
     onClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
@@ -52,21 +52,21 @@ fun SaleItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = productSale.sale.buyer,
+                    text = saleWithItems.sale.buyer,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.W500,
                     modifier = Modifier
                 )
                 Spacer(Modifier.width(40.dp))
                 Text(
-                    text = productSale.sale.date,
+                    text = saleWithItems.sale.date,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                 )
             }
             Text(
-                text = productSale.product.name,
+                text = saleWithItems.product.name,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold,
                 modifier = Modifier.padding(start = 4.dp, end = 12.dp)
@@ -76,18 +76,18 @@ fun SaleItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = productSale.sale.quantity.toString(),
+                    text = saleWithItems.sale.quantity.toString(),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "Total: $${productSale.sale.totalSalePrice}",
+                    text = "Total: $${saleWithItems.sale.totalSalePrice}",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
             }
             Text(
-                text = productSale.sale.saleNotes ?: "No Sale Notes",
+                text = saleWithItems.sale.saleNotes ?: "No Sale Notes",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.W900
             )

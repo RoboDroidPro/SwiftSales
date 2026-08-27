@@ -5,10 +5,10 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.salestracker.data.database.ProductDao
-import com.example.salestracker.data.model.ProductItem
+import com.example.salestracker.data.model.Product
 
 @Database(
-    entities = [Sale::class, ProductItem::class],
+    entities = [Sale::class, Product::class],
     version = 2,
     exportSchema = false
 )

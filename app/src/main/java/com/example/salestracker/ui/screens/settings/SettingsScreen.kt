@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.salestracker.data.model.ProductItem
+import com.example.salestracker.data.model.Product
 import com.example.salestracker.ui.components.DeleteDialog
 import com.example.salestracker.ui.components.SalesAppBar
 import com.example.salestracker.viewModel.SettingsViewModel
@@ -194,7 +194,7 @@ fun Settings(
 
 @Composable
 fun ProductCard(
-    product: ProductItem,
+    product: Product,
     onClick: () -> Unit
 ) {
     Card(

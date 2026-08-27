@@ -15,14 +15,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.example.salestracker.data.model.ProductItem
+import com.example.salestracker.data.model.Product
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDropdown(
     selectedProduct: String,
-    selectedProductChanged: (ProductItem) -> Unit,
-    productOptions: List<ProductItem>
+    selectedProductChanged: (Product) -> Unit,
+    productOptions: List<Product>
 ) {
     var expanded by remember { mutableStateOf(false) }
 

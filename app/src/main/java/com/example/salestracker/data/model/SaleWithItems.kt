@@ -4,11 +4,11 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.example.salestracker.Sale
 
-data class ProductSale(
+data class SaleWithItems( // Joins a sale with all the items that were sold in it
     @Embedded val sale: Sale,
     @Relation(
-        parentColumn = "productId",
-        entityColumn = "id"
+        parentColumn = "id",
+        entityColumn = "saleId"
     )
-    val product: ProductItem
+    val saleItem: SaleItem
 )

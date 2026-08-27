@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.salestracker.Sale
 import com.example.salestracker.SaleRepository
-import com.example.salestracker.data.model.ProductSale
+import com.example.salestracker.data.model.SaleWithItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,8 +41,8 @@ private const val TAG = "ArduinoASVM"
  * and thus does not recompose.
  */
 data class SalesUIState(
-    val allProductSales: List<ProductSale> = emptyList(),
-    val selectedSales: List<ProductSale> = emptyList(),
+    val allSaleWithItems: List<com.example.salestracker.data.model.SaleWithItems> = emptyList(),
+    val selectedSaleWithItems: List<com.example.salestracker.data.model.SaleWithItems> = emptyList(),
     val confirmDeletionValue: Boolean = false,
 )
 
@@ -55,7 +55,7 @@ class AllSalesViewModel @Inject constructor(
     val salesUIState = _salesUIState.asStateFlow()
 
     // AllSalesViewModel Todo this is better than init{} system currently running
-    val salesWithProducts = saleRepo.allProductSales.stateIn(
+    val salesWithProducts = saleRepo.allSales.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),  // keeps flowing while screen subscribed (stops 5s after unsubscribed)
         initialValue = emptyList()                      // shown immediately before DB loads
@@ -68,8 +68,8 @@ class AllSalesViewModel @Inject constructor(
     // listens to the allSales flow of list of sales
     private fun observeSales() {
         viewModelScope.launch {
-            saleRepo.allProductSales.collect { sales ->
-                _salesUIState.update { it.copy(allProductSales = sales) } //Todo expecting ProductSale, gets Sale
+            saleRepo.allSales.collect { sales ->
+                _salesUIState.update { it.copy(allSaleWithItems = sales) } //Todo expecting ProductSale, gets Sale
             }
         }
     }
@@ -78,22 +78,22 @@ class AllSalesViewModel @Inject constructor(
     private fun deselect() {
         _salesUIState.update { currentState ->
             currentState.copy(
-                selectedSales = emptyList(),
+                selectedSaleWithItems = emptyList(),
                 confirmDeletionValue = false
             )
         }
     }
 
     // toggles the selection of the sale provided in the param
-    fun toggleSelection(sale: ProductSale) {
+    fun toggleSelection(saleWithItems: com.example.salestracker.data.model.SaleWithItems) {
         _salesUIState.update { uIState -> //update the salesUIState, making its users get recomposed
             val newSelectedList =
-                if (sale in uIState.selectedSales)
-                    uIState.selectedSales - sale
+                if (saleWithItems in uIState.selectedSaleWithItems)
+                    uIState.selectedSaleWithItems - saleWithItems
                 else
-                    uIState.selectedSales + sale
+                    uIState.selectedSaleWithItems + saleWithItems
 
-            uIState.copy(selectedSales = newSelectedList) //copy the old instance of salesUIState,
+            uIState.copy(selectedSaleWithItems = newSelectedList) //copy the old instance of salesUIState,
             // only changing the "selected sales" field
         }
     }
@@ -123,7 +123,7 @@ class AllSalesViewModel @Inject constructor(
     // called when the deletion of selected sales is confirmed ("Confirm Deletion" button clicked)
     fun deleteSelectedSales() {
         viewModelScope.launch {
-            saleRepo.deleteSales(salesUIState.value.selectedSales.toSaleList())
+            saleRepo.deleteSales(salesUIState.value.selectedSaleWithItems.toSaleList())
             deselect()
         }
     }
@@ -133,10 +133,10 @@ class AllSalesViewModel @Inject constructor(
         deselect()
     }
 
-    fun selectAll(sales: List<ProductSale>) {
+    fun selectAll(saleWithItems: List<com.example.salestracker.data.model.SaleWithItems>) {
         _salesUIState.update { currentState ->
             currentState.copy(
-                selectedSales = sales
+                selectedSaleWithItems = saleWithItems
             )
         }
     }
@@ -155,7 +155,7 @@ class AllSalesViewModel @Inject constructor(
 }
 
 
-fun ProductSale.toSale() =
+fun com.example.salestracker.data.model.SaleWithItems.toSale() =
     Sale(
         id = sale.id,
         date = sale.date,
@@ -166,8 +166,8 @@ fun ProductSale.toSale() =
         saleNotes = sale.saleNotes
     )
 
-fun List<ProductSale>.toSaleList() =
-    map(ProductSale::toSale)
+fun List<com.example.salestracker.data.model.SaleWithItems>.toSaleList() =
+    map(SaleWithItems::toSale)
 
 /*
 viewModelScope.launch {// Observe navigation results here!
