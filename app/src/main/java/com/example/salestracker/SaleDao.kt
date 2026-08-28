@@ -7,7 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
 import com.example.salestracker.data.model.SaleItem
-import com.example.salestracker.data.model.SaleWithItems
+import com.example.salestracker.data.model.SaleEventWithItems
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -37,10 +37,10 @@ interface SaleDao {
     //----------------
     @Transaction
     @Query("SELECT * FROM sales ORDER BY date DESC")
-    fun getAllSalesWithProducts(): Flow<List<SaleWithItems>>
+    fun getAllSalesWithProducts(): Flow<List<SaleEventWithItems>>
 
     @Transaction
     @Query("SELECT * FROM sales WHERE id = :id")
-    suspend fun getSaleWithItems(id: String): SaleWithItems?
+    suspend fun getSaleWithItems(id: String): SaleEventWithItems?
     //----------------
 }

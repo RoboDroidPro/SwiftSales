@@ -35,7 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.salestracker.SalesListItem
-import com.example.salestracker.data.model.SaleWithItems
+import com.example.salestracker.data.model.SaleEventWithItems
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
 import com.example.salestracker.ui.navigation.SNACKBAR_MSG_KEY
@@ -47,7 +47,7 @@ private const val TAG = "ArduinoASS"
 @Composable
 fun AllSalesScreen(
     modifier: Modifier = Modifier,
-    onAddEditSale: (SaleWithItems?) -> Unit,
+    onAddEditSale: (SaleEventWithItems?) -> Unit,
     onMenuClick: () -> Unit,
     snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
     viewModel: AllSalesViewModel = hiltViewModel(),
@@ -117,11 +117,11 @@ fun AllSalesScreen(
 fun AllSales(
     modifier: Modifier = Modifier,
     viewModel: AllSalesViewModel,
-    onAddEditSale: (SaleWithItems?) -> Unit,
+    onAddEditSale: (SaleEventWithItems?) -> Unit,
 ) {
     val salesUIState by viewModel.salesUIState.collectAsStateWithLifecycle()
 
-    BackHandler(enabled = salesUIState.selectedSaleWithItems.isNotEmpty()) {
+    BackHandler(enabled = salesUIState.selectedSaleEventWithItems.isNotEmpty()) {
         viewModel.clearSelection()
     }
 
@@ -134,8 +134,8 @@ fun AllSales(
                 .weight(1f)
 
         ) {
-            items(salesUIState.allSaleWithItems) { productSale ->
-                val isSelected = salesUIState.selectedSaleWithItems.contains(productSale)
+            items(salesUIState.allSaleEventWithItems) { productSale ->
+                val isSelected = salesUIState.selectedSaleEventWithItems.contains(productSale)
 
                 Box(
                     modifier = Modifier.background(
@@ -145,8 +145,8 @@ fun AllSales(
                 ) {
                     SalesListItem(
                         modifier = Modifier,
-                        saleWithItems = productSale,
-                        onClick = { if (salesUIState.selectedSaleWithItems.isNotEmpty()) {
+                        saleEventWithItems = productSale,
+                        onClick = { if (salesUIState.selectedSaleEventWithItems.isNotEmpty()) {
                             viewModel.toggleSelection(productSale)
                         }
                         else onAddEditSale(productSale) },
@@ -157,14 +157,14 @@ fun AllSales(
         }
 
 
-        if (salesUIState.selectedSaleWithItems.isNotEmpty()) {
+        if (salesUIState.selectedSaleEventWithItems.isNotEmpty()) {
 
-            if (salesUIState.selectedSaleWithItems.size < salesUIState.allSaleWithItems.size) {
+            if (salesUIState.selectedSaleEventWithItems.size < salesUIState.allSaleEventWithItems.size) {
                 Button(
-                    onClick = { viewModel.selectAll(salesUIState.allSaleWithItems) },
+                    onClick = { viewModel.selectAll(salesUIState.allSaleEventWithItems) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Select All (${salesUIState.allSaleWithItems.size})")
+                    Text("Select All (${salesUIState.allSaleEventWithItems.size})")
                 }
                 Spacer(Modifier.height(8.dp))
             }
@@ -174,7 +174,7 @@ fun AllSales(
                     onClick = { viewModel.askForDeleteConfirmation() }, //Todo all viewModelConfirmDeletion calls should be replaced with uiState.confirmDeletion
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Delete selected (${salesUIState.selectedSaleWithItems.size})")
+                    Text("Delete selected (${salesUIState.selectedSaleEventWithItems.size})")
                 }
             } else {
                 Button(
@@ -182,7 +182,7 @@ fun AllSales(
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Confirm Deletion (${salesUIState.selectedSaleWithItems.size})")
+                    Text("Confirm Deletion (${salesUIState.selectedSaleEventWithItems.size})")
                 }
 
                 Spacer(Modifier.height(8.dp))

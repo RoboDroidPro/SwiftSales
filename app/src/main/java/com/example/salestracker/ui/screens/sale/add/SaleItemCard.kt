@@ -29,7 +29,8 @@ fun SaleItemCard(
     itemState: SaleItemState,
     productOptions: List<Product>,
     onAction: (AddSaleAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    cardNumber: Int = 0
 ) {
     Card(
         modifier = modifier
@@ -51,7 +52,7 @@ fun SaleItemCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Item Details",
+                    text = "Item $cardNumber Details",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -66,7 +67,7 @@ fun SaleItemCard(
 
             // Product Selection
             ProductDropdown(
-                selectedProduct = itemState.productName,
+                selectedProduct = itemState.product.name,
                 productOptions = productOptions,
                 selectedProductChanged = { product ->
                     onAction(
@@ -84,7 +85,7 @@ fun SaleItemCard(
             ) {
                 // Price Field
                 OutlinedTextField(
-                    value = if (itemState.productPrice == 0.0) "" else itemState.productPrice.toString(),
+                    value = if (itemState.salePrice == 0.0) "" else itemState.salePrice.toString(),
                     onValueChange = { newPrice ->
                         onAction(
                             AddSaleAction.SaleEntryAction(
@@ -102,7 +103,7 @@ fun SaleItemCard(
 
                 // Quantity Field
                 OutlinedTextField(
-                    value = if (itemState.quantity == 0) "" else itemState.quantity.toString(),
+                    value = if (itemState.quantity == null) "" else itemState.quantity.toString(),
                     onValueChange = { newQty ->
                         onAction(
                             AddSaleAction.SaleEntryAction(

@@ -105,7 +105,10 @@ class AddSaleViewModel @Inject constructor(
                 if (saleItemState.saleItemId == itemId) {
                     when (action) {
                         is SaleItemAction.ProductChanged -> saleItemState.copy(product = action.newProduct)
-                        is SaleItemAction.QuantityChanged -> saleItemState.copy(quantity = action.newQuantity.toInt())
+                        is SaleItemAction.ProductPriceChanged -> saleItemState.copy(salePrice = action.newPrice.toDoubleOrNull()?: 0.0)
+                        is SaleItemAction.QuantityChanged -> saleItemState.copy(
+                            quantity = action.newQuantity.toIntOrNull()
+                        )
                     }
                 } else saleItemState
             })
@@ -187,7 +190,8 @@ class AddSaleViewModel @Inject constructor(
                         id = UUID.randomUUID().toString(),
                         saleId = saleId,
                         productId = itemState.product.id,
-                        quantity = itemState.quantity
+                        salePrice = itemState.salePrice,
+                        quantity = itemState.quantity ?: 0
                     )
                 }
 

@@ -39,8 +39,8 @@ private const val TAG = "ArduinoASVM"
  * and thus does not recompose.
  */
 data class SalesUIState(
-    val allSaleWithItems: List<com.example.salestracker.data.model.SaleWithItems> = emptyList(),
-    val selectedSaleWithItems: List<com.example.salestracker.data.model.SaleWithItems> = emptyList(),
+    val allSaleEventWithItems: List<com.example.salestracker.data.model.SaleEventWithItems> = emptyList(),
+    val selectedSaleEventWithItems: List<com.example.salestracker.data.model.SaleEventWithItems> = emptyList(),
     val confirmDeletionValue: Boolean = false,
 )
 
@@ -67,7 +67,7 @@ class AllSalesViewModel @Inject constructor(
     private fun observeSales() {
         viewModelScope.launch {
             saleRepo.allSales.collect { sales ->
-                _salesUIState.update { it.copy(allSaleWithItems = sales) } //Todo expecting ProductSale, gets Sale
+                _salesUIState.update { it.copy(allSaleEventWithItems = sales) } //Todo expecting ProductSale, gets Sale
             }
         }
     }
@@ -76,22 +76,22 @@ class AllSalesViewModel @Inject constructor(
     private fun deselect() {
         _salesUIState.update { currentState ->
             currentState.copy(
-                selectedSaleWithItems = emptyList(),
+                selectedSaleEventWithItems = emptyList(),
                 confirmDeletionValue = false
             )
         }
     }
 
     // toggles the selection of the sale provided in the param
-    fun toggleSelection(saleWithItems: com.example.salestracker.data.model.SaleWithItems) {
+    fun toggleSelection(saleEventWithItems: com.example.salestracker.data.model.SaleEventWithItems) {
         _salesUIState.update { uIState -> //update the salesUIState, making its users get recomposed
             val newSelectedList =
-                if (saleWithItems in uIState.selectedSaleWithItems)
-                    uIState.selectedSaleWithItems - saleWithItems
+                if (saleEventWithItems in uIState.selectedSaleEventWithItems)
+                    uIState.selectedSaleEventWithItems - saleEventWithItems
                 else
-                    uIState.selectedSaleWithItems + saleWithItems
+                    uIState.selectedSaleEventWithItems + saleEventWithItems
 
-            uIState.copy(selectedSaleWithItems = newSelectedList) //copy the old instance of salesUIState,
+            uIState.copy(selectedSaleEventWithItems = newSelectedList) //copy the old instance of salesUIState,
             // only changing the "selected sales" field
         }
     }
@@ -131,10 +131,10 @@ class AllSalesViewModel @Inject constructor(
         deselect()
     }
 
-    fun selectAll(saleWithItems: List<com.example.salestracker.data.model.SaleWithItems>) {
+    fun selectAll(saleEventWithItems: List<com.example.salestracker.data.model.SaleEventWithItems>) {
         _salesUIState.update { currentState ->
             currentState.copy(
-                selectedSaleWithItems = saleWithItems
+                selectedSaleEventWithItems = saleEventWithItems
             )
         }
     }

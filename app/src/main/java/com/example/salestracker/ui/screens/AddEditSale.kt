@@ -4,13 +4,14 @@ import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DoneOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -149,7 +150,6 @@ fun AddEditSale(
                     .fillMaxWidth()
             )
         }
-        // OutlinedTextField(value = viewModel.product.value, onValueChange = { viewModel.product.value = it }, label = { Text("Product") }, modifier = Modifier.fillMaxWidth())
         item {
             OutlinedTextField(
                 value = state.buyer,
@@ -180,9 +180,34 @@ fun AddEditSale(
             SaleItemCard(
                 itemState = saleItem,
                 productOptions = dropdownProducts,
-                onAction = onAction
+                onAction = onAction,
+                cardNumber = state.saleItems.indexOf(saleItem) + 1
             )
         }
+
+        item {
+            Button(
+                onClick = { onAction(AddSaleAction.AddSaleItem) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ) {
+                Icon(Icons.Default.Add, contentDescription = null)
+                Spacer(Modifier.width(8.dp))
+                Text("Add Product to Sale")
+            }
+        }
+
+        /*
+        // Inside the Column of SalesListItem
+saleEventWithItems.items.forEach { itemWithProduct ->
+    Text(
+        text = "• ${itemWithProduct.saleItem.quantity}x ${itemWithProduct.product.name}",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+}
+         */
 
         if (state.userMessage != null) {
             item {
@@ -194,13 +219,6 @@ fun AddEditSale(
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(vertical = 24.dp)
                 )
-            }
-        }
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(onClick = onNavigateToAllSales, modifier = Modifier.fillMaxWidth()) {
-                Text("View All Sales")
             }
         }
     }
