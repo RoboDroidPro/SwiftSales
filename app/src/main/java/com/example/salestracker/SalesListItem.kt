@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.example.salestracker.data.model.SaleWithItems
 
 @Composable
-fun SaleItem(
+fun SalesListItem(
     modifier: Modifier = Modifier,
     saleWithItems: SaleWithItems,
     onClick: () -> Unit,
@@ -52,21 +52,21 @@ fun SaleItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = saleWithItems.sale.buyer,
+                    text = saleWithItems.saleEvent.totalSalePrice.toString(),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.W500,
                     modifier = Modifier
                 )
                 Spacer(Modifier.width(40.dp))
                 Text(
-                    text = saleWithItems.sale.date,
+                    text = saleWithItems.saleEvent.date,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                 )
             }
             Text(
-                text = saleWithItems.product.name,
+                text = saleWithItems.saleItem.,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold,
                 modifier = Modifier.padding(start = 4.dp, end = 12.dp)
@@ -76,18 +76,18 @@ fun SaleItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = saleWithItems.sale.quantity.toString(),
+                    text = saleWithItems.saleItem.,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "Total: $${saleWithItems.sale.totalSalePrice}",
+                    text = "Total: $${saleWithItems.saleEvent.totalSalePrice}",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
             }
             Text(
-                text = saleWithItems.sale.saleNotes ?: "No Sale Notes",
+                text = saleWithItems.saleEvent.saleNotes ?: "No Sale Notes",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.W900
             )

@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.salestracker.SaleItem
+import com.example.salestracker.SalesListItem
 import com.example.salestracker.data.model.SaleWithItems
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
@@ -143,7 +143,7 @@ fun AllSales(
                         else Color.Transparent
                     )
                 ) {
-                    SaleItem(
+                    SalesListItem(
                         modifier = Modifier,
                         saleWithItems = productSale,
                         onClick = { if (salesUIState.selectedSaleWithItems.isNotEmpty()) {

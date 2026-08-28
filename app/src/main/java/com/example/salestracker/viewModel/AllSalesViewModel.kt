@@ -2,9 +2,7 @@ package com.example.salestracker.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.salestracker.Sale
 import com.example.salestracker.SaleRepository
-import com.example.salestracker.data.model.SaleWithItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -122,10 +120,10 @@ class AllSalesViewModel @Inject constructor(
     //calls saleRepo.deleteSales on all the selected sales in the salesUIState
     // called when the deletion of selected sales is confirmed ("Confirm Deletion" button clicked)
     fun deleteSelectedSales() {
-        viewModelScope.launch {
-            saleRepo.deleteSales(salesUIState.value.selectedSaleWithItems.toSaleList())
-            deselect()
-        }
+//        viewModelScope.launch {
+//            saleRepo.deleteSales(salesUIState.value.selectedSaleWithItems.toSaleList())
+//            deselect()
+//        }
     }
 
     // Clears the selected sales, by removing all the sales from selectedSales List<Sale>
@@ -155,19 +153,17 @@ class AllSalesViewModel @Inject constructor(
 }
 
 
-fun com.example.salestracker.data.model.SaleWithItems.toSale() =
+/*fun SaleWithItems.toSale() =
     Sale(
         id = sale.id,
         date = sale.date,
-        productId = sale.productId,
         buyer = sale.buyer,
-        quantity = sale.quantity,
         totalSalePrice = sale.totalSalePrice,
         saleNotes = sale.saleNotes
     )
 
-fun List<com.example.salestracker.data.model.SaleWithItems>.toSaleList() =
-    map(SaleWithItems::toSale)
+fun List<SaleWithItems>.toSaleList() =
+    map(SaleWithItems::toSale)*/
 
 /*
 viewModelScope.launch {// Observe navigation results here!

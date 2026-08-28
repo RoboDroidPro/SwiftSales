@@ -6,10 +6,15 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.salestracker.data.database.ProductDao
 import com.example.salestracker.data.model.Product
+import com.example.salestracker.data.model.SaleItem
 
 @Database(
-    entities = [Sale::class, Product::class],
-    version = 2,
+    entities = [
+        SaleEvent::class,
+        SaleItem::class,
+        Product::class
+    ],
+    version = 3,
     exportSchema = false
 )
 abstract class SaleDatabase : RoomDatabase() {

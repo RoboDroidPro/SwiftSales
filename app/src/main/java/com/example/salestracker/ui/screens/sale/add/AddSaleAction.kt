@@ -18,6 +18,5 @@ sealed interface AddSaleAction {
 
 sealed interface SaleItemAction {
     data class ProductChanged(val newProduct: Product) : SaleItemAction
-    data class ProductPriceChanged(val newPrice: String) : SaleItemAction
     data class QuantityChanged(val newQuantity: String) : SaleItemAction
 }

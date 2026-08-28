@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "sales",
 )
-data class Sale(  // Represents an event when one or more products were sold
+data class SaleEvent(  // Represents an event when one or more products were sold
     @PrimaryKey val id: String,
     val date: String,
     val buyer: String,

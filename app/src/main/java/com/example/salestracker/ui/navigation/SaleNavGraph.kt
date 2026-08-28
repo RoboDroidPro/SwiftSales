@@ -120,7 +120,7 @@ fun SaleNavGraph(
                     onAddEditSale = { productSale ->
                         navActions.navigateAddEditSale(
                             title = "Add Sale",
-                            saleId = productSale?.sale?.id
+                            saleId = productSale?.saleEvent?.id
                         )
                     },
                     onMenuClick = { coroutineScope.launch { drawerState.open() } },

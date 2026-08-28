@@ -4,10 +4,9 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.salestracker.Sale
+import com.example.salestracker.SaleEvent
 import com.example.salestracker.SaleRepository
 import com.example.salestracker.data.model.SaleItem
-import com.example.salestracker.data.model.SaleWithItems
 import com.example.salestracker.data.repository.ProductRepository
 import com.example.salestracker.ui.navigation.ADD_RESULT_OK
 import com.example.salestracker.ui.screens.sale.add.AddSaleAction
@@ -102,19 +101,18 @@ class AddSaleViewModel @Inject constructor(
 
     private fun updateSaleEntry(itemId: String, action: SaleItemAction) {
         _addSaleUIState.update { state ->
-            state.copy(saleItems = state.saleItems.map { saleItem ->
-                if (saleItem.saleItemId == itemId) {
+            state.copy(saleItems = state.saleItems.map { saleItemState ->
+                if (saleItemState.saleItemId == itemId) {
                     when (action) {
-                        is SaleItemAction.ProductChanged -> saleItem.copy(productName = action.newProduct.name)
-                        is SaleItemAction.ProductPriceChanged -> saleItem.copy(productPrice = action.newPrice.toDouble())
-                        is SaleItemAction.QuantityChanged -> saleItem.copy(quantity = action.newQuantity.toInt())
+                        is SaleItemAction.ProductChanged -> saleItemState.copy(product = action.newProduct)
+                        is SaleItemAction.QuantityChanged -> saleItemState.copy(quantity = action.newQuantity.toInt())
                     }
-                } else saleItem
+                } else saleItemState
             })
         }
     }
 
-    fun buyerChanged(newValue: String) {
+    private fun buyerChanged(newValue: String) {
         _addSaleUIState.update { currentState ->
             currentState.copy(
                 buyer = newValue
@@ -122,7 +120,7 @@ class AddSaleViewModel @Inject constructor(
         }
     }
 
-    fun totalSalePriceChanged(newSalePrice: String) {
+    private fun totalSalePriceChanged(newSalePrice: String) {
         _addSaleUIState.update { currentState ->
             currentState.copy(
                 totalSalePrice = newSalePrice
@@ -130,7 +128,7 @@ class AddSaleViewModel @Inject constructor(
         }
     }
 
-    fun notesChanged(newNotesValue: String) {
+    private fun notesChanged(newNotesValue: String) {
         _addSaleUIState.update { currentState ->
             currentState.copy(
                 saleNotes = newNotesValue
@@ -173,26 +171,28 @@ class AddSaleViewModel @Inject constructor(
         } /*else {*/
             viewModelScope.launch {
                 val saleId = UUID.randomUUID().toString()
-                saleRepository.upsertSaleWithItems(
-                    SaleWithItems(
-                        sale = Sale( //todo we need to somehow get the productId for product field
-                            id = saleId, //generate the id here so it is not optional.
-                            date = _addSaleUIState.value.date, //todo these should perhaps be uiState.value instead
-                            buyer = _addSaleUIState.value.buyer,
-                            totalSalePrice = priceStr.toDouble(),
-                            saleNotes = _addSaleUIState.value.saleNotes
-                        ),
-                        saleItem = _addSaleUIState.value.saleItems.map {
-                            SaleItem(
-                                id = it.saleItemId,
-                                saleId = saleId, //todo might need some work yet
-                                productName = it.productName,
-                                productPrice = it.productPrice,
-                                quantity = it.quantity
-                            )
-                        }
-                    )
+
+                // 1. Create the Header (Entity)
+                val event = SaleEvent(
+                    id = saleId,
+                    date = uiState.value.date,
+                    buyer = uiState.value.buyer,
+                    totalSalePrice = priceStr.toDoubleOrNull() ?: 0.0,
+                    saleNotes = uiState.value.saleNotes
                 )
+
+                // 2. Create the Items (List of Entities)
+                val items = uiState.value.saleItems.map { itemState ->
+                    SaleItem(
+                        id = UUID.randomUUID().toString(),
+                        saleId = saleId,
+                        productId = itemState.product.id,
+                        quantity = itemState.quantity
+                    )
+                }
+
+                // 3. Save them separately via the repo
+                saleRepository.upsertSaleWithItems(event, items)
                 /**
                  * To see the sequence that goes through from the save button clicked, to the snackbar
                  * displayed, follow the numbers #1.

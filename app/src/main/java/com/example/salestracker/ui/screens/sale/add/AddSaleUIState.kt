@@ -1,5 +1,7 @@
 package com.example.salestracker.ui.screens.sale.add
 
+import com.example.salestracker.data.model.Product
+
 data class AddSaleUIState(
     val date: String = "",
     val buyer: String = "",
@@ -11,7 +13,6 @@ data class AddSaleUIState(
 
 data class SaleItemState(
     val saleItemId: String = "",
-    val productName: String = "",
-    val productPrice: Double = 0.0,
+    val product: Product = Product(),
     val quantity: Int = 1
 )
