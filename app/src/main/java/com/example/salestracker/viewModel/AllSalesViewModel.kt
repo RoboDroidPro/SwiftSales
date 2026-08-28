@@ -3,6 +3,7 @@ package com.example.salestracker.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.salestracker.SaleRepository
+import com.example.salestracker.data.model.SaleEventWithItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -39,8 +40,8 @@ private const val TAG = "ArduinoASVM"
  * and thus does not recompose.
  */
 data class SalesUIState(
-    val allSaleEventWithItems: List<com.example.salestracker.data.model.SaleEventWithItems> = emptyList(),
-    val selectedSaleEventWithItems: List<com.example.salestracker.data.model.SaleEventWithItems> = emptyList(),
+    val allSaleEventWithItems: List<SaleEventWithItems> = emptyList(),
+    val selectedSaleEventWithItems: List<SaleEventWithItems> = emptyList(),
     val confirmDeletionValue: Boolean = false,
 )
 
@@ -120,10 +121,10 @@ class AllSalesViewModel @Inject constructor(
     //calls saleRepo.deleteSales on all the selected sales in the salesUIState
     // called when the deletion of selected sales is confirmed ("Confirm Deletion" button clicked)
     fun deleteSelectedSales() {
-//        viewModelScope.launch {
-//            saleRepo.deleteSales(salesUIState.value.selectedSaleWithItems.toSaleList())
-//            deselect()
-//        }
+        viewModelScope.launch {
+            saleRepo.deleteSales(salesUIState.value.selectedSaleWithItems.toSaleList())
+            deselect()
+        }
     }
 
     // Clears the selected sales, by removing all the sales from selectedSales List<Sale>

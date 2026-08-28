@@ -173,11 +173,11 @@ class AddSaleViewModel @Inject constructor(
             }
         } /*else {*/
             viewModelScope.launch {
-                val saleId = UUID.randomUUID().toString()
+                val saleEventId = UUID.randomUUID().toString()
 
                 // 1. Create the Header (Entity)
                 val event = SaleEvent(
-                    id = saleId,
+                    id = saleEventId,
                     date = uiState.value.date,
                     buyer = uiState.value.buyer,
                     totalSalePrice = priceStr.toDoubleOrNull() ?: 0.0,
@@ -188,7 +188,7 @@ class AddSaleViewModel @Inject constructor(
                 val items = uiState.value.saleItems.map { itemState ->
                     SaleItem(
                         id = UUID.randomUUID().toString(),
-                        saleId = saleId,
+                        saleId = saleEventId,
                         productId = itemState.product.id,
                         salePrice = itemState.salePrice,
                         quantity = itemState.quantity ?: 0
@@ -196,7 +196,7 @@ class AddSaleViewModel @Inject constructor(
                 }
 
                 // 3. Save them separately via the repo
-                saleRepository.upsertSaleWithItems(event, items)
+                saleRepository.insertSaleWithItems(event, items)
                 /**
                  * To see the sequence that goes through from the save button clicked, to the snackbar
                  * displayed, follow the numbers #1.

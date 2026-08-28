@@ -1,7 +1,7 @@
 package com.example.salestracker
 
-import com.example.salestracker.data.model.SaleItem
 import com.example.salestracker.data.model.SaleEventWithItems
+import com.example.salestracker.data.model.SaleItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -18,10 +18,12 @@ class SaleRepository @Inject constructor(private val dao: SaleDao) {
 
     suspend fun upsertSaleWithItems(event: SaleEvent, items: List<SaleItem>) {
         dao.upsertSale(event)
+        dao.insertSaleItems(items)
     }
 
-    suspend fun insertSaleWithItems(saleEventWithItems: SaleEventWithItems) {
-        dao.upsertSale(saleEventWithItems.saleEvent)
+    suspend fun insertSaleWithItems(event: SaleEvent, items: List<SaleItem>) {
+        dao.upsertSale(event)
+        dao.insertSaleItems(items)
     }
 
     suspend fun deleteSales(saleEvents: List<SaleEvent>) {
