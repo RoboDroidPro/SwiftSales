@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -35,9 +36,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.salestracker.ui.components.ProductDropdown
+import com.example.salestracker.data.model.Product
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
+import com.example.salestracker.ui.screens.sale.add.AddSaleAction
+import com.example.salestracker.ui.screens.sale.add.AddSaleUIState
+import com.example.salestracker.ui.screens.sale.add.SaleItemCard
 import com.example.salestracker.viewModel.AddSaleViewModel
 import com.example.salestracker.viewModel.UIEvent
 
@@ -53,6 +57,9 @@ fun AddEditSaleScreen(
     onBackClicked: () -> Unit,
     screenTitle: String = "Add Edit Sale"
 ) {
+
+    val addEditUIState by viewModel.uiState.collectAsStateWithLifecycle()
+    val dropdownProducts by viewModel.availableProducts.collectAsStateWithLifecycle()
 
     /**
      * Step #3.
@@ -109,7 +116,9 @@ fun AddEditSaleScreen(
     ) { paddingValues ->
         AddEditSale(
             modifier = modifier.padding(paddingValues),
-            viewModel = viewModel,
+            state = addEditUIState,
+            onAction = viewModel::onAction,
+            dropdownProducts = dropdownProducts,
             onNavigateToAllSales = onBackClicked,
         )
     }
@@ -118,11 +127,11 @@ fun AddEditSaleScreen(
 @Composable
 fun AddEditSale(
     modifier: Modifier = Modifier,
-    viewModel: AddSaleViewModel,
+    state: AddSaleUIState = AddSaleUIState(),
+    onAction: (AddSaleAction) -> Unit,
+    dropdownProducts: List<Product>,
     onNavigateToAllSales: () -> Unit
 ) {
-    val addEditUIState by viewModel.uiState.collectAsStateWithLifecycle()
-    val dropdownProducts by viewModel.availableProducts.collectAsStateWithLifecycle()
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -132,7 +141,7 @@ fun AddEditSale(
     ) {
         item {
             OutlinedTextField(
-                value = addEditUIState.date,
+                value = state.date,
                 onValueChange = { /*viewModel.changeDate()*/ }, //this was commented out because if date is changeable, we need to parse it before storing it.
                 label = { Text("Date") },
                 readOnly = true, //Todo this needs to be false or deleted if a way of changing the date is implemented
@@ -143,33 +152,17 @@ fun AddEditSale(
         // OutlinedTextField(value = viewModel.product.value, onValueChange = { viewModel.product.value = it }, label = { Text("Product") }, modifier = Modifier.fillMaxWidth())
         item {
             OutlinedTextField(
-                value = addEditUIState.buyer,
-                onValueChange = { viewModel.buyerChanged(it) },
+                value = state.buyer,
+                onValueChange = { onAction(AddSaleAction.BuyerChanged(it)) },
                 label = { Text("Buyer") },
                 modifier = Modifier.fillMaxWidth()
-            )
-        }
-        item {
-            ProductDropdown(
-                selectedProduct = addEditUIState.selectedProduct?.name ?: "",
-                selectedProductChanged = { viewModel.selectedProductChanged(it) },
-                productOptions = dropdownProducts,
-            )
-        }  //PRODUCT FIELD
-        item {
-            OutlinedTextField(
-                value = if (addEditUIState.quantity != null) addEditUIState.quantity.toString() else "",
-                onValueChange = { viewModel.quantityChanged(it.toIntOrNull()) },
-                label = { Text("Quantity") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
 
         item {
             OutlinedTextField(
-                value = addEditUIState.totalSalePrice,
-                onValueChange = { viewModel.totalSalePriceChanged(it) },
+                value = state.totalSalePrice,
+                onValueChange = { onAction(AddSaleAction.TotalSalePriceChanged(it)) },
                 label = { Text("Total Sale Price") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -177,16 +170,24 @@ fun AddEditSale(
         }
         item {
             OutlinedTextField(
-                value = addEditUIState.notes,
-                onValueChange = { viewModel.notesChanged(it) },
+                value = state.saleNotes,
+                onValueChange = { onAction(AddSaleAction.SaleNotesChanged(it)) },
                 label = { Text("Notes (optional)") },
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        if (addEditUIState.userMessage != null) {
+        items(state.saleItems) { saleItem ->
+            SaleItemCard(
+                itemState = saleItem,
+                productOptions = dropdownProducts,
+                onAction = onAction
+            )
+        }
+
+        if (state.userMessage != null) {
             item {
                 Text(
-                    text = addEditUIState.userMessage!!,
+                    text = state.userMessage,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.W600,
                     fontFamily = FontFamily.SansSerif,
@@ -204,115 +205,3 @@ fun AddEditSale(
         }
     }
 }
-
-/*
-@Composable
-fun NewSaleScreen(
-    viewModel: SaleViewModel,
-    modifier: Modifier = Modifier,
-    onNavigateToAllSales: () -> Unit
-) {
-    val context = LocalContext.current
-
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .padding(WindowInsets.systemBars.asPaddingValues())
-            .padding(16.dp)
-            .fillMaxWidth()
-    ) {
-//        item {
-//            Text("Add Sale", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-//            Spacer(modifier.height(12.dp))
-//        }
-        item {
-            OutlinedTextField(
-                value = viewModel.formatDateForDisplay(viewModel.date.value),
-                onValueChange = { /*viewModel.date.value = it /*it refers to the value that changed*/*/ }, //this was commented out because if date is changeable, we need to parse it before storing it.
-                label = { Text("Date") },
-                readOnly = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-        }
-        // OutlinedTextField(value = viewModel.product.value, onValueChange = { viewModel.product.value = it }, label = { Text("Product") }, modifier = Modifier.fillMaxWidth())
-        item {
-            OutlinedTextField(
-                value = viewModel.buyer.value,
-                onValueChange = { viewModel.buyer.value = it },
-                label = { Text("Buyer") },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        item {
-//            ProductDropdown(viewModel) No longer works because ProductDropdown accepts different params now
-        }  //PRODUCT FIELD
-        item {
-            OutlinedTextField(
-                value = viewModel.quantity.intValue.toString(),
-                onValueChange = { newValue ->
-                    viewModel.quantity.intValue = newValue.toIntOrNull() ?: 0
-                },
-                label = { Text("Quantity") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-        }
-
-        item {
-            OutlinedTextField(
-                value = viewModel.totalSalePrice.value,
-                onValueChange = { viewModel.totalSalePrice.value = it },
-                label = { Text("Total Sale Price") },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        item {
-            OutlinedTextField(
-                value = viewModel.notes.value,
-                onValueChange = { viewModel.notes.value = it },
-                label = { Text("Notes (optional)") },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = {
-
-                    if (
-                        viewModel.buyer.value.isNotBlank()
-                        && viewModel.selectedProduct.value != Product.None
-                        && viewModel.totalSalePrice.value.isNotBlank()
-                    ) {
-                        viewModel.saveSale()
-                        Toast.makeText(
-                            context,
-                            "${viewModel.selectedProduct.value.displayName} sold to ${viewModel.buyer.value}. Total Sale Price: ${viewModel.totalSalePrice.value} Sale saved.",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "FIELD REQUIRED. Sale must have buyer AND product. NOT SAVED",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }, modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Save Sale")
-            }
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(onClick = onNavigateToAllSales, modifier = Modifier.fillMaxWidth()) {
-                Text("View All Sales")
-            }
-        }
-    }
-}
- */

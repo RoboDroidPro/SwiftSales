@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.salestracker.Sale
 import com.example.salestracker.SaleRepository
-import com.example.salestracker.data.model.Product
 import com.example.salestracker.data.model.SaleItem
 import com.example.salestracker.data.model.SaleWithItems
 import com.example.salestracker.data.repository.ProductRepository
 import com.example.salestracker.ui.navigation.ADD_RESULT_OK
+import com.example.salestracker.ui.screens.sale.add.AddSaleAction
+import com.example.salestracker.ui.screens.sale.add.AddSaleUIState
+import com.example.salestracker.ui.screens.sale.add.SaleItemAction
+import com.example.salestracker.ui.screens.sale.add.SaleItemState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,21 +24,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.util.UUID
 import javax.inject.Inject
 
 private const val TAG = "ArduinoAESVM"
-
-data class AddSaleUIState(
-    val buyer: String = "",
-    val selectedProduct: Product? = null,
-    val quantity: Int? = 0,
-    val totalSalePrice: String = "",
-    val notes: String = "",
-    val date: String = LocalDate.now().toString(),
-    val userMessage: String? = null
-)
 
 @HiltViewModel
 class AddSaleViewModel @Inject constructor(
@@ -65,29 +57,67 @@ class AddSaleViewModel @Inject constructor(
         initialValue = emptyList()                      // shown immediately before DB loads
     )
 
+    fun onAction(action: AddSaleAction) {
+        when (action) {
+            is AddSaleAction.DateChanged -> {
+                //todo date change
+            }
+            is AddSaleAction.BuyerChanged -> {
+                buyerChanged(action.newBuyer)
+            }
+            is AddSaleAction.TotalSalePriceChanged -> {
+                totalSalePriceChanged(action.newSalePrice)
+            }
+            is AddSaleAction.SaleNotesChanged -> {
+                notesChanged(action.newNotes)
+            }
+            AddSaleAction.AddSaleItem -> {
+                addSaleItem()
+            }
+            is AddSaleAction.RemoveSaleItem -> {
+                removeSaleItem(action.itemId)
+            }
+
+            is AddSaleAction.SaleEntryAction -> updateSaleEntry(action.itemId, action.action)
+
+            AddSaleAction.SaveSale -> saveSale()
+        }
+    }
+
+    private fun addSaleItem() {
+        _addSaleUIState.update { currentState ->
+            currentState.copy(
+                saleItems = currentState.saleItems + SaleItemState()
+            )
+        }
+    }
+
+    private fun removeSaleItem(itemId: String) {
+        _addSaleUIState.update { currentState ->
+            currentState.copy(
+                saleItems = currentState.saleItems.filter { it.saleItemId != itemId }
+            )
+        }
+    }
+
+    private fun updateSaleEntry(itemId: String, action: SaleItemAction) {
+        _addSaleUIState.update { state ->
+            state.copy(saleItems = state.saleItems.map { saleItem ->
+                if (saleItem.saleItemId == itemId) {
+                    when (action) {
+                        is SaleItemAction.ProductChanged -> saleItem.copy(productName = action.newProduct.name)
+                        is SaleItemAction.ProductPriceChanged -> saleItem.copy(productPrice = action.newPrice.toDouble())
+                        is SaleItemAction.QuantityChanged -> saleItem.copy(quantity = action.newQuantity.toInt())
+                    }
+                } else saleItem
+            })
+        }
+    }
+
     fun buyerChanged(newValue: String) {
         _addSaleUIState.update { currentState ->
             currentState.copy(
                 buyer = newValue
-            )
-        }
-    }
-
-    fun selectedProductChanged(newProduct: Product) {
-        _addSaleUIState.update { currentState ->
-            currentState.copy(
-                selectedProduct = newProduct,
-                totalSalePrice = calculatePrice(productPrice = newProduct.defaultPrice)
-            )
-        }
-    }
-
-    fun quantityChanged(newQuantity: Int?) {
-        _addSaleUIState.update { currentState ->
-            currentState.copy(
-                quantity = newQuantity,
-                totalSalePrice = calculatePrice(quantity = newQuantity ?: 0)
-//                viewModel.quantity.intValue = newValue.toIntOrNull() ?: 0
             )
         }
     }
@@ -103,17 +133,17 @@ class AddSaleViewModel @Inject constructor(
     fun notesChanged(newNotesValue: String) {
         _addSaleUIState.update { currentState ->
             currentState.copy(
-                notes = newNotesValue
+                saleNotes = newNotesValue
             )
         }
     }
 
-    private fun calculatePrice(quantity: Int? = null, productPrice: Double? = null): String {
-        val price: Double = (quantity?.toDouble() ?: (uiState.value.quantity?.toDouble() ?: 0.0)) *
-            (productPrice ?: (uiState.value.selectedProduct?.defaultPrice ?: 0.0))
-
-        return if (price != 0.0) price.toString() else ""
-    }
+//    private fun calculatePrice(quantity: Int? = null, productPrice: Double? = null): String {
+//        val price: Double = (quantity?.toDouble() ?: (uiState.value.quantity?.toDouble() ?: 0.0)) *
+//            (productPrice ?: (uiState.value.selectedProduct?.defaultPrice ?: 0.0))
+//
+//        return if (price != 0.0) price.toString() else ""
+//    }
 
     /*fun changeDate() {
         //Todo this is called when the user clicks the "date" field in addEdit
@@ -122,7 +152,7 @@ class AddSaleViewModel @Inject constructor(
     fun saveSale(){ // removed the boolean return, and its return statements below, because it is no longer necessary
         var userMessage: String? = null
         if (uiState.value.buyer.isBlank()) userMessage = "'Buyer' field required!"
-        if (uiState.value.selectedProduct == null) userMessage = "${userMessage ?: ""} \n'Product' field required!"
+        if (uiState.value.saleItems.isEmpty()) userMessage = "${userMessage ?: ""} \n'Product' field required!"
         val priceStr = uiState.value.totalSalePrice
 
         if (priceStr.isBlank()) {
@@ -140,7 +170,7 @@ class AddSaleViewModel @Inject constructor(
                     userMessage = userMessage
                 )
             }
-        } else {
+        } /*else {*/
             viewModelScope.launch {
                 val saleId = UUID.randomUUID().toString()
                 saleRepository.upsertSaleWithItems(
@@ -150,15 +180,17 @@ class AddSaleViewModel @Inject constructor(
                             date = _addSaleUIState.value.date, //todo these should perhaps be uiState.value instead
                             buyer = _addSaleUIState.value.buyer,
                             totalSalePrice = priceStr.toDouble(),
-                            saleNotes = _addSaleUIState.value.notes
+                            saleNotes = _addSaleUIState.value.saleNotes
                         ),
-                        saleItem = SaleItem(
-                            id = UUID.randomUUID().toString(),
-                            saleId = saleId, //todo might need some work yet
-                            productName = _addSaleUIState.value.selectedProduct!!.name,
-                            productPrice = _addSaleUIState.value.selectedProduct!!.defaultPrice,
-                            quantity = _addSaleUIState.value.quantity ?: 1
-                        )
+                        saleItem = _addSaleUIState.value.saleItems.map {
+                            SaleItem(
+                                id = it.saleItemId,
+                                saleId = saleId, //todo might need some work yet
+                                productName = it.productName,
+                                productPrice = it.productPrice,
+                                quantity = it.quantity
+                            )
+                        }
                     )
                 )
                 /**
@@ -172,7 +204,7 @@ class AddSaleViewModel @Inject constructor(
                     )
                 )
                 Log.d(TAG, "addEditEvents.emitted result: $ADD_RESULT_OK")
-            }
+//            }
         }
     }
 }

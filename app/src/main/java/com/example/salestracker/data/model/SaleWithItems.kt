@@ -10,5 +10,5 @@ data class SaleWithItems( // Joins a sale with all the items that were sold in i
         parentColumn = "id",
         entityColumn = "saleId"
     )
-    val saleItem: SaleItem
+    val saleItem: List<SaleItem>
 )
