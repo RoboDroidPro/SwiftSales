@@ -1,7 +1,6 @@
 package com.example.salestracker
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
@@ -31,8 +30,8 @@ interface SaleDao {
     @Query("SELECT * FROM sales WHERE id = :id")
     suspend fun getSale(id: String) : SaleEvent
 
-    @Delete
-    suspend fun deleteSales(saleEvents: List<SaleEvent>)
+    @Query("DELETE FROM sales WHERE id IN (:saleEventIds)")
+    suspend fun deleteSales(saleEventIds: List<String>)
 
     //----------------
     @Transaction

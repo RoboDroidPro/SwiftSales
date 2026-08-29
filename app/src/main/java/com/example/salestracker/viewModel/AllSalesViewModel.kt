@@ -41,7 +41,7 @@ private const val TAG = "ArduinoASVM"
  */
 data class SalesUIState(
     val allSaleEventWithItems: List<SaleEventWithItems> = emptyList(),
-    val selectedSaleEventWithItems: List<SaleEventWithItems> = emptyList(),
+    val selectedSaleEventIds: List<String> = emptyList(),
     val confirmDeletionValue: Boolean = false,
 )
 
@@ -77,22 +77,22 @@ class AllSalesViewModel @Inject constructor(
     private fun deselect() {
         _salesUIState.update { currentState ->
             currentState.copy(
-                selectedSaleEventWithItems = emptyList(),
+                selectedSaleEventIds = emptyList(),
                 confirmDeletionValue = false
             )
         }
     }
 
     // toggles the selection of the sale provided in the param
-    fun toggleSelection(saleEventWithItems: com.example.salestracker.data.model.SaleEventWithItems) {
+    fun toggleSelection(saleEventId: String) {
         _salesUIState.update { uIState -> //update the salesUIState, making its users get recomposed
             val newSelectedList =
-                if (saleEventWithItems in uIState.selectedSaleEventWithItems)
-                    uIState.selectedSaleEventWithItems - saleEventWithItems
+                if (saleEventId in uIState.selectedSaleEventIds)
+                    uIState.selectedSaleEventIds - saleEventId
                 else
-                    uIState.selectedSaleEventWithItems + saleEventWithItems
+                    uIState.selectedSaleEventIds + saleEventId
 
-            uIState.copy(selectedSaleEventWithItems = newSelectedList) //copy the old instance of salesUIState,
+            uIState.copy(selectedSaleEventIds = newSelectedList) //copy the old instance of salesUIState,
             // only changing the "selected sales" field
         }
     }
@@ -122,7 +122,7 @@ class AllSalesViewModel @Inject constructor(
     // called when the deletion of selected sales is confirmed ("Confirm Deletion" button clicked)
     fun deleteSelectedSales() {
         viewModelScope.launch {
-            saleRepo.deleteSales(salesUIState.value.selectedSaleWithItems.toSaleList())
+            saleRepo.deleteSales(salesUIState.value.selectedSaleEventIds)
             deselect()
         }
     }
@@ -132,10 +132,10 @@ class AllSalesViewModel @Inject constructor(
         deselect()
     }
 
-    fun selectAll(saleEventWithItems: List<com.example.salestracker.data.model.SaleEventWithItems>) {
+    fun selectAll(saleEventIds: List<String>) {
         _salesUIState.update { currentState ->
             currentState.copy(
-                selectedSaleEventWithItems = saleEventWithItems
+                selectedSaleEventIds = saleEventIds
             )
         }
     }

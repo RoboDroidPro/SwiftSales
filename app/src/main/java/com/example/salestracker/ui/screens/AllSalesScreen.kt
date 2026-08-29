@@ -121,7 +121,7 @@ fun AllSales(
 ) {
     val salesUIState by viewModel.salesUIState.collectAsStateWithLifecycle()
 
-    BackHandler(enabled = salesUIState.selectedSaleEventWithItems.isNotEmpty()) {
+    BackHandler(enabled = salesUIState.selectedSaleEventIds.isNotEmpty()) {
         viewModel.clearSelection()
     }
 
@@ -135,7 +135,7 @@ fun AllSales(
 
         ) {
             items(salesUIState.allSaleEventWithItems) { productSale ->
-                val isSelected = salesUIState.selectedSaleEventWithItems.contains(productSale)
+                val isSelected = salesUIState.selectedSaleEventIds.contains(productSale.saleEvent.id)
 
                 Box(
                     modifier = Modifier.background(
@@ -146,22 +146,22 @@ fun AllSales(
                     SalesListItem(
                         modifier = Modifier,
                         saleEventWithItems = productSale,
-                        onClick = { if (salesUIState.selectedSaleEventWithItems.isNotEmpty()) {
-                            viewModel.toggleSelection(productSale)
+                        onClick = { if (salesUIState.selectedSaleEventIds.isNotEmpty()) {
+                            viewModel.toggleSelection(productSale.saleEvent.id)
                         }
                         else onAddEditSale(productSale) },
-                        onLongClick = { viewModel.toggleSelection(productSale) }
+                        onLongClick = { viewModel.toggleSelection(productSale.saleEvent.id) }
                     )
                 }
             }
         }
 
 
-        if (salesUIState.selectedSaleEventWithItems.isNotEmpty()) {
+        if (salesUIState.selectedSaleEventIds.isNotEmpty()) {
 
-            if (salesUIState.selectedSaleEventWithItems.size < salesUIState.allSaleEventWithItems.size) {
+            if (salesUIState.selectedSaleEventIds.size < salesUIState.allSaleEventWithItems.size) {
                 Button(
-                    onClick = { viewModel.selectAll(salesUIState.allSaleEventWithItems) },
+                    onClick = { viewModel.selectAll(salesUIState.allSaleEventWithItems.map { it.saleEvent.id }) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Select All (${salesUIState.allSaleEventWithItems.size})")
@@ -174,7 +174,7 @@ fun AllSales(
                     onClick = { viewModel.askForDeleteConfirmation() }, //Todo all viewModelConfirmDeletion calls should be replaced with uiState.confirmDeletion
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Delete selected (${salesUIState.selectedSaleEventWithItems.size})")
+                    Text("Delete selected (${salesUIState.selectedSaleEventIds.size})")
                 }
             } else {
                 Button(
@@ -182,7 +182,7 @@ fun AllSales(
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Confirm Deletion (${salesUIState.selectedSaleEventWithItems.size})")
+                    Text("Confirm Deletion (${salesUIState.selectedSaleEventIds.size})")
                 }
 
                 Spacer(Modifier.height(8.dp))

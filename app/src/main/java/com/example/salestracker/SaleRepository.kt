@@ -26,7 +26,7 @@ class SaleRepository @Inject constructor(private val dao: SaleDao) {
         dao.insertSaleItems(items)
     }
 
-    suspend fun deleteSales(saleEvents: List<SaleEvent>) {
-        dao.deleteSales(saleEvents)
+    suspend fun deleteSales(saleEventIds: List<String>) {
+        dao.deleteSales(saleEventIds)
     }
 }
