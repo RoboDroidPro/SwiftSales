@@ -62,13 +62,25 @@ class AddSaleViewModel @Inject constructor(
                 //todo date change
             }
             is AddSaleAction.BuyerChanged -> {
-                buyerChanged(action.newBuyer)
+                _addSaleUIState.update { currentState ->
+                    currentState.copy(
+                        buyer = action.newBuyer
+                    )
+                }
             }
-            is AddSaleAction.TotalSalePriceChanged -> {
-                totalSalePriceChanged(action.newSalePrice)
-            }
+//            is AddSaleAction.TotalSalePriceChanged -> { //todo remove. Total sale price cannot be changed
+//                _addSaleUIState.update { currentState ->
+//                    currentState.copy(
+//                        totalSalePrice = action.newSalePrice
+//                    )
+//                }
+//            }
             is AddSaleAction.SaleNotesChanged -> {
-                notesChanged(action.newNotes)
+                _addSaleUIState.update { currentState ->
+                    currentState.copy(
+                        saleNotes = action.newNotes
+                    )
+                }
             }
             AddSaleAction.AddSaleItem -> {
                 addSaleItem()
@@ -77,7 +89,9 @@ class AddSaleViewModel @Inject constructor(
                 removeSaleItem(action.itemId)
             }
 
-            is AddSaleAction.SaleEntryAction -> updateSaleEntry(action.itemId, action.action)
+            is AddSaleAction.SaleEntryAction -> {
+                updateSaleEntry(action.itemId, action.action)
+            }
 
             AddSaleAction.SaveSale -> saveSale()
         }
@@ -93,85 +107,68 @@ class AddSaleViewModel @Inject constructor(
 
     private fun removeSaleItem(itemId: String) {
         _addSaleUIState.update { currentState ->
+            val newSaleItems = currentState.saleItems.filter { it.saleItemId != itemId }
             currentState.copy(
-                saleItems = currentState.saleItems.filter { it.saleItemId != itemId }
+                totalSalePrice = calculateTotalSalePrice(newSaleItems),
+                saleItems = newSaleItems
             )
         }
     }
 
     private fun updateSaleEntry(itemId: String, action: SaleItemAction) {
         _addSaleUIState.update { state ->
-            state.copy(saleItems = state.saleItems.map { saleItemState ->
+            val saleItems: List<SaleItemState> = state.saleItems.map { saleItemState ->
                 if (saleItemState.saleItemId == itemId) {
                     when (action) {
-                        is SaleItemAction.ProductChanged -> saleItemState.copy(product = action.newProduct)
-                        is SaleItemAction.ProductPriceChanged -> saleItemState.copy(salePrice = action.newPrice.toDoubleOrNull()?: 0.0)
+                        is SaleItemAction.ProductChanged -> saleItemState.copy(
+                            product = action.newProduct,
+                            salePrice = (action.newProduct.defaultPrice) * (saleItemState.quantity ?: 1)
+                        )
+                        is SaleItemAction.ProductPriceChanged -> saleItemState.copy(
+                            salePrice = action.newPrice.toDoubleOrNull()?: 0.0
+                        )
                         is SaleItemAction.QuantityChanged -> saleItemState.copy(
-                            quantity = action.newQuantity.toIntOrNull()
+                            quantity = action.newQuantity.toIntOrNull(),
+                            salePrice = calculatePrice(
+                                action.newQuantity.toIntOrNull() ?: 0,
+                                saleItemState.product.defaultPrice
+                            )
                         )
                     }
                 } else saleItemState
-            })
-        }
-    }
-
-    private fun buyerChanged(newValue: String) {
-        _addSaleUIState.update { currentState ->
-            currentState.copy(
-                buyer = newValue
+            }
+            state.copy(
+                totalSalePrice = calculateTotalSalePrice(saleItems),
+                saleItems = saleItems
             )
         }
     }
 
-    private fun totalSalePriceChanged(newSalePrice: String) {
-        _addSaleUIState.update { currentState ->
-            currentState.copy(
-                totalSalePrice = newSalePrice
-            )
-        }
+    private fun calculatePrice(quantity: Int, productPrice: Double): Double {
+        return (quantity * productPrice)
     }
 
-    private fun notesChanged(newNotesValue: String) {
-        _addSaleUIState.update { currentState ->
-            currentState.copy(
-                saleNotes = newNotesValue
-            )
-        }
+    private fun calculateTotalSalePrice(items: List<SaleItemState>): Double {
+        return items.sumOf { it.salePrice }
     }
-
-//    private fun calculatePrice(quantity: Int? = null, productPrice: Double? = null): String {
-//        val price: Double = (quantity?.toDouble() ?: (uiState.value.quantity?.toDouble() ?: 0.0)) *
-//            (productPrice ?: (uiState.value.selectedProduct?.defaultPrice ?: 0.0))
-//
-//        return if (price != 0.0) price.toString() else ""
-//    }
 
     /*fun changeDate() {
         //Todo this is called when the user clicks the "date" field in addEdit
     }*/
 
     fun saveSale(){ // removed the boolean return, and its return statements below, because it is no longer necessary
-        var userMessage: String? = null
-        if (uiState.value.buyer.isBlank()) userMessage = "'Buyer' field required!"
-        if (uiState.value.saleItems.isEmpty()) userMessage = "${userMessage ?: ""} \n'Product' field required!"
-        val priceStr = uiState.value.totalSalePrice
+        if (uiState.value.buyer.isBlank()) _addSaleUIState.update { it.copy(buyerError = "Buyer field required!") }
+//        if (uiState.value.saleItems.isEmpty()) userMessage = "${userMessage ?: ""} \n'Product' field required!"
 
-        if (priceStr.isBlank()) {
-            userMessage = "${userMessage ?: ""} \n'Price' field required! "
-        } else {
-            val priceRegex = Regex("^\\d+(\\.\\d{1,2})?$")
-            if (!priceRegex.matches(priceStr)) {
-                userMessage = "${userMessage ?: ""} \n'Total Sale Price' invalid. Must be a number with up to 2 decimals. \nExamples: 2.98, 2.1, 20, 0.2"
-            }
-        }
+        /*val priceRegex = Regex("^\\d+(\\.\\d{1,2})?$")
+        if (!priceRegex.matches(priceStr)) {
+            userMessage = "${userMessage ?: ""} 'Total Sale Price' invalid. Must be a number with up to 2 decimals. \nExamples: 2.98, 2.1, 20, 0.2"
+        }*/
 
-        if (userMessage != null) {
-            _addSaleUIState.update { currentState ->
-                currentState.copy(
-                    userMessage = userMessage
-                )
-            }
-        } /*else {*/
+        if (_addSaleUIState.value.buyerError != null &&
+            _addSaleUIState.value.itemsError != null &&
+            _addSaleUIState.value.totalSalePriceError != null
+        ) {
             viewModelScope.launch {
                 val saleEventId = UUID.randomUUID().toString()
 
@@ -180,7 +177,7 @@ class AddSaleViewModel @Inject constructor(
                     id = saleEventId,
                     date = uiState.value.date,
                     buyer = uiState.value.buyer,
-                    totalSalePrice = priceStr.toDoubleOrNull() ?: 0.0,
+                    totalSalePrice = 100.00,
                     saleNotes = uiState.value.saleNotes
                 )
 
@@ -208,7 +205,7 @@ class AddSaleViewModel @Inject constructor(
                     )
                 )
                 Log.d(TAG, "addEditEvents.emitted result: $ADD_RESULT_OK")
-//            }
+            }
         }
     }
 }
