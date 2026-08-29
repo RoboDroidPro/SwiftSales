@@ -157,19 +157,22 @@ class AddSaleViewModel @Inject constructor(
     }*/
 
     fun saveSale(){ // removed the boolean return, and its return statements below, because it is no longer necessary
-        if (uiState.value.buyer.isBlank()) _addSaleUIState.update { it.copy(buyerError = "Buyer field required!") }
-//        if (uiState.value.saleItems.isEmpty()) userMessage = "${userMessage ?: ""} \n'Product' field required!"
+        Log.d(TAG, "saveSale called")
+        if (_addSaleUIState.value.buyer.isBlank()) _addSaleUIState.update { it.copy(buyerError = "Buyer field required!") } else _addSaleUIState.update { it.copy(buyerError = null) } //todo a more efficient way is in the ai agent conversation
+//        if (uiState.value.saleItems.isEmpty()) userMessage = "${userMessage ?: ""} 'Product' field required!"
 
         /*val priceRegex = Regex("^\\d+(\\.\\d{1,2})?$")
         if (!priceRegex.matches(priceStr)) {
             userMessage = "${userMessage ?: ""} 'Total Sale Price' invalid. Must be a number with up to 2 decimals. \nExamples: 2.98, 2.1, 20, 0.2"
         }*/
+        Log.d(TAG, "ready to start if")
 
-        if (_addSaleUIState.value.buyerError != null &&
-            _addSaleUIState.value.itemsError != null &&
-            _addSaleUIState.value.totalSalePriceError != null
+        if (_addSaleUIState.value.buyerError == null &&
+            _addSaleUIState.value.itemsError == null &&
+            _addSaleUIState.value.totalSalePriceError == null
         ) {
             viewModelScope.launch {
+                Log.d(TAG, "viewModelScope.launch called")
                 val saleEventId = UUID.randomUUID().toString()
 
                 // 1. Create the Header (Entity)
@@ -177,9 +180,10 @@ class AddSaleViewModel @Inject constructor(
                     id = saleEventId,
                     date = uiState.value.date,
                     buyer = uiState.value.buyer,
-                    totalSalePrice = 100.00,
+                    totalSalePrice = uiState.value.totalSalePrice,
                     saleNotes = uiState.value.saleNotes
                 )
+                Log.d(TAG, "event created")
 
                 // 2. Create the Items (List of Entities)
                 val items = uiState.value.saleItems.map { itemState ->
@@ -191,9 +195,12 @@ class AddSaleViewModel @Inject constructor(
                         quantity = itemState.quantity ?: 0
                     )
                 }
+                Log.d(TAG, "items created")
 
                 // 3. Save them separately via the repo
                 saleRepository.insertSaleWithItems(event, items)
+                Log.d(TAG, "saleRepository.insertSaleWithItems called")
+
                 /**
                  * To see the sequence that goes through from the save button clicked, to the snackbar
                  * displayed, follow the numbers #1.
@@ -206,6 +213,8 @@ class AddSaleViewModel @Inject constructor(
                 )
                 Log.d(TAG, "addEditEvents.emitted result: $ADD_RESULT_OK")
             }
+        } else {
+            Log.d(TAG, "received errors: ${_addSaleUIState.value.buyerError}, ${_addSaleUIState.value.itemsError}, ${_addSaleUIState.value.totalSalePriceError}")
         }
     }
 }
