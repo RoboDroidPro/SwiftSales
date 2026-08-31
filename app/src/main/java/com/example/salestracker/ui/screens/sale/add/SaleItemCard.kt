@@ -81,7 +81,8 @@ fun SaleItemCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 // Price Field
                 OutlinedTextField(
@@ -94,16 +95,18 @@ fun SaleItemCard(
                             )
                         )
                     },
-                    label = { Text("Price") },
-                    modifier = Modifier.weight(1f),
+                    label = { Text("Unit Price") },
+                    modifier = Modifier.weight(1.2f),
                     prefix = { Text("$") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true
                 )
 
+                Text("×", style = MaterialTheme.typography.bodyLarge)
+
                 // Quantity Field
                 OutlinedTextField(
-                    value = itemState.quantity?.toString() ?: " 1",
+                    value = itemState.quantity?.toString() ?: "01",
                     onValueChange = { newQty ->
                         onAction(
                             AddSaleAction.SaleEntryAction(
@@ -113,8 +116,21 @@ fun SaleItemCard(
                         )
                     },
                     label = { Text("Qty") },
-                    modifier = Modifier.width(100.dp),
+                    modifier = Modifier.width(70.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
+                )
+
+                Text("=", style = MaterialTheme.typography.bodyLarge)
+
+                // Line Total Field (Read Only)
+                OutlinedTextField(
+                    value = "", // Visual field added, logic left to you
+                    onValueChange = {},
+                    label = { Text("Total") },
+                    modifier = Modifier.weight(1f),
+                    prefix = { Text("$") },
+                    readOnly = true,
                     singleLine = true
                 )
             }

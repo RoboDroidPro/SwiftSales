@@ -19,8 +19,8 @@ data class SaleItemState(
     val saleItemId: String = UUID.randomUUID().toString(),
     val product: Product = Product(),
     val salePrice: Double = 0.0,
-
+    val unitPrice: Double = 0.0,
     val quantity: Int? = null,
     val productError: String? = null,
-    val priceError: String? = null,
+    val unitPriceError: String? = null,
 )

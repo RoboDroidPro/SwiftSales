@@ -119,10 +119,11 @@ class AddSaleViewModel @Inject constructor(
                     when (action) {
                         is SaleItemAction.ProductChanged -> saleItemState.copy(
                             product = action.newProduct,
-                            salePrice = (action.newProduct.defaultPrice) * (saleItemState.quantity ?: 1)
+                            salePrice = (action.newProduct.defaultPrice) * (saleItemState.quantity ?: 1),
+                            unitPrice = action.newProduct.defaultPrice
                         )
                         is SaleItemAction.ProductPriceChanged -> saleItemState.copy(
-                            salePrice = action.newPrice.toDoubleOrNull()?: 0.0
+                            salePrice = action.newPrice.toDoubleOrNull() ?: 0.0
                         )
                         is SaleItemAction.QuantityChanged -> {
                             val cleanedQty = action.newQuantity.replace(" 1", "")
