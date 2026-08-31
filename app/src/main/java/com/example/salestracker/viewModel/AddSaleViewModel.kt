@@ -64,17 +64,13 @@ class AddSaleViewModel @Inject constructor(
             is AddSaleAction.BuyerChanged -> {
                 _addSaleUIState.update { currentState ->
                     currentState.copy(
-                        buyer = action.newBuyer
+                        buyer = action.newBuyer,
+                        buyerError = null
                     )
                 }
             }
-//            is AddSaleAction.TotalSalePriceChanged -> { //todo remove. Total sale price cannot be changed
-//                _addSaleUIState.update { currentState ->
-//                    currentState.copy(
-//                        totalSalePrice = action.newSalePrice
-//                    )
-//                }
-//            }
+//            is AddSaleAction.TotalSalePriceChanged -> {} //todo remove. Total sale price cannot be changed
+
             is AddSaleAction.SaleNotesChanged -> {
                 _addSaleUIState.update { currentState ->
                     currentState.copy(
@@ -100,7 +96,8 @@ class AddSaleViewModel @Inject constructor(
     private fun addSaleItem() {
         _addSaleUIState.update { currentState ->
             currentState.copy(
-                saleItems = currentState.saleItems + SaleItemState()
+                saleItems = currentState.saleItems + SaleItemState(),
+                itemsError = null
             )
         }
     }
@@ -127,13 +124,16 @@ class AddSaleViewModel @Inject constructor(
                         is SaleItemAction.ProductPriceChanged -> saleItemState.copy(
                             salePrice = action.newPrice.toDoubleOrNull()?: 0.0
                         )
-                        is SaleItemAction.QuantityChanged -> saleItemState.copy(
-                            quantity = action.newQuantity.toIntOrNull(),
-                            salePrice = calculatePrice(
-                                action.newQuantity.toIntOrNull() ?: 0,
-                                saleItemState.product.defaultPrice
+                        is SaleItemAction.QuantityChanged -> {
+                            val cleanedQty = action.newQuantity.replace(" 1", "")
+                            saleItemState.copy(
+                                quantity = cleanedQty.toIntOrNull(),
+                                salePrice = calculatePrice(
+                                    cleanedQty.toIntOrNull() ?: 1,
+                                    saleItemState.salePrice
+                                )
                             )
-                        )
+                        }
                     }
                 } else saleItemState
             }
@@ -158,8 +158,9 @@ class AddSaleViewModel @Inject constructor(
 
     fun saveSale(){ // removed the boolean return, and its return statements below, because it is no longer necessary
         Log.d(TAG, "saveSale called")
-        if (_addSaleUIState.value.buyer.isBlank()) _addSaleUIState.update { it.copy(buyerError = "Buyer field required!") } else _addSaleUIState.update { it.copy(buyerError = null) } //todo a more efficient way is in the ai agent conversation
-//        if (uiState.value.saleItems.isEmpty()) userMessage = "${userMessage ?: ""} 'Product' field required!"
+
+        val buyerError = if (_addSaleUIState.value.buyer.isBlank()) "Buyer field required!" else null
+        val itemsError = if (_addSaleUIState.value.saleItems.isEmpty()) "Add at least one item!" else null
 
         /*val priceRegex = Regex("^\\d+(\\.\\d{1,2})?$")
         if (!priceRegex.matches(priceStr)) {
@@ -167,9 +168,8 @@ class AddSaleViewModel @Inject constructor(
         }*/
         Log.d(TAG, "ready to start if")
 
-        if (_addSaleUIState.value.buyerError == null &&
-            _addSaleUIState.value.itemsError == null &&
-            _addSaleUIState.value.totalSalePriceError == null
+        if (buyerError == null &&
+            itemsError == null
         ) {
             viewModelScope.launch {
                 Log.d(TAG, "viewModelScope.launch called")
@@ -192,7 +192,7 @@ class AddSaleViewModel @Inject constructor(
                         saleId = saleEventId,
                         productId = itemState.product.id,
                         salePrice = itemState.salePrice,
-                        quantity = itemState.quantity ?: 0
+                        quantity = itemState.quantity ?: 1
                     )
                 }
                 Log.d(TAG, "items created")
@@ -214,7 +214,13 @@ class AddSaleViewModel @Inject constructor(
                 Log.d(TAG, "addEditEvents.emitted result: $ADD_RESULT_OK")
             }
         } else {
-            Log.d(TAG, "received errors: ${_addSaleUIState.value.buyerError}, ${_addSaleUIState.value.itemsError}, ${_addSaleUIState.value.totalSalePriceError}")
+            Log.d(TAG, "received errors: $buyerError, $itemsError")
+            _addSaleUIState.update { currentState ->
+                currentState.copy(
+                    buyerError = buyerError,
+                    itemsError = itemsError
+                )
+            }
         }
     }
 }

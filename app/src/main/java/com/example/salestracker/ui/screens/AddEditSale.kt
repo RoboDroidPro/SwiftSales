@@ -16,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -148,7 +149,11 @@ fun AddEditSale(
             OutlinedTextField(
                 value = state.buyer,
                 onValueChange = { onAction(AddSaleAction.BuyerChanged(it)) },
-                label = { Text("Buyer") },
+                label = { Text("Buyer") }, //todo I removed a modifier fill max. see if that makes trouble
+                isError = state.buyerError != null, // Highlights the box in red
+                supportingText = {
+                    state.buyerError?.let { Text(it) } // Shows the error message below the box
+                },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -177,6 +182,17 @@ fun AddEditSale(
                 onAction = onAction,
                 cardNumber = state.saleItems.indexOf(saleItem) + 1
             )
+        }
+
+        if (state.itemsError != null) {
+            item {
+                Text(
+                    text = state.itemsError,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
         }
 
         item {

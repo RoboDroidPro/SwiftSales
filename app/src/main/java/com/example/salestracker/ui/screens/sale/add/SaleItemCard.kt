@@ -103,7 +103,7 @@ fun SaleItemCard(
 
                 // Quantity Field
                 OutlinedTextField(
-                    value = if (itemState.quantity == null) "" else itemState.quantity.toString(),
+                    value = itemState.quantity?.toString() ?: " 1",
                     onValueChange = { newQty ->
                         onAction(
                             AddSaleAction.SaleEntryAction(

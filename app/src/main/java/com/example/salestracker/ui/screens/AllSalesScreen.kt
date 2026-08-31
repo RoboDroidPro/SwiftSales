@@ -154,6 +154,8 @@ fun AllSales(
                     )
                 }
             }
+
+            item { Spacer(Modifier.height(120.dp)) }
         }
 
 
