@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.math.round
 
 private const val TAG = "ArduinoAESVM"
 
@@ -119,19 +120,27 @@ class AddSaleViewModel @Inject constructor(
                     when (action) {
                         is SaleItemAction.ProductChanged -> saleItemState.copy(
                             product = action.newProduct,
-                            salePrice = (action.newProduct.defaultPrice) * (saleItemState.quantity ?: 1),
+                            lineTotal = calculatePrice(
+                                (saleItemState.quantity ?: 1),
+                                action.newProduct.defaultPrice
+                            ),
                             unitPrice = action.newProduct.defaultPrice
                         )
-                        is SaleItemAction.ProductPriceChanged -> saleItemState.copy(
-                            salePrice = action.newPrice.toDoubleOrNull() ?: 0.0
+                        is SaleItemAction.UnitPriceChanged -> saleItemState.copy(
+                            unitPrice = action.newPrice.toDoubleOrNull() ?: 0.0,
+                            lineTotal = calculatePrice(
+                                saleItemState.quantity ?: 1,
+                                action.newPrice.toDoubleOrNull() ?: 0.0
+                            )
                         )
                         is SaleItemAction.QuantityChanged -> {
                             val cleanedQty = action.newQuantity.replace(" 1", "")
+                            Log.d(TAG, "cleanedQty: $cleanedQty")
                             saleItemState.copy(
                                 quantity = cleanedQty.toIntOrNull(),
-                                salePrice = calculatePrice(
+                                lineTotal = calculatePrice(
                                     cleanedQty.toIntOrNull() ?: 1,
-                                    saleItemState.salePrice
+                                    saleItemState.unitPrice
                                 )
                             )
                         }
@@ -146,11 +155,12 @@ class AddSaleViewModel @Inject constructor(
     }
 
     private fun calculatePrice(quantity: Int, productPrice: Double): Double {
-        return (quantity * productPrice)
+        val rawPrice = quantity * productPrice
+        return round(rawPrice * 100) / 100.0
     }
 
     private fun calculateTotalSalePrice(items: List<SaleItemState>): Double {
-        return items.sumOf { it.salePrice }
+        return items.sumOf { it.lineTotal }
     }
 
     /*fun changeDate() {
@@ -192,7 +202,7 @@ class AddSaleViewModel @Inject constructor(
                         id = UUID.randomUUID().toString(),
                         saleId = saleEventId,
                         productId = itemState.product.id,
-                        salePrice = itemState.salePrice,
+                        salePrice = itemState.lineTotal,
                         quantity = itemState.quantity ?: 1
                     )
                 }

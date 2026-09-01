@@ -23,6 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.ui.components.ProductDropdown
+import java.util.Locale
 
 @Composable
 fun SaleItemCard(
@@ -86,12 +87,12 @@ fun SaleItemCard(
             ) {
                 // Price Field
                 OutlinedTextField(
-                    value = if (itemState.salePrice == 0.0) "" else itemState.salePrice.toString(),
+                    value = if (itemState.unitPrice == 0.0) "" else itemState.unitPrice.toString(),
                     onValueChange = { newPrice ->
                         onAction(
                             AddSaleAction.SaleEntryAction(
                                 itemState.saleItemId,
-                                SaleItemAction.ProductPriceChanged(newPrice)
+                                SaleItemAction.UnitPriceChanged(newPrice)
                             )
                         )
                     },
@@ -106,7 +107,7 @@ fun SaleItemCard(
 
                 // Quantity Field
                 OutlinedTextField(
-                    value = itemState.quantity?.toString() ?: "01",
+                    value = itemState.quantity?.toString() ?: " 1",
                     onValueChange = { newQty ->
                         onAction(
                             AddSaleAction.SaleEntryAction(
@@ -125,8 +126,8 @@ fun SaleItemCard(
 
                 // Line Total Field (Read Only)
                 OutlinedTextField(
-                    value = "", // Visual field added, logic left to you
-                    onValueChange = {},
+                    value = String.format(Locale.getDefault(), "%.2f", itemState.lineTotal),
+                    onValueChange = {}, // no need. Read only field
                     label = { Text("Total") },
                     modifier = Modifier.weight(1f),
                     prefix = { Text("$") },

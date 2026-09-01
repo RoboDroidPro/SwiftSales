@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.salestracker.data.model.SaleEventWithItems
+import java.util.Locale
 
 @Composable
 fun SalesListItem(
@@ -82,20 +83,27 @@ fun SalesListItem(
                 saleEventWithItems.items.forEach { itemWithProduct ->
                     val quantity = itemWithProduct.saleItem.quantity
                     val productName = itemWithProduct.product.name
-                    val price = itemWithProduct.saleItem.salePrice
-                    val lineTotal = quantity * price
+                    val lineTotal = itemWithProduct.saleItem.salePrice
+                    
+                    // Safely calculate unit price for display
+                    val unitPrice = if (quantity > 0) lineTotal / quantity else 0.0
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "$quantity x $productName",
+                            text = "$quantity x $productName ($${String.format(Locale.getDefault(), "%.2f", unitPrice)} each)",
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.weight(1f)
                         )
+                        /**
+                         * In computers, Double and Float types store numbers in binary, which can't perfectly
+                         * represent some decimals (like 0.55). When you multiply them, you get tiny rounding errors
+                         * like 7x4.55 = 31.849999999999998 instead of 31.85.
+                         */
                         Text(
-                            text = "$${String.format("%.2f", lineTotal)}",
+                            text = "$${String.format(Locale.getDefault(),"%.2f", lineTotal)}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium
                         )
@@ -122,7 +130,7 @@ fun SalesListItem(
                     color = MaterialTheme.colorScheme.secondary
                 )
                 Text(
-                    text = "$${String.format("%.2f", saleEventWithItems.saleEvent.totalSalePrice)}",
+                    text = "$${String.format(Locale.getDefault(), "%.2f", saleEventWithItems.saleEvent.totalSalePrice)}",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.onSurface

@@ -32,6 +32,6 @@ data class SaleItem(   // Represents one item in a sale (where one sale can have
     @PrimaryKey val id: String,
     val saleId: String,
     val productId: String,
-    val salePrice: Double,
+    val salePrice: Double, //represents the price of the sale item. could be quantity 5 were sold, making 5 x Product.price
     val quantity: Int
 )
