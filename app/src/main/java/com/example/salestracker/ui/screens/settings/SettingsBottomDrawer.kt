@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -76,8 +75,18 @@ fun AddProductSheet(
 
         OutlinedTextField(
             value = uIState.productName,
-            onValueChange = { viewModel.productNameChanged(it) },
+            onValueChange = {
+                if (it.length <= 40) viewModel.productNameChanged(it)
+            },
             label = { Text("Product Name") },
+            supportingText = {
+                Text(
+                    text = "${uIState.productName.length} / 40",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                )
+            },
+            singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
         )
@@ -135,7 +144,8 @@ fun AddProductSheet(
                 {
                     Icon(
                         imageVector = Icons.Filled.Delete,
-                        contentDescription = "Delete Product"
+                        contentDescription = "Delete Product",
+                        tint = MaterialTheme.colorScheme.error
                     )
                 }
             }
@@ -160,7 +170,7 @@ fun SettingsDrawerPreview() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Red)
+            .background(color = MaterialTheme.colorScheme.background)
     ) {
 //        SettingsScreen {  }
     }

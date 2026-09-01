@@ -181,7 +181,10 @@ fun AllSales(
             } else {
                 Button(
                     onClick = { viewModel.deleteSelectedSales() },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    ),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Confirm Deletion (${salesUIState.selectedSaleEventIds.size})")

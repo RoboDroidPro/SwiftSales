@@ -55,7 +55,7 @@ fun ProductDropdown(
                             color = if (product.inStock) {
                                 MaterialTheme.colorScheme.onSurface  // Normal text color
                             } else {
-                                MaterialTheme.colorScheme.onSurfaceVariant  // Greyed out (perfect M3 grey!)
+                                MaterialTheme.colorScheme.onSurfaceVariant  // Greyed out (perfect M3 gray!)
                             },
                             style = MaterialTheme.typography.bodyLarge //Todo added by Grok
                         )

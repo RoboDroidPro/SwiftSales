@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -169,7 +171,11 @@ fun Settings(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(top = 4.dp),
-            onClick = { showDeleteAllDialog = true }
+            onClick = { showDeleteAllDialog = true },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.error,
+                contentColor = MaterialTheme.colorScheme.onError
+            )
         ) {
             Text(
                 text = "Delete All",
@@ -203,13 +209,10 @@ fun ProductCard(
             .padding(horizontal = 4.dp, vertical = 4.dp)
             .height(50.dp)
             .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-/*        colors = CardColors(
-            Color.LightGray,
-            contentColor = Color.Black,
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = Color.DarkGray
-        )*/
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+        )
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -220,12 +223,16 @@ fun ProductCard(
         ) {
             Text(
                 text = product.name,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
             )
             Text(
                 text = "$${product.defaultPrice}",
                 fontSize = 14.sp,
-                fontWeight = FontWeight.W800
+                fontWeight = FontWeight.W800,
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
     }
