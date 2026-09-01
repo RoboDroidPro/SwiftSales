@@ -168,7 +168,14 @@ class SettingsViewModel @Inject constructor(
     //Database actions
     fun deleteAll() {
         viewModelScope.launch {
-            repository.deleteProductItems()
+            try {
+                repository.deleteProductItems()
+            } catch (e: Exception) {
+                Log.e(SETTAG, "Error deleting all products: ${e.message}")
+                _settingsUIState.update {
+                    it.copy(userMessage = "Cannot delete all products: Some are used in existing sales. Delete all sales first.")
+                }
+            }
         }
     }
 
@@ -180,11 +187,18 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun deleteProduct() {
-        _showAddProductSheet.value = false
         viewModelScope.launch {
-            repository.deleteProduct(
-                productId = currentProductID!!
-            )
+            try {
+                repository.deleteProduct(
+                    productId = currentProductID!!
+                )
+                _showAddProductSheet.value = false
+            } catch (e: Exception) {
+                Log.e(SETTAG, "Error deleting product: ${e.message}")
+                _settingsUIState.update {
+                    it.copy(userMessage = "Cannot delete: This product is used in existing sales. Delete the sales first.")
+                }
+            }
         }
     }
 

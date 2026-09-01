@@ -117,8 +117,11 @@ fun Settings(
     if (showDeleteAllDialog) {
         DeleteDialog(
             title = "Delete All",
-            contentText = "Are you sure you want to delete ALL the products? This will also delete ALL the sales recorded.",
-            onConfirm = settingsViewModel::deleteAll,
+            contentText = "Are you sure you want to delete ALL the products? Only products with NO SALE records can be deleted.",
+            onConfirm = {
+                showDeleteAllDialog = false
+                settingsViewModel.deleteAll()
+            },
             onCancel = { showDeleteAllDialog = false }
         )
     }

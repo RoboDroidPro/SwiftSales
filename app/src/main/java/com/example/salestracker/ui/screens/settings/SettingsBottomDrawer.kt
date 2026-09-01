@@ -49,7 +49,7 @@ fun AddProductSheet(
     if (showDeleteDialog) {
         DeleteDialog(
             title = "Delete Product?",
-            contentText = "This will permanently delete this product and ALL sales that reference it. This cannot be undone.",
+            contentText = "Are you sure you want to delete this product? Only products with NO SALE RECORDS can be deleted.",
             onConfirm = {
                 showDeleteDialog = false
                 viewModel.deleteProduct()
@@ -155,14 +155,14 @@ fun AddProductSheet(
             Text(
                 text = uIState.userMessage ?: "",
                 fontSize = 18.sp,
-                fontWeight = FontWeight.W600,
+                fontWeight = FontWeight.W800,
                 fontFamily = FontFamily.SansSerif,
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(vertical = 24.dp)
             )
         }
     }
-}//Todo it would be good to have a IN STOCK boolean
+}
 
 @Preview
 @Composable
