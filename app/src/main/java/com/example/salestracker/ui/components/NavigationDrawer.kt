@@ -12,12 +12,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -56,14 +54,16 @@ fun SalesDrawerSheet(
         modifier = Modifier
             .width(280.dp)
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)) {
             DrawerHeader(headerTitle = headerTitle)
             Spacer(Modifier.height(40.dp))
-            DrawerNavButton(
-                buttonIcon = Icons.Default.Star,
-                buttonLabel = "Star",
-                buttonIconContentDescription = "Star"
-            )
+//            DrawerNavButton(
+//                buttonIcon = Icons.Default.Star,
+//                buttonLabel = "Star",
+//                buttonIconContentDescription = "Star"
+//            )
             DrawerNavButton(
                 navButtonClick = onSettingsClick,
                 buttonIcon = Icons.Default.Settings,
@@ -83,54 +83,21 @@ fun DrawerHeader(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
+            .padding(top = 16.dp)
     ) {
-        /*Row(
-            modifier = modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = {},
-                modifier.size(40.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "Menu",
-                    Modifier.size(40.dp)
-                )
-            }
-            Spacer(Modifier.width(20.dp))
-            Text(
-                text = headerTitle,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.ExtraBold,
-                modifier = modifier//.padding(20.dp)
-            )
-        }*/
         Text(
             text = headerTitle,
             fontSize = 28.sp,
             fontWeight = FontWeight.ExtraBold,
+            color = MaterialTheme.colorScheme.primary, // Use theme's teal color
             modifier = modifier//.padding(20.dp)
         )
-        HorizontalDivider(thickness = 2.dp)
+        HorizontalDivider(
+            thickness = 2.dp,
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f) // Light teal divider
+        )
     }
 }
-
-/*@Composable
-fun Test() {
-    Column() {
-        ModalNavigationDrawer(
-            drawerContent = {  },
-            modifier = Modifier,
-            drawerState = DrawerState(DrawerValue.Closed),
-        ) {
-            ModalDrawerSheet(Modifier.width(280.dp)) {
-                DrawerHeader()
-                SalesDrawerSheet()
-            }
-        }
-    }
-}*/
 
 @Composable
 fun DrawerNavButton(
@@ -138,7 +105,7 @@ fun DrawerNavButton(
     buttonIcon: ImageVector = Icons.Default.Add,
     buttonIconContentDescription: String = "Add",
     buttonLabel: String = "Add",
-    iconTintColor: Color = LocalContentColor.current
+    iconTintColor: Color = MaterialTheme.colorScheme.primary
 ) {
     TextButton(
         onClick = navButtonClick,
@@ -160,8 +127,6 @@ fun DrawerNavButton(
             )
             Text(
                 text = buttonLabel,
-//                style = MaterialTheme.typography.bodyMedium,
-//                fontSize = 28.sp,
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 22.sp),
                 color = iconTintColor,
                 modifier = Modifier.padding(start = 16.dp)
@@ -170,27 +135,3 @@ fun DrawerNavButton(
         }
     }
 }
-
-/*@Preview
-@Composable
-fun DrawerPreview() {
-//    Column(Modifier
-//        .background(Color.Red)
-//        .fillMaxSize()) {
-////        SalesDrawerContent()
-////        Test()
-        SalesNavDrawer()
-//    }
-//    DrawerNavButton()
-
-}*/
-
-/*    ModalNavigationDrawer(
-        drawerContent = {},
-        modifier = modifier
-            .width(200.dp)
-            .background(color = Color.LightGray),
-
-        drawerState = drawerState,
-        content = content
-    )*/
