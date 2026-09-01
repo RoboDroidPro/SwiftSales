@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.toCurrencyString
+import com.example.salestracker.ui.components.DatePicker
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
 import com.example.salestracker.ui.screens.sale.add.AddSaleAction
@@ -137,14 +138,20 @@ fun AddEditSale(
             .fillMaxWidth()
     ) {
         item {
-            OutlinedTextField(
+            DatePicker(
                 value = state.date,
-                onValueChange = { /*viewModel.changeDate()*/ }, //this was commented out because if date is changeable, we need to parse it before storing it.
-                label = { Text("Date") },
-                readOnly = true, //Todo this needs to be false or deleted if a way of changing the date is implemented
-                modifier = Modifier
-                    .fillMaxWidth()
+                onValueChange = { onAction(AddSaleAction.DateChanged(it)) },
+                label = "Date",
+                modifier = Modifier.fillMaxWidth()
             )
+//            OutlinedTextField(
+//                value = state.date,
+//                onValueChange = { /*viewModel.changeDate()*/ }, //this was commented out because if date is changeable, we need to parse it before storing it.
+//                label = { Text("Date") },
+//                readOnly = true, //Todo this needs to be false or deleted if a way of changing the date is implemented
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//            )
         }
         item {
             OutlinedTextField(

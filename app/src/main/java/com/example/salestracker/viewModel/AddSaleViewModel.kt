@@ -60,7 +60,9 @@ class AddSaleViewModel @Inject constructor(
     fun onAction(action: AddSaleAction) {
         when (action) {
             is AddSaleAction.DateChanged -> {
-                //todo date change
+                _addSaleUIState.update {
+                    it.copy(date = action.newDate)
+                }
             }
             is AddSaleAction.BuyerChanged -> {
                 _addSaleUIState.update { currentState ->

@@ -4,7 +4,7 @@ import com.example.salestracker.data.model.Product
 import java.util.UUID
 
 data class AddSaleUIState(
-    val date: String = "8/28/26",
+    val date: String = "",
     val buyer: String = "",
     val totalSalePrice: Double = 0.00,
     val saleNotes: String = "",
