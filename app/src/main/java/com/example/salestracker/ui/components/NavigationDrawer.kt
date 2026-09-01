@@ -16,6 +16,7 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -89,12 +90,12 @@ fun DrawerHeader(
             text = headerTitle,
             fontSize = 28.sp,
             fontWeight = FontWeight.ExtraBold,
-            color = MaterialTheme.colorScheme.primary, // Use theme's teal color
+//            color = MaterialTheme.colorScheme.primary, // Use theme's teal color
             modifier = modifier//.padding(20.dp)
         )
         HorizontalDivider(
             thickness = 2.dp,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f) // Light teal divider
+//            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f) // Light teal divider
         )
     }
 }
@@ -105,7 +106,7 @@ fun DrawerNavButton(
     buttonIcon: ImageVector = Icons.Default.Add,
     buttonIconContentDescription: String = "Add",
     buttonLabel: String = "Add",
-    iconTintColor: Color = MaterialTheme.colorScheme.primary
+    iconTintColor: Color = LocalContentColor.current
 ) {
     TextButton(
         onClick = navButtonClick,
