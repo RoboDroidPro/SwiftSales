@@ -20,7 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.salestracker.data.model.SaleEventWithItems
-import java.util.Locale
 
 @Composable
 fun SalesListItem(
@@ -93,7 +92,7 @@ fun SalesListItem(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "$quantity x $productName ($${String.format(Locale.getDefault(), "%.2f", unitPrice)} each)",
+                            text = "$quantity x $productName ($${unitPrice.toCurrencyString()} each)",
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.weight(1f)
                         )
@@ -103,7 +102,7 @@ fun SalesListItem(
                          * like 7x4.55 = 31.849999999999998 instead of 31.85.
                          */
                         Text(
-                            text = "$${String.format(Locale.getDefault(),"%.2f", lineTotal)}",
+                            text = "$${lineTotal.toCurrencyString()}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium
                         )
@@ -130,7 +129,7 @@ fun SalesListItem(
                     color = MaterialTheme.colorScheme.secondary
                 )
                 Text(
-                    text = "$${String.format(Locale.getDefault(), "%.2f", saleEventWithItems.saleEvent.totalSalePrice)}",
+                    text = "$${saleEventWithItems.saleEvent.totalSalePrice.toCurrencyString()}",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.onSurface

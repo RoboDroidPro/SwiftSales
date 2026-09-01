@@ -22,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.salestracker.data.model.Product
+import com.example.salestracker.toCurrencyString
 import com.example.salestracker.ui.components.ProductDropdown
-import java.util.Locale
 
 @Composable
 fun SaleItemCard(
@@ -126,7 +126,7 @@ fun SaleItemCard(
 
                 // Line Total Field (Read Only)
                 OutlinedTextField(
-                    value = String.format(Locale.getDefault(), "%.2f", itemState.lineTotal),
+                    value = itemState.lineTotal.toCurrencyString(),
                     onValueChange = {}, // no need. Read only field
                     label = { Text("Total") },
                     modifier = Modifier.weight(1f),

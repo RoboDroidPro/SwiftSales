@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.salestracker.data.model.Product
+import com.example.salestracker.toCurrencyString
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
 import com.example.salestracker.ui.screens.sale.add.AddSaleAction
@@ -160,7 +161,7 @@ fun AddEditSale(
 
         item {
             OutlinedTextField(
-                value = state.totalSalePrice.toString(),
+                value = state.totalSalePrice.toCurrencyString(),
                 onValueChange = {},
                 label = { Text("Total Sale Price") },
                 readOnly = true,
