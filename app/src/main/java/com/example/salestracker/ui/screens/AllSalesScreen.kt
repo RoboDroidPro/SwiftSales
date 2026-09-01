@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,8 +15,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.filled.SelectAll
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,7 +24,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,9 +39,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.salestracker.SalesListItem
 import com.example.salestracker.data.model.SaleEventWithItems
+import com.example.salestracker.ui.components.DeleteDialog
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
 import com.example.salestracker.ui.navigation.SNACKBAR_MSG_KEY
+import com.example.salestracker.ui.screens.sale.list.AllSalesAction
+import com.example.salestracker.ui.screens.sale.list.SalesUIState
 import com.example.salestracker.viewModel.AllSalesViewModel
 
 private const val TAG = "ArduinoASS"
@@ -101,12 +102,36 @@ fun AllSalesScreen(
                 onNavigationIconClicked = onMenuClick,
                 navigationIcon = {
                     if (isSelectionMode) {
-                        IconButton(onClick = { viewModel.clearSelection() }) {
+                        IconButton(onClick = { viewModel.onAction(AllSalesAction.ClearSelection) }) {
                             Icon(Icons.Default.Close, contentDescription = "Clear Selection")
                         }
                     } else {
                         IconButton(onClick = onMenuClick) {
                             Icon(Icons.Default.Menu, contentDescription = "Open Navigation Drawer")
+                        }
+                    }
+                },
+                moreTopBarActions = {
+                    if (isSelectionMode) {
+                        IconButton(
+                            onClick = { viewModel.onAction(AllSalesAction.AskForDeletionConfirmation) },
+                            enabled = !salesUIState.isConfirmingDeletion
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = "Delete Selected"
+                            )
+                        }
+                        if (salesUIState.selectedSaleEventIds.size < salesUIState.allSaleEventWithItems.size) {
+                            IconButton(
+                                onClick = { viewModel.onAction(AllSalesAction.SelectAllSales) },
+                                enabled = !salesUIState.isConfirmingDeletion
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.SelectAll,
+                                    contentDescription = "Select All"
+                                )
+                            }
                         }
                     }
                 },
@@ -138,7 +163,8 @@ fun AllSalesScreen(
         AllSales(
             modifier = modifier.padding(paddingValues),
             onAddEditSale = onAddEditSale,
-            viewModel = viewModel
+            allSalesUIState = salesUIState,
+            onAction = viewModel::onAction
         )
     }
 }
@@ -146,13 +172,26 @@ fun AllSalesScreen(
 @Composable
 fun AllSales(
     modifier: Modifier = Modifier,
-    viewModel: AllSalesViewModel,
+    allSalesUIState: SalesUIState,
+    onAction: (AllSalesAction) -> Unit,
     onAddEditSale: (SaleEventWithItems?) -> Unit,
 ) {
-    val salesUIState by viewModel.salesUIState.collectAsStateWithLifecycle()
 
-    BackHandler(enabled = salesUIState.selectedSaleEventIds.isNotEmpty()) {
-        viewModel.clearSelection()
+    if (allSalesUIState.isConfirmingDeletion) {
+        DeleteDialog(
+            title = "Delete Sales",
+            contentText = "Are you sure you want to permanently delete ${allSalesUIState.selectedSaleEventIds.size}" +
+                    " sale${if (allSalesUIState.selectedSaleEventIds.size > 1) "s" else ""}?",
+            confirmText = "Yes, Delete",
+            onConfirm = {
+                onAction(AllSalesAction.DeleteSelectedSales)
+            },
+            onCancel = { onAction(AllSalesAction.ClearSelection) }
+        )
+    }
+
+    BackHandler(enabled = allSalesUIState.selectedSaleEventIds.isNotEmpty()) {
+        onAction(AllSalesAction.ClearSelection)
     }
 
     Column(
@@ -164,8 +203,8 @@ fun AllSales(
                 .weight(1f)
 
         ) {
-            items(salesUIState.allSaleEventWithItems) { productSale ->
-                val isSelected = salesUIState.selectedSaleEventIds.contains(productSale.saleEvent.id)
+            items(allSalesUIState.allSaleEventWithItems) { productSale ->
+                val isSelected = allSalesUIState.selectedSaleEventIds.contains(productSale.saleEvent.id)
 
                 Box(
                     modifier = Modifier.background(
@@ -178,55 +217,16 @@ fun AllSales(
                         saleEventWithItems = productSale,
                         isSelected = isSelected,
                         onClick = {
-                            if (salesUIState.selectedSaleEventIds.isNotEmpty()) {
-                                viewModel.toggleSelection(productSale.saleEvent.id)
+                            if (allSalesUIState.selectedSaleEventIds.isNotEmpty()) {
+                                onAction(AllSalesAction.ToggleSelection(productSale.saleEvent.id))
                             } else onAddEditSale(productSale)
                         },
-                        onLongClick = { viewModel.toggleSelection(productSale.saleEvent.id) }
+                        onLongClick = { onAction(AllSalesAction.ToggleSelection(productSale.saleEvent.id)) }
                     )
                 }
             }
 
             item { Spacer(Modifier.height(120.dp)) }
-        }
-
-        if (salesUIState.selectedSaleEventIds.isNotEmpty()) {
-            if (!salesUIState.confirmDeletionValue) {
-                if (salesUIState.selectedSaleEventIds.size < salesUIState.allSaleEventWithItems.size) {
-                    Button(
-                        onClick = { viewModel.selectAll(salesUIState.allSaleEventWithItems.map { it.saleEvent.id }) },
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
-                    ) {
-                        Text("Select All (${salesUIState.allSaleEventWithItems.size})")
-                    }
-//                    Spacer(Modifier.height(4.dp))
-                }
-                Button(
-                    onClick = { viewModel.askForDeleteConfirmation() }, //Todo all viewModelConfirmDeletion calls should be replaced with uiState.confirmDeletion
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(top = 4.dp)
-                ) {
-                    Text("Delete selected (${salesUIState.selectedSaleEventIds.size})")
-                }
-            } else {
-                Button(
-                    onClick = { viewModel.deleteSelectedSales() },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = MaterialTheme.colorScheme.onError
-                    ),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
-                ) {
-                    Text("Confirm Deletion (${salesUIState.selectedSaleEventIds.size})")
-                }
-
-//                Spacer(Modifier.height(4.dp))
-            }
-            Button(
-                onClick = { viewModel.clearSelection() },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(top = 4.dp)
-            ) {
-                Text("Cancel")
-            }
         }
     }
 }

@@ -3,7 +3,8 @@ package com.example.salestracker.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.salestracker.SaleRepository
-import com.example.salestracker.data.model.SaleEventWithItems
+import com.example.salestracker.ui.screens.sale.list.AllSalesAction
+import com.example.salestracker.ui.screens.sale.list.SalesUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -39,11 +40,6 @@ private const val TAG = "ArduinoASVM"
  * flow does not emit again, and the listening/collecting side never finds out there was a change
  * and thus does not recompose.
  */
-data class SalesUIState(
-    val allSaleEventWithItems: List<SaleEventWithItems> = emptyList(),
-    val selectedSaleEventIds: List<String> = emptyList(),
-    val confirmDeletionValue: Boolean = false,
-)
 
 @HiltViewModel
 class AllSalesViewModel @Inject constructor(
@@ -73,12 +69,22 @@ class AllSalesViewModel @Inject constructor(
         }
     }
 
+    fun onAction(action: AllSalesAction) {
+        when(action) {
+            AllSalesAction.AskForDeletionConfirmation -> askForDeleteConfirmation()
+            AllSalesAction.ClearSelection -> clearSelection()
+            AllSalesAction.DeleteSelectedSales -> deleteSelectedSales()
+            is AllSalesAction.SelectAllSales -> selectAll(salesUIState.value.allSaleEventWithItems.map { it.saleEvent.id })
+            is AllSalesAction.ToggleSelection -> toggleSelection(action.saleId)
+        }
+    }
+
     // this fun deselects all sales
     private fun deselect() {
         _salesUIState.update { currentState ->
             currentState.copy(
                 selectedSaleEventIds = emptyList(),
-                confirmDeletionValue = false
+                isConfirmingDeletion = false
             )
         }
     }
@@ -100,7 +106,7 @@ class AllSalesViewModel @Inject constructor(
     fun askForDeleteConfirmation() {
         _salesUIState.update { currentState ->
             currentState.copy(
-                confirmDeletionValue = true
+                isConfirmingDeletion = true
             )
         }
     }
@@ -113,7 +119,7 @@ class AllSalesViewModel @Inject constructor(
     fun cancelDeletionConfirmation() {
         _salesUIState.update { currentState ->
             currentState.copy(
-                confirmDeletionValue = false
+                isConfirmingDeletion = false
             )
         }
     }
