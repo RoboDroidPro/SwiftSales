@@ -12,7 +12,9 @@ import androidx.compose.ui.unit.sp
 fun DeleteDialog(
     title: String = "Delete",
     contentText: String = "Are you sure you want to delete?",
+    confirmText: String = "Delete Anyway",
     onConfirm: () -> Unit,
+    cancelText: String = "Cancel",
     onCancel: () -> Unit
 ) {
 
@@ -25,12 +27,12 @@ fun DeleteDialog(
                 onClick = onConfirm,
                 colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
             ) {
-                Text("Delete Anyway")
+                Text(confirmText)
             }
         },
         dismissButton = {
             TextButton(onClick = onCancel) {
-                Text("Cancel")
+                Text(cancelText)
             }
         }
     )
