@@ -82,11 +82,11 @@ fun SaleItemCard(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Top
             ) {
                 // Price Field
                 OutlinedTextField(
-                    value = if (itemState.unitPrice == "0.0") "" else itemState.unitPrice,
+                    value = itemState.unitPrice,
                     onValueChange = { newPrice ->
                         onAction(
                             AddSaleAction.SaleEntryAction(
@@ -99,10 +99,14 @@ fun SaleItemCard(
                     modifier = Modifier.weight(1.2f),
                     prefix = { Text("$") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    singleLine = true
+                    singleLine = true,
+                    isError = itemState.unitPriceError != null,
+                    supportingText = {
+                        itemState.unitPriceError?.let { Text(it) } // Shows the error message below the box
+                    },
                 )
 
-                Text("×", style = MaterialTheme.typography.bodyLarge)
+                Text("×", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(top = 24.dp))
 
                 // Quantity Field
                 OutlinedTextField(
@@ -121,7 +125,7 @@ fun SaleItemCard(
                     singleLine = true
                 )
 
-                Text("=", style = MaterialTheme.typography.bodyLarge)
+                Text("=", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(top = 24.dp))
 
                 // Line Total Field (Read Only)
                 OutlinedTextField(

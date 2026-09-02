@@ -73,7 +73,6 @@ class AddSaleViewModel @Inject constructor(
                     )
                 }
             }
-//            is AddSaleAction.TotalSalePriceChanged -> {} //todo remove. Total sale price cannot be changed
 
             is AddSaleAction.SaleNotesChanged -> {
                 _addSaleUIState.update { currentState ->
@@ -129,13 +128,17 @@ class AddSaleViewModel @Inject constructor(
                             ),
                             unitPrice = action.newProduct.defaultPrice.toSwiftString()
                         )
-                        is SaleItemAction.UnitPriceChanged -> saleItemState.copy(
-                            unitPrice = action.newPrice,
-                            lineTotal = calculatePrice(
-                                saleItemState.quantity ?: 1,
-                                action.newPrice.toSwiftCurrency() ?: 0
+                        is SaleItemAction.UnitPriceChanged -> {
+                            val productPrice = action.newPrice.toSwiftCurrency()
+                            saleItemState.copy(
+                                unitPrice = action.newPrice,
+                                lineTotal = calculatePrice(
+                                    saleItemState.quantity ?: 1,
+                                    productPrice ?: 0
+                                ),
+                                unitPriceError = if (productPrice == null) "Invalid price" else null
                             )
-                        )
+                        }
                         is SaleItemAction.QuantityChanged -> {
                             val cleanedQty = action.newQuantity.replace(" 1", "")
                             Log.d(TAG, "cleanedQty: $cleanedQty")
