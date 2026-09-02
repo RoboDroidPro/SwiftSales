@@ -1,4 +1,4 @@
-package com.example.salestracker
+package com.example.salestracker.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -10,6 +10,6 @@ data class SaleEvent(  // Represents an event when one or more products were sol
     @PrimaryKey val id: String,
     val date: String,
     val buyer: String,
-    val totalSalePrice: Double,
+    val totalSalePrice: Int,
     val saleNotes: String? = null
 )

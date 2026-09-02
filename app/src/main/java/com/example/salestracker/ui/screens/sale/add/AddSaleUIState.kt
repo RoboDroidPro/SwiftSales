@@ -6,7 +6,7 @@ import java.util.UUID
 data class AddSaleUIState(
     val date: String = "",
     val buyer: String = "",
-    val totalSalePrice: Double = 0.00,
+    val totalSalePrice: String = "",
     val saleNotes: String = "",
     val saleItems: List<SaleItemState> = listOf(SaleItemState()),
 
@@ -18,8 +18,8 @@ data class AddSaleUIState(
 data class SaleItemState(
     val saleItemId: String = UUID.randomUUID().toString(),
     val product: Product = Product(),
-    val lineTotal: Double = 0.0,
-    val unitPrice: Double = 0.0,
+    val lineTotal: String = "",
+    val unitPrice: String = "",
     val quantity: Int? = null,
     val productError: String? = null,
     val unitPriceError: String? = null,

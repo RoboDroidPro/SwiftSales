@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.salestracker.SaleEvent
 import com.example.salestracker.SaleRepository
+import com.example.salestracker.data.model.SaleEvent
 import com.example.salestracker.data.model.SaleItem
 import com.example.salestracker.data.repository.ProductRepository
 import com.example.salestracker.ui.navigation.ADD_RESULT_OK
@@ -13,6 +13,8 @@ import com.example.salestracker.ui.screens.sale.add.AddSaleAction
 import com.example.salestracker.ui.screens.sale.add.AddSaleUIState
 import com.example.salestracker.ui.screens.sale.add.SaleItemAction
 import com.example.salestracker.ui.screens.sale.add.SaleItemState
+import com.example.salestracker.utils.toSwiftCurrency
+import com.example.salestracker.utils.toSwiftString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +27,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
-import kotlin.math.round
 
 private const val TAG = "ArduinoAESVM"
 
@@ -109,7 +110,7 @@ class AddSaleViewModel @Inject constructor(
         _addSaleUIState.update { currentState ->
             val newSaleItems = currentState.saleItems.filter { it.saleItemId != itemId }
             currentState.copy(
-                totalSalePrice = calculateTotalSalePrice(newSaleItems),
+                totalSalePrice = calculateTotalSalePrice(newSaleItems) ?: "0.00",
                 saleItems = newSaleItems
             )
         }
@@ -126,13 +127,13 @@ class AddSaleViewModel @Inject constructor(
                                 (saleItemState.quantity ?: 1),
                                 action.newProduct.defaultPrice
                             ),
-                            unitPrice = action.newProduct.defaultPrice
+                            unitPrice = action.newProduct.defaultPrice.toSwiftString()
                         )
                         is SaleItemAction.UnitPriceChanged -> saleItemState.copy(
-                            unitPrice = action.newPrice.toDoubleOrNull() ?: 0.0,
+                            unitPrice = action.newPrice,
                             lineTotal = calculatePrice(
                                 saleItemState.quantity ?: 1,
-                                action.newPrice.toDoubleOrNull() ?: 0.0
+                                action.newPrice.toSwiftCurrency() ?: 0
                             )
                         )
                         is SaleItemAction.QuantityChanged -> {
@@ -142,7 +143,7 @@ class AddSaleViewModel @Inject constructor(
                                 quantity = cleanedQty.toIntOrNull(),
                                 lineTotal = calculatePrice(
                                     cleanedQty.toIntOrNull() ?: 1,
-                                    saleItemState.unitPrice
+                                    saleItemState.unitPrice.toSwiftCurrency() ?: 0
                                 )
                             )
                         }
@@ -150,19 +151,18 @@ class AddSaleViewModel @Inject constructor(
                 } else saleItemState
             }
             state.copy(
-                totalSalePrice = calculateTotalSalePrice(saleItems),
+                totalSalePrice = calculateTotalSalePrice(saleItems) ?: "0.00",
                 saleItems = saleItems
             )
         }
     }
 
-    private fun calculatePrice(quantity: Int, productPrice: Double): Double {
-        val rawPrice = quantity * productPrice
-        return round(rawPrice * 100) / 100.0
+    private fun calculatePrice(quantity: Int, productPrice: Int): String {
+        return (quantity * productPrice).toSwiftString()
     }
 
-    private fun calculateTotalSalePrice(items: List<SaleItemState>): Double {
-        return items.sumOf { it.lineTotal }
+    private fun calculateTotalSalePrice(items: List<SaleItemState>): String? {
+        return items.sumOf { it.lineTotal.toSwiftCurrency() ?: return null }.toSwiftString()
     }
 
     /*fun changeDate() {
@@ -193,7 +193,7 @@ class AddSaleViewModel @Inject constructor(
                     id = saleEventId,
                     date = uiState.value.date,
                     buyer = uiState.value.buyer,
-                    totalSalePrice = uiState.value.totalSalePrice,
+                    totalSalePrice = uiState.value.totalSalePrice.toSwiftCurrency() ?: 0,
                     saleNotes = uiState.value.saleNotes
                 )
                 Log.d(TAG, "event created")
@@ -204,7 +204,7 @@ class AddSaleViewModel @Inject constructor(
                         id = UUID.randomUUID().toString(),
                         saleId = saleEventId,
                         productId = itemState.product.id,
-                        salePrice = itemState.lineTotal,
+                        salePrice = itemState.lineTotal.toSwiftCurrency() ?: 0,
                         quantity = itemState.quantity ?: 1
                     )
                 }

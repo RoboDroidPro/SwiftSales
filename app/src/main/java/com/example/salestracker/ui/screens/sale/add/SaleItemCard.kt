@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.salestracker.data.model.Product
-import com.example.salestracker.toCurrencyString
 import com.example.salestracker.ui.components.ProductDropdown
 
 @Composable
@@ -87,7 +86,7 @@ fun SaleItemCard(
             ) {
                 // Price Field
                 OutlinedTextField(
-                    value = if (itemState.unitPrice == 0.0) "" else itemState.unitPrice.toString(),
+                    value = if (itemState.unitPrice == "0.0") "" else itemState.unitPrice,
                     onValueChange = { newPrice ->
                         onAction(
                             AddSaleAction.SaleEntryAction(
@@ -126,7 +125,7 @@ fun SaleItemCard(
 
                 // Line Total Field (Read Only)
                 OutlinedTextField(
-                    value = itemState.lineTotal.toCurrencyString(),
+                    value = itemState.lineTotal,
                     onValueChange = {}, // no need. Read only field
                     label = { Text("Total") },
                     modifier = Modifier.weight(1f),

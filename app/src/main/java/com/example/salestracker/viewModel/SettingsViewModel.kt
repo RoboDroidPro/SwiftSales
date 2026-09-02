@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.data.repository.ProductRepository
 import com.example.salestracker.ui.screens.settings.SETTAG
+import com.example.salestracker.utils.toSwiftCurrency
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -113,7 +114,7 @@ class SettingsViewModel @Inject constructor(
                 Product(
                     id = currentProductID ?: UUID.randomUUID().toString(),
                     name = _settingsUIState.value.productName,
-                    defaultPrice = _settingsUIState.value.productPrice.toDoubleOrNull() ?: 0.0,
+                    defaultPrice = _settingsUIState.value.productPrice.toSwiftCurrency() ?: 0,
                     notes = _settingsUIState.value.productNotes,
                     inStock = _settingsUIState.value.productInStock,
                     orderIndex = _settingsUIState.value.productOrderIndex.toIntOrNull() ?: 0

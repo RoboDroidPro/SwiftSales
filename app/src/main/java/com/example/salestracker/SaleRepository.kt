@@ -1,5 +1,6 @@
 package com.example.salestracker
 
+import com.example.salestracker.data.model.SaleEvent
 import com.example.salestracker.data.model.SaleEventWithItems
 import com.example.salestracker.data.model.SaleItem
 import kotlinx.coroutines.flow.Flow
