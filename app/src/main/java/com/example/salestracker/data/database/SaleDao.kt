@@ -15,6 +15,7 @@ interface SaleDao {
     @Transaction
     suspend fun upsertSaleWithItems(event: SaleEvent, items: List<SaleItem>) {
         upsertSale(event)
+        deleteItemsBySaleId(event.id)
         insertSaleItems(items)
     }
 
@@ -34,7 +35,9 @@ interface SaleDao {
     @Query("DELETE FROM sales WHERE id IN (:saleEventIds)")
     suspend fun deleteSales(saleEventIds: List<String>)
 
-    //----------------
+    @Query("DELETE FROM sale_item WHERE saleId = :saleId")
+    suspend fun deleteItemsBySaleId(saleId: String)
+
     @Transaction
     @Query("SELECT * FROM sales ORDER BY date DESC")
     fun getAllSalesWithProducts(): Flow<List<SaleEventWithItems>>
@@ -42,5 +45,4 @@ interface SaleDao {
     @Transaction
     @Query("SELECT * FROM sales WHERE id = :id")
     suspend fun getSaleWithItems(id: String): SaleEventWithItems?
-    //----------------
 }

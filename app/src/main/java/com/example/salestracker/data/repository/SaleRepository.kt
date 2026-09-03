@@ -19,13 +19,7 @@ class SaleRepository @Inject constructor(private val dao: SaleDao) {
     }
 
     suspend fun upsertSaleWithItems(event: SaleEvent, items: List<SaleItem>) {
-        dao.upsertSale(event)
-        dao.insertSaleItems(items)
-    }
-
-    suspend fun insertSaleWithItems(event: SaleEvent, items: List<SaleItem>) {
-        dao.upsertSale(event)
-        dao.insertSaleItems(items)
+        dao.upsertSaleWithItems(event, items)
     }
 
     suspend fun deleteSales(saleEventIds: List<String>) {
