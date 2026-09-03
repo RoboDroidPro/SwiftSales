@@ -1,5 +1,6 @@
-package com.example.salestracker
+package com.example.salestracker.data.repository
 
+import com.example.salestracker.data.database.SaleDao
 import com.example.salestracker.data.model.SaleEvent
 import com.example.salestracker.data.model.SaleEventWithItems
 import com.example.salestracker.data.model.SaleItem

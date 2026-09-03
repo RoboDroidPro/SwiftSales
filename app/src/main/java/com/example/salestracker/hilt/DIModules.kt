@@ -2,10 +2,10 @@ package com.example.salestracker.hilt
 
 import android.content.Context
 import androidx.room.Room
-import com.example.salestracker.MIGRATION_1_2
-import com.example.salestracker.SaleDao
-import com.example.salestracker.SaleDatabase
+import com.example.salestracker.data.database.MIGRATION_1_2
+import com.example.salestracker.data.database.SaleDatabase
 import com.example.salestracker.data.database.ProductDao
+import com.example.salestracker.data.database.SaleDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

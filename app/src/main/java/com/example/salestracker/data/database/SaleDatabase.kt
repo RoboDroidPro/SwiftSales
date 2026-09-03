@@ -1,10 +1,9 @@
-package com.example.salestracker
+package com.example.salestracker.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.salestracker.data.database.ProductDao
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.data.model.SaleEvent
 import com.example.salestracker.data.model.SaleItem

@@ -15,7 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.salestracker.R
 import com.example.salestracker.ui.components.SalesNavDrawer
-import com.example.salestracker.ui.screens.AddEditSaleScreen
+import com.example.salestracker.ui.screens.sale.add.AddEditSaleScreen
 import com.example.salestracker.ui.screens.AllSalesScreen
 import com.example.salestracker.ui.screens.settings.SettingsScreen
 import com.example.salestracker.viewModel.AllSalesViewModel

@@ -1,4 +1,4 @@
-package com.example.salestracker
+package com.example.salestracker.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert

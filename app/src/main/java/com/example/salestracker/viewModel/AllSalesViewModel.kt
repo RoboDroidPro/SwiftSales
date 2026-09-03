@@ -2,7 +2,7 @@ package com.example.salestracker.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.salestracker.SaleRepository
+import com.example.salestracker.data.repository.SaleRepository
 import com.example.salestracker.ui.screens.sale.list.AllSalesAction
 import com.example.salestracker.ui.screens.sale.list.SalesUIState
 import dagger.hilt.android.lifecycle.HiltViewModel

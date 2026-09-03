@@ -1,4 +1,4 @@
-package com.example.salestracker.ui.screens
+package com.example.salestracker.ui.screens.sale.add
 
 import android.util.Log
 import androidx.compose.foundation.layout.Spacer
@@ -36,11 +36,7 @@ import com.example.salestracker.data.model.Product
 import com.example.salestracker.ui.components.DatePicker
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
-import com.example.salestracker.ui.screens.sale.add.AddSaleAction
-import com.example.salestracker.ui.screens.sale.add.AddSaleUIState
-import com.example.salestracker.ui.screens.sale.add.SaleItemCard
 import com.example.salestracker.viewModel.AddSaleViewModel
-import com.example.salestracker.viewModel.UIEvent
 
 private const val TAG = "ArduinoAESS"
 
@@ -67,7 +63,7 @@ fun AddEditSaleScreen(
         viewModel.addEditEvents.collect { event ->
             Log.d(TAG, "AddEditEvent collection: [$event]")
             when(event) {
-                is UIEvent.ShowSnackbar -> { //this could be used to display things like "Buyer field required"
+                is AddEditUIEvent.ShowSnackbar -> { //this could be used to display things like "Buyer field required"
                     // If you want inline snackbars on AddEditScreen
                     snackBarHostState.showSnackbar(
                         context.getString(event.messageRes)
@@ -80,7 +76,7 @@ fun AddEditSaleScreen(
                  * [onNavigateToAllSales],calling step 4# at [com.example.salestracker.ui.navigation.SaleNavGraph]
                  * in the AddEditSaleScreen call in the composable{} block
                  */
-                is UIEvent.NavigateBack -> {
+                is AddEditUIEvent.NavigateBack -> {
                     onNavigateToAllSales(event.resultCode)   //calls onNavigate passing the result code passed from the event flow
                     Log.d(TAG, "addEditEvent is nav back '${event.resultCode}'")
                 }

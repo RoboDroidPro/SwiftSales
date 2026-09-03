@@ -4,11 +4,12 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.salestracker.SaleRepository
 import com.example.salestracker.data.model.SaleEvent
 import com.example.salestracker.data.model.SaleItem
 import com.example.salestracker.data.repository.ProductRepository
+import com.example.salestracker.data.repository.SaleRepository
 import com.example.salestracker.ui.navigation.ADD_RESULT_OK
+import com.example.salestracker.ui.screens.sale.add.AddEditUIEvent
 import com.example.salestracker.ui.screens.sale.add.AddSaleAction
 import com.example.salestracker.ui.screens.sale.add.AddSaleUIState
 import com.example.salestracker.ui.screens.sale.add.SaleItemAction
@@ -46,9 +47,9 @@ class AddSaleViewModel @Inject constructor(
      * variable to share a flow of events of the AddEditScreen. AddEditScreen listens to this flow
      * the [saveSale] function uses it to emit a snackbar.
      * This is #2 of snackbar journey. Next is in
-     * @see com.example.salestracker.ui.screens.AddEditSaleScreen
+     * @see com.example.salestracker.ui.screens.sale.add.AddEditSaleScreen
      */
-    private val _addEditEvents = MutableSharedFlow<UIEvent>()
+    private val _addEditEvents = MutableSharedFlow<AddEditUIEvent>()
     val addEditEvents = _addEditEvents.asSharedFlow()
 
     // AddEditSaleViewModel – inject ProductRepository only
@@ -223,7 +224,7 @@ class AddSaleViewModel @Inject constructor(
                  * This is number #1. Next is in [_addEditEvents]
                  */
                 _addEditEvents.emit(  //emits an event into the flow for AddEditSale to collect
-                    UIEvent.NavigateBack(
+                    AddEditUIEvent.NavigateBack(
                         resultCode = ADD_RESULT_OK
                     )
                 )
