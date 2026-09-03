@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
 //    id("com.google.dagger.hilt.android") version "2.57.2"
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -75,4 +76,7 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     // Hilt + Jetpack Compose integration
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    //added for serialization
+    implementation(libs.kotlinx.serialization.json)
 }

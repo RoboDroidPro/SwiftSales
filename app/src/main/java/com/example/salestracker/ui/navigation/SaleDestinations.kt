@@ -42,3 +42,9 @@ class SaleNavigationActions(private val navController: NavHostController) {
     }
 }
 
+object SalesListDes
+
+data class AddEditSaleDes(val id: String? = null)
+
+object SettingsDes
+
