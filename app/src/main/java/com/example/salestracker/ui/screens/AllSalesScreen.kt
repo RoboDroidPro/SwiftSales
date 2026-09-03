@@ -38,7 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.salestracker.SalesListItem
-import com.example.salestracker.data.model.SaleEventWithItems
 import com.example.salestracker.ui.components.DeleteDialog
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
@@ -53,7 +52,7 @@ private const val TAG = "ArduinoASS"
 @Composable
 fun AllSalesScreen(
     modifier: Modifier = Modifier,
-    onAddEditSale: (SaleEventWithItems?) -> Unit,
+    onSaleClicked: (String?) -> Unit,
     onMenuClick: () -> Unit,
     snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
     viewModel: AllSalesViewModel = hiltViewModel(),
@@ -152,7 +151,7 @@ fun AllSalesScreen(
             if (!isSelectionMode) {
                 SaleFAB(
                     onFABClick = {
-                        onAddEditSale(null)
+                        onSaleClicked(null)
                     },
                     icon = Icons.Filled.Add,
                     contentDescription = "Save Sale, Go to AllSales"
@@ -162,7 +161,7 @@ fun AllSalesScreen(
     ) { paddingValues ->
         AllSales(
             modifier = modifier.padding(paddingValues),
-            onAddEditSale = onAddEditSale,
+            onSaleClick = onSaleClicked,
             allSalesUIState = salesUIState,
             onAction = viewModel::onAction
         )
@@ -174,7 +173,7 @@ fun AllSales(
     modifier: Modifier = Modifier,
     allSalesUIState: SalesUIState,
     onAction: (AllSalesAction) -> Unit,
-    onAddEditSale: (SaleEventWithItems?) -> Unit,
+    onSaleClick: (String?) -> Unit,
 ) {
 
     if (allSalesUIState.isConfirmingDeletion) {
@@ -219,7 +218,7 @@ fun AllSales(
                         onClick = {
                             if (allSalesUIState.selectedSaleEventIds.isNotEmpty()) {
                                 onAction(AllSalesAction.ToggleSelection(productSale.saleEvent.id))
-                            } else onAddEditSale(productSale)
+                            } else onSaleClick(productSale.saleEvent.id)
                         },
                         onLongClick = { onAction(AllSalesAction.ToggleSelection(productSale.saleEvent.id)) }
                     )

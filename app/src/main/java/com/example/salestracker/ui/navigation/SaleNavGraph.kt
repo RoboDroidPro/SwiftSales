@@ -10,11 +10,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.salestracker.R
 import com.example.salestracker.ui.components.SalesNavDrawer
 import com.example.salestracker.ui.screens.AddEditSaleScreen
@@ -33,15 +31,11 @@ fun SaleNavGraph(
     navController: NavHostController = rememberNavController(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-    startDestination: String = SaleDestinations.SALES_LIST_ROUTE, //sd.SLR is "sales_list"
-    navActions: SaleNavigationActions = remember(navController) {
-        SaleNavigationActions(navController)
-    }
 ) {
 
     NavHost(
         navController = navController,
-        startDestination = startDestination,
+        startDestination = SalesListDes,
         modifier = modifier
     ) {
         /** Step #5.
@@ -90,11 +84,9 @@ fun SaleNavGraph(
          * Compose destinations. Next step is in [AllSalesScreen]
          */
         //Sales List
-        composable(
-            route = SaleDestinations.SALES_LIST_ROUTE
-        ) { backStackEntry ->
+        composable<SalesListDes> { backStackEntry ->
             val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(SaleDestinations.SALES_LIST_ROUTE)
+                navController.getBackStackEntry(SalesListDes)
             }
             // we need an instance of the AllSalesViewModel — get it from hiltViewModel()
             val allSalesViewModel = hiltViewModel<AllSalesViewModel>(parentEntry)
@@ -109,7 +101,9 @@ fun SaleNavGraph(
 
             SalesNavDrawer(
                 onNavToSettings = {
-                    navActions.navigateToSettings()
+                    navController.navigate(SettingsDes) {
+                        popUpTo(SalesListDes) { inclusive = false}
+                    }
                     coroutineScope.launch {
                         drawerState.close()
                     }
@@ -117,11 +111,10 @@ fun SaleNavGraph(
                 drawerState = drawerState
             ) {
                 AllSalesScreen(
-                    onAddEditSale = { productSale ->
-                        navActions.navigateAddEditSale(
-                            title = "Add Sale",
-                            saleId = productSale?.saleEvent?.id
-                        )
+                    onSaleClicked = { saleId ->
+                        navController.navigate(AddEditSaleDes(saleId)) {
+                            popUpTo(SalesListDes) { inclusive = false }
+                        }
                     },
                     onMenuClick = { coroutineScope.launch { drawerState.open() } },
                     viewModel = allSalesViewModel,
@@ -129,22 +122,9 @@ fun SaleNavGraph(
                 )
             }
         }
+
         //AddEditSale Screen
-        composable(
-            route = SaleDestinations.ADD_EDIT_SALE_ROUTE_WITH_ARGS,
-//            "$ADD_EDIT_SALE_ROUTE?$TITLE_ARG={$TITLE_ARG}&$SALE_ID_ARG={$SALE_ID_ARG}"
-            arguments = listOf(
-                navArgument(SaleDestinationsArgs.TITLE_ARG) { //title
-                    type = NavType.StringType
-                    defaultValue = "Add Sale"
-                },
-                navArgument(SaleDestinationsArgs.SALE_ID_ARG) {
-                    type = NavType.StringType
-                    nullable = true
-                    defaultValue = null
-                }
-            )
-        ) { entry ->
+        composable<AddEditSaleDes> { entry ->
             AddEditSaleScreen(
                 onNavigateToAllSales = { resultCode ->
                     /**
@@ -166,13 +146,12 @@ fun SaleNavGraph(
 
                 },
                 onBackClicked = { navController.popBackStack() },
-                screenTitle = entry.arguments?.getString(SaleDestinationsArgs.TITLE_ARG) ?: "!!AddEditSale!!"
+                screenTitle = "AddEditSale"
             )
         }
 
-        composable(
-            route = SaleDestinations.SETTINGS_ROUTE
-        ) {
+        //Settings
+        composable<SettingsDes> {
             SettingsScreen(
                 onBackClicked = { navController.popBackStack() }
             )
