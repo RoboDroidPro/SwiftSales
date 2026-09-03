@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.ui.components.DatePicker
+import com.example.salestracker.ui.components.DeleteDialog
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
 import com.example.salestracker.viewModel.AddSaleViewModel
@@ -44,10 +45,9 @@ private const val TAG = "ArduinoAESS"
 @Composable
 fun AddEditSaleScreen(
     modifier: Modifier = Modifier,
-    onNavigateToAllSales: (String) -> Unit, //accepts a success code string
+    onNavigateToAllSales: (String?) -> Unit, //accepts a success code string
     viewModel: AddSaleViewModel = hiltViewModel(),
     snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    onBackClicked: () -> Unit,
     screenTitle: String = "Add Edit Sale"
 ) {
 
@@ -63,8 +63,7 @@ fun AddEditSaleScreen(
         viewModel.addEditEvents.collect { event ->
             Log.d(TAG, "AddEditEvent collection: [$event]")
             when(event) {
-                is AddEditUIEvent.ShowSnackbar -> { //this could be used to display things like "Buyer field required"
-                    // If you want inline snackbars on AddEditScreen
+                is AddEditUIEvent.ShowSnackbar -> {
                     snackBarHostState.showSnackbar(
                         context.getString(event.messageRes)
                     )
@@ -90,8 +89,11 @@ fun AddEditSaleScreen(
         topBar = {
             SalesAppBar(
                 screenTitle,
-                onBackClicked,
-                navigationIcon = { IconButton(onClick = onBackClicked) { Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") } }
+                {  },
+                navigationIcon = {
+                    IconButton(onClick = { viewModel.onAction(AddSaleAction.BackClicked) })
+                    { Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") }
+                }
             )
         },
         snackbarHost = { SnackbarHost(snackBarHostState) },
@@ -112,7 +114,6 @@ fun AddEditSaleScreen(
             state = addEditUIState,
             onAction = viewModel::onAction,
             dropdownProducts = dropdownProducts,
-            onNavigateToAllSales = onBackClicked,
         )
     }
 }
@@ -123,8 +124,20 @@ fun AddEditSale(
     state: AddSaleUIState = AddSaleUIState(),
     onAction: (AddSaleAction) -> Unit,
     dropdownProducts: List<Product>,
-    onNavigateToAllSales: () -> Unit
 ) {
+
+    if (state.showDialog) {
+        DeleteDialog(
+            title = "Abandon Changes?",
+            contentText = "Any changes you have made will be discarded if you don't save them.",
+            confirmText = "Abandon changes",
+            onConfirm = {
+                onAction(AddSaleAction.DialogAnswer(true))
+            },
+            cancelText = "Save changes",
+            onCancel = { onAction(AddSaleAction.DialogAnswer(false)) }
+        )
+    }
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -139,14 +152,6 @@ fun AddEditSale(
                 label = "Date",
                 modifier = Modifier.fillMaxWidth()
             )
-//            OutlinedTextField(
-//                value = state.date,
-//                onValueChange = { /*viewModel.changeDate()*/ }, //this was commented out because if date is changeable, we need to parse it before storing it.
-//                label = { Text("Date") },
-//                readOnly = true, //Todo this needs to be false or deleted if a way of changing the date is implemented
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//            )
         }
         item {
             OutlinedTextField(
@@ -210,16 +215,5 @@ fun AddEditSale(
                 Text("Add Product to Sale")
             }
         }
-
-        /*
-        // Inside the Column of SalesListItem
-saleEventWithItems.items.forEach { itemWithProduct ->
-    Text(
-        text = "• ${itemWithProduct.saleItem.quantity}x ${itemWithProduct.product.name}",
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant
-    )
-}
-         */
     }
 }

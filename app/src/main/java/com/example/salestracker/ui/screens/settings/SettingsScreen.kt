@@ -75,7 +75,6 @@ fun SettingsScreen(
         ModalBottomSheet(
             onDismissRequest = { viewModel.onSheetDismissed() },
             sheetState = sheetState,
-    //        dragHandle = null
         ) {
             AddProductSheet(
                 viewModel = viewModel
@@ -110,7 +109,6 @@ fun Settings(
     settingsViewModel: SettingsViewModel
 ) {
 
-//    val settingsUIState by settingsViewModel.settingsUIState.collectAsStateWithLifecycle()
     val productsList by settingsViewModel.productsList.collectAsStateWithLifecycle()
     var showDeleteAllDialog by remember { mutableStateOf(false) }  // Local UI state for dialog
 

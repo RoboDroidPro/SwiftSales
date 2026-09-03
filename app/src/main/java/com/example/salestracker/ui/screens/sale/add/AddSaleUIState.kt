@@ -9,6 +9,7 @@ data class AddSaleUIState(
     val totalSalePrice: String = "",
     val saleNotes: String = "",
     val saleItems: List<SaleItemState> = listOf(SaleItemState()),
+    val showDialog: Boolean = false,
 
     val buyerError: String? = null,
     val totalSalePriceError: String? = null,

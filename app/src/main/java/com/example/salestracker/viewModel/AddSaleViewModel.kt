@@ -61,6 +61,7 @@ class AddSaleViewModel @Inject constructor(
     )
     
     private var originalSale: String? = null
+    private var initialState: AddSaleUIState? = null
     private val route = savedStateHandle.toRoute<AddEditSaleDes>()
     
     init {
@@ -88,6 +89,7 @@ class AddSaleViewModel @Inject constructor(
                             }
                         )
                     }
+                    initialState = _addSaleUIState.value
                 }
             }
         }
@@ -128,6 +130,28 @@ class AddSaleViewModel @Inject constructor(
             }
 
             AddSaleAction.SaveSale -> saveSale()
+
+            AddSaleAction.BackClicked -> {
+                viewModelScope.launch {
+                    if (hasUnsavedChanges()) {
+                        _addSaleUIState.update {
+                            it.copy(
+                                showDialog = true
+                            )
+                        }
+                    } else _addEditEvents.emit(AddEditUIEvent.NavigateBack(null))
+                }
+            }
+
+            is AddSaleAction.DialogAnswer -> {
+                viewModelScope.launch {
+                    _addSaleUIState.update { it.copy(showDialog = false) }
+
+                    if (action.confirmAbandon) { //indicates the user clicked "Abandon Changes"
+                        _addEditEvents.emit(AddEditUIEvent.NavigateBack(null))
+                    } else saveSale()  //indicates the user clicked "Save Changes"
+                }
+            }
         }
     }
 
@@ -201,6 +225,17 @@ class AddSaleViewModel @Inject constructor(
 
     private fun calculateTotalSalePrice(items: List<SaleItemState>): String? {
         return items.sumOf { it.lineTotal.toSwiftCurrency() ?: return null }.toSwiftString()
+    }
+
+    private fun hasUnsavedChanges(): Boolean {
+        val initial = initialState ?: return false
+        val current = _addSaleUIState.value
+
+        // We "null out" fields that don't represent the actual sale data
+        val normalizedInitial = initial.copy(showDialog = false, buyerError = null, itemsError = null)
+        val normalizedCurrent = current.copy(showDialog = false, buyerError = null, itemsError = null)
+
+        return normalizedInitial != normalizedCurrent
     }
 
     fun saveSale(){ // removed the boolean return, and its return statements below, because it is no longer necessary

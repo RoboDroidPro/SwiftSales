@@ -15,8 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.salestracker.R
 import com.example.salestracker.ui.components.SalesNavDrawer
-import com.example.salestracker.ui.screens.sale.add.AddEditSaleScreen
 import com.example.salestracker.ui.screens.AllSalesScreen
+import com.example.salestracker.ui.screens.sale.add.AddEditSaleScreen
 import com.example.salestracker.ui.screens.settings.SettingsScreen
 import com.example.salestracker.viewModel.AllSalesViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -127,25 +127,26 @@ fun SaleNavGraph(
         composable<AddEditSaleDes> { entry ->
             AddEditSaleScreen(
                 onNavigateToAllSales = { resultCode ->
-                    /**
-                     * Step #4. Takes the result String passed to onNavigateSales,
-                     * and puts it into the saved state handle of the previous backStackEntry
-                     * the savedStateHandle now contains the result code. Next step is in the AllSales
-                     * composable{} block
-                     */
-                    val previousHandle = navController.previousBackStackEntry?.savedStateHandle
-                    val msgRes = when (resultCode) {
-                        ADD_RESULT_OK -> R.string.save_success
-                        EDIT_RESULT_OK -> R.string.edit_success
-                        else -> null
-                    }
-                    if (msgRes != null) {
-                        previousHandle?.set(SNACKBAR_MSG_KEY, msgRes)
+                    if (resultCode != null) {
+                        /**
+                         * Step #4. Takes the result String passed to onNavigateSales,
+                         * and puts it into the saved state handle of the previous backStackEntry
+                         * the savedStateHandle now contains the result code. Next step is in the AllSales
+                         * composable{} block
+                         */
+                        val previousHandle = navController.previousBackStackEntry?.savedStateHandle
+                        val msgRes = when (resultCode) {
+                            ADD_RESULT_OK -> R.string.save_success
+                            EDIT_RESULT_OK -> R.string.edit_success
+                            else -> null
+                        }
+                        if (msgRes != null) {
+                            previousHandle?.set(SNACKBAR_MSG_KEY, msgRes)
+                        }
                     }
                     navController.popBackStack()
 
                 },
-                onBackClicked = { navController.popBackStack() },
                 screenTitle = "AddEditSale"
             )
         }
