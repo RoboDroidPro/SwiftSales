@@ -12,4 +12,6 @@ sealed interface SettingsAction {
     object SaveProductClicked : SettingsAction
     object DeleteProduct : SettingsAction
     object DeleteAllProducts : SettingsAction
+    object DeleteAllCancel : SettingsAction
+    object DeleteAllClicked : SettingsAction
 }

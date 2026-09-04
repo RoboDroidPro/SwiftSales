@@ -43,6 +43,7 @@ class SettingsViewModel @Inject constructor(
     val showAddProductSheet = _showAddProductSheet.asStateFlow()
 
     fun onAction(action: SettingsAction) {
+        _settingsUIState.update { it.copy(deleteProductError = null, deleteAllError = false) }
         when (action) {
             is SettingsAction.AddEditProduct -> addEditProduct(action.product)
             SettingsAction.DeleteAllProducts -> deleteAll()
@@ -86,9 +87,10 @@ class SettingsViewModel @Inject constructor(
                 }
             }
             SettingsAction.SaveProductClicked -> drawerSaveClicked()
+            SettingsAction.DeleteAllCancel -> _settingsUIState.update { it.copy(showDeleteAll = false) }
+            SettingsAction.DeleteAllClicked -> _settingsUIState.update { it.copy(showDeleteAll = true) }
         }
     }
-
     private fun addEditProduct(product: Product? = null) {
         _showAddProductSheet.value = true
 
@@ -154,12 +156,13 @@ class SettingsViewModel @Inject constructor(
     //Database actions
     private fun deleteAll() {
         viewModelScope.launch {
+            _settingsUIState.update { it.copy(showDeleteAll = false) }
             try {
                 repository.deleteProductItems()
             } catch (e: Exception) {
                 Log.e(SETTAG, "Error deleting all products: ${e.message}")
                 _settingsUIState.update {
-                    it.copy(userMessage = "Cannot delete all products: Some are used in existing sales. Delete all sales first.")
+                    it.copy(deleteAllError = true)
                 }
             }
         }
@@ -182,7 +185,7 @@ class SettingsViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.e(SETTAG, "Error deleting product: ${e.message}")
                 _settingsUIState.update {
-                    it.copy(userMessage = "Cannot delete: This product is used in existing sales. Delete the sales first.")
+                    it.copy(deleteProductError = "Cannot delete: This product is used in existing sales. Delete the sales first.")
                 }
             }
         }

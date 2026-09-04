@@ -52,6 +52,7 @@ fun AddProductSheet(
                 showDeleteDialog = false
                 onAction(SettingsAction.DeleteProduct)
             },
+            confirmText = "Delete",
             onCancel = { showDeleteDialog = false}
         )
     }
@@ -158,9 +159,9 @@ fun AddProductSheet(
             }
         }
 
-        if (uIState.userMessage != null) {
+        if (uIState.deleteProductError != null) {
             Text(
-                text = uIState.userMessage,
+                text = uIState.deleteProductError,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.W800,
                 fontFamily = FontFamily.SansSerif,

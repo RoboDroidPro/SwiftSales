@@ -2,7 +2,9 @@ package com.example.salestracker.ui.screens.settings
 
 data class SettingsUIState(
     val showDelete: Boolean = false,
-    val userMessage: String? = null,
+    val showDeleteAll: Boolean = false,
+    val deleteAllError: Boolean = false,
+    val deleteProductError: String? = null,
     val productName: String = "",
     val productPrice: String = "",
     val productNotes: String = "",

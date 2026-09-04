@@ -31,11 +31,9 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -103,6 +101,7 @@ fun SettingsScreen(
         Settings(
             modifier = Modifier.padding(paddingValues),
             productsList = productsList,
+            uIState = uIState,
             onAction = viewModel::onAction
         )
     }
@@ -113,19 +112,17 @@ fun Settings(
     modifier: Modifier = Modifier,
     productsList: List<Product> = emptyList(),
     onAction: (SettingsAction) -> Unit = {},
+    uIState: SettingsUIState
 ) {
-    var showDeleteAllDialog by remember { mutableStateOf(false) }  // Local UI state for dialog
-
-    if (showDeleteAllDialog) {
+    if (uIState.showDeleteAll) {
         DeleteDialog(
             title = "Delete All",
-            contentText = "Are you sure you want to delete ALL the products? Only products with NO SALE records can be deleted.",
+            contentText = "Are you sure you want to delete ALL the products? Only products with NO SALE records can be deleted.",    //,
             onConfirm = {
-                showDeleteAllDialog = false
                 onAction(SettingsAction.DeleteAllProducts)
             },
             confirmText = "Delete",
-            onCancel = { showDeleteAllDialog = false }
+            onCancel = { onAction(SettingsAction.DeleteAllCancel) }
         )
     }
 
@@ -133,15 +130,19 @@ fun Settings(
         modifier = modifier.fillMaxSize()
     ) {
         Text(
-            text = "Here you can Add/Remove/Edit your products. Each of the Products" +
-                    " listed here will appear in the Add Sale screen's Product field dropdown. The price is optional." +
-                    " It will be used to autofill the 'Price' field when you add a sale. " +
-                    "'Price' field will not autofill, or will be inaccurate if you don't specify it here. " +
-                    "Click any product to view its details, or edit it." +
-                    " To delete, click the product, then in the edit screen, click the trash icon.",
-            fontSize = 18.sp,
+            text = if (!uIState.deleteAllError)
+                "Here you can Add/Remove/Edit your products. Each of the Products" +
+                        " listed here will appear in the Add Sale screen's Product field dropdown. The price is optional." +
+                        " It will be used to autofill the 'Price' field when you add a sale. " +
+                        "'Price' field will not autofill, or will be inaccurate if you don't specify it here. " +
+                        "Click any product to view its details, or edit it." +
+                        " To delete, click the product, then in the edit screen, click the trash icon."
+             else "Delete All Failed. These products still have references in the Sales List. Delete those first.",
+//            fontSize = if (!uIState.deleteAllError) 18.sp else 28.sp,
             fontWeight = FontWeight.W600,
-            modifier = Modifier.padding(8.dp)
+            color = if (uIState.deleteAllError) MaterialTheme.colorScheme.error else Color.Unspecified,
+            modifier = Modifier.padding(8.dp),
+            style = if (uIState.deleteAllError) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.titleLarge
         )
 
         Spacer(Modifier.height(20.dp))
@@ -175,7 +176,7 @@ fun Settings(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(top = 4.dp),
-            onClick = { showDeleteAllDialog = true },
+            onClick = { onAction(SettingsAction.DeleteAllClicked) },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.error,
                 contentColor = MaterialTheme.colorScheme.onError
