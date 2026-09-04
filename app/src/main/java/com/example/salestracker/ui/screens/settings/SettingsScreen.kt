@@ -46,6 +46,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.ui.components.DeleteDialog
 import com.example.salestracker.ui.components.SalesAppBar
+import com.example.salestracker.utils.toSwiftString
 import com.example.salestracker.viewModel.SettingsViewModel
 
 const val SETTAG = "ArduinoSettings"
@@ -230,7 +231,7 @@ fun ProductCard(
                 modifier = Modifier.weight(1f)
             )
             Text(
-                text = "$${product.defaultPrice}",
+                text = "$${product.defaultPrice.toSwiftString()}",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W800,
                 modifier = Modifier.padding(start = 8.dp)
