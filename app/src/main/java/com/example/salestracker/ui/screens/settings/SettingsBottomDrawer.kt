@@ -29,21 +29,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.salestracker.ui.components.DeleteDialog
 import com.example.salestracker.ui.components.StockStatusRow
-import com.example.salestracker.viewModel.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductSheet(
-    viewModel: SettingsViewModel
+    uIState: SettingsUIState,
+    onAction: (SettingsAction) -> Unit,
 ) { // Bottom drawer
-
-    val uIState by viewModel.settingsUIState.collectAsStateWithLifecycle()
     var showDeleteDialog by remember { mutableStateOf(false) }  // Local UI state for dialog
 
     if (showDeleteDialog) {
@@ -52,7 +50,7 @@ fun AddProductSheet(
             contentText = "Are you sure you want to delete this product? Only products with NO SALE RECORDS can be deleted.",
             onConfirm = {
                 showDeleteDialog = false
-                viewModel.deleteProduct()
+                onAction(SettingsAction.DeleteProduct)
             },
             onCancel = { showDeleteDialog = false}
         )
@@ -76,32 +74,37 @@ fun AddProductSheet(
         OutlinedTextField(
             value = uIState.productName,
             onValueChange = {
-                if (it.length <= 40) viewModel.productNameChanged(it)
+                if (it.length <= 40) onAction(SettingsAction.ProductNameChanged(it))
             },
             label = { Text("Product Name") },
             supportingText = {
                 Text(
-                    text = "${uIState.productName.length} / 40",
+                    text = uIState.productError ?: "${uIState.productName.length} / 40",
                     modifier = Modifier.fillMaxWidth(),
-                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                    textAlign = if (uIState.productError == null) TextAlign.End else null,
                 )
             },
             singleLine = true,
+            isError = uIState.productError != null,
             modifier = Modifier
                 .fillMaxWidth()
         )
 
         OutlinedTextField(
             value = uIState.productPrice,
-            onValueChange = { viewModel.productPriceChanged(it) },
+            onValueChange = { onAction(SettingsAction.ProductPriceChanged(it)) },
             label = { Text("Default Price") },
             modifier = Modifier.fillMaxWidth(),
+            isError = uIState.priceError != null,
+            supportingText = {
+                uIState.priceError?.let { Text(it) }
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
         )
 
         OutlinedTextField(
             value = uIState.productNotes,
-            onValueChange = { viewModel.productNotesChanged(it) },
+            onValueChange = { onAction(SettingsAction.ProductNotesChanged(it)) },
             label = { Text("Product Notes") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -109,14 +112,18 @@ fun AddProductSheet(
 
         StockStatusRow(
             inStock = uIState.productInStock,
-            onCheckedChange = { viewModel.inStockToggle() }
+            onCheckedChange = { onAction(SettingsAction.ProductInStockToggle) }
         )
 
         OutlinedTextField(
             value = uIState.productOrderIndex,
-            onValueChange = { viewModel.productIndexChanged(it) },
+            onValueChange = { onAction(SettingsAction.ProductIndexChanged(it)) },
             label = { Text("Order Index") },
             modifier = Modifier.fillMaxWidth(),
+            isError = uIState.indexError != null,
+            supportingText = {
+                uIState.indexError?.let { Text(it) }
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
@@ -128,7 +135,7 @@ fun AddProductSheet(
 
         Row {
             Button(
-                onClick = { viewModel.drawerSaveClicked() }
+                onClick = { onAction(SettingsAction.SaveProductClicked) }
             ) {
                 Row {
                     Text(text = "Save")
@@ -153,7 +160,7 @@ fun AddProductSheet(
 
         if (uIState.userMessage != null) {
             Text(
-                text = uIState.userMessage ?: "",
+                text = uIState.userMessage,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.W800,
                 fontFamily = FontFamily.SansSerif,

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.data.repository.ProductRepository
 import com.example.salestracker.ui.screens.settings.SETTAG
+import com.example.salestracker.ui.screens.settings.SettingsAction
 import com.example.salestracker.ui.screens.settings.SettingsUIState
 import com.example.salestracker.utils.toSwiftCurrency
 import com.example.salestracker.utils.toSwiftString
@@ -41,9 +42,54 @@ class SettingsViewModel @Inject constructor(
     private val _showAddProductSheet = MutableStateFlow(false)
     val showAddProductSheet = _showAddProductSheet.asStateFlow()
 
-    //Drawer sheet UI functions
+    fun onAction(action: SettingsAction) {
+        when (action) {
+            is SettingsAction.AddEditProduct -> addEditProduct(action.product)
+            SettingsAction.DeleteAllProducts -> deleteAll()
+            SettingsAction.DeleteProduct -> deleteProduct()
+            SettingsAction.ProductInStockToggle -> {
+                _settingsUIState.update { state ->
+                    state.copy(
+                        productInStock = !state.productInStock
+                    )
+                }
+            }
+            is SettingsAction.ProductIndexChanged -> {
+                _settingsUIState.update {
+                    it.copy(
+                        productOrderIndex = action.newIndex,
+                        indexError = null
+                    )
+                }
+            }
+            is SettingsAction.ProductNameChanged -> {
+                _settingsUIState.update {
+                    it.copy(
+                        productName = action.newName,
+                        productError = null
+                    )
+                }
+            }
+            is SettingsAction.ProductNotesChanged -> {
+                _settingsUIState.update {
+                    it.copy(
+                        productNotes = action.newNotes,
+                    )
+                }
+            }
+            is SettingsAction.ProductPriceChanged -> {
+                _settingsUIState.update {
+                    it.copy(
+                        productPrice = action.newPrice,
+                        priceError = if (action.newPrice.toSwiftCurrency() == null) "Invalid price" else null
+                    )
+                }
+            }
+            SettingsAction.SaveProductClicked -> drawerSaveClicked()
+        }
+    }
 
-    fun addEditProduct(product: Product? = null) {
+    private fun addEditProduct(product: Product? = null) {
         _showAddProductSheet.value = true
 
         if (product == null) {
@@ -72,27 +118,17 @@ class SettingsViewModel @Inject constructor(
 
     fun drawerSaveClicked() {
         Log.d(SETTAG, "drawer save clicked")
-        var userMessage: String? = null
 
-        if (settingsUIState.value.productName.isBlank()) {
-            userMessage = "'Name' field required"
-        }
+        val priceInt = _settingsUIState.value.productPrice.toSwiftCurrency()
+        val productError = if (_settingsUIState.value.productName.isBlank()) "Product name required" else null
+        val priceError = if (_settingsUIState.value.productPrice.isBlank()) "Price required"
+        else if (priceInt == null) "Invalid price"
+        else null
+        val indexError = if (settingsUIState.value.productOrderIndex.toIntOrNull() == null) "Invalid Order Index" else null
 
-        val price = settingsUIState.value.productPrice
-        val priceRegex = Regex("^\\d+(\\.\\d{1,2})?$")
-        if (price.isNotBlank()) {
-            if (!priceRegex.matches(price)) {
-                userMessage =
-                    "${userMessage ?: ""} \n'Default Price' invalid. Must be a number with up to 2 decimals. Examples: 2.98, 2.1, 20, 0.2"
-            }
-        }
-        if (settingsUIState.value.productOrderIndex.toIntOrNull() == null) {
-            userMessage = "${userMessage ?: ""} \n 'Invalid Order Index'"
-        }
-
-        Log.d(SETTAG, "User message is: $userMessage")
-
-        if (userMessage == null) {
+        if (productError == null &&
+            priceError == null &&
+            indexError == null) {
             _showAddProductSheet.value = false
             saveProduct(
                 Product(
@@ -105,57 +141,18 @@ class SettingsViewModel @Inject constructor(
                 )
             )
         } else {
-            _settingsUIState.update { it.copy(userMessage = userMessage) }
-        }
-    }
-
-    //UI STATE functions
-    fun productNameChanged(newValue: String) {
-        _settingsUIState.update {
-            it.copy(
-                productName = newValue,
-                userMessage = null
-            )
-        }
-    }
-
-    fun productPriceChanged(newValue: String) {
-        _settingsUIState.update {
-            it.copy(
-                productPrice = newValue,
-                userMessage = null
-            )
-        }
-    }
-
-    fun productNotesChanged(newValue: String) {
-        _settingsUIState.update {
-            it.copy(
-                productNotes = newValue,
-                userMessage = null
-            )
-        }
-    }
-
-    fun inStockToggle() {
-        _settingsUIState.update { state ->
-            state.copy(
-                productInStock = !state.productInStock
-            )
-        }
-    }
-
-    fun productIndexChanged(newValue: String) {
-        _settingsUIState.update {
-            it.copy(
-                productOrderIndex = newValue,
-                userMessage = null
-            )
+            _settingsUIState.update {
+                it.copy(
+                    productError = productError,
+                    priceError = priceError,
+                    indexError = indexError
+                )
+            }
         }
     }
 
     //Database actions
-    fun deleteAll() {
+    private fun deleteAll() {
         viewModelScope.launch {
             try {
                 repository.deleteProductItems()
@@ -175,7 +172,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun deleteProduct() {
+    private fun deleteProduct() {
         viewModelScope.launch {
             try {
                 repository.deleteProduct(

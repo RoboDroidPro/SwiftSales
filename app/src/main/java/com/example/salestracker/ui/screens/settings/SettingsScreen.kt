@@ -62,6 +62,8 @@ fun SettingsScreen(
 
     // This boolean lives in the ViewModel – pure UI state, zero business logic
     val showAddProductSheet by viewModel.showAddProductSheet.collectAsStateWithLifecycle()
+    val productsList by viewModel.productsList.collectAsStateWithLifecycle()
+    val uIState by viewModel.settingsUIState.collectAsStateWithLifecycle()
 
     // Show/hide the sheet based on ViewModel flag
     LaunchedEffect(showAddProductSheet) {
@@ -78,7 +80,8 @@ fun SettingsScreen(
             sheetState = sheetState,
         ) {
             AddProductSheet(
-                viewModel = viewModel
+                uIState = uIState,
+                onAction = viewModel::onAction,
             )
         }
     }
@@ -99,7 +102,8 @@ fun SettingsScreen(
     ) { paddingValues ->
         Settings(
             modifier = Modifier.padding(paddingValues),
-            settingsViewModel = viewModel
+            productsList = productsList,
+            onAction = viewModel::onAction
         )
     }
 }
@@ -107,10 +111,9 @@ fun SettingsScreen(
 @Composable
 fun Settings(
     modifier: Modifier = Modifier,
-    settingsViewModel: SettingsViewModel
+    productsList: List<Product> = emptyList(),
+    onAction: (SettingsAction) -> Unit = {},
 ) {
-
-    val productsList by settingsViewModel.productsList.collectAsStateWithLifecycle()
     var showDeleteAllDialog by remember { mutableStateOf(false) }  // Local UI state for dialog
 
     if (showDeleteAllDialog) {
@@ -119,8 +122,9 @@ fun Settings(
             contentText = "Are you sure you want to delete ALL the products? Only products with NO SALE records can be deleted.",
             onConfirm = {
                 showDeleteAllDialog = false
-                settingsViewModel.deleteAll()
+                onAction(SettingsAction.DeleteAllProducts)
             },
+            confirmText = "Delete",
             onCancel = { showDeleteAllDialog = false }
         )
     }
@@ -135,8 +139,6 @@ fun Settings(
                     "'Price' field will not autofill, or will be inaccurate if you don't specify it here. " +
                     "Click any product to view its details, or edit it." +
                     " To delete, click the product, then in the edit screen, click the trash icon.",
-//            fontSize = 20.sp,
-//            fontWeight = FontWeight.W300,
             fontSize = 18.sp,
             fontWeight = FontWeight.W600,
             modifier = Modifier.padding(8.dp)
@@ -163,7 +165,7 @@ fun Settings(
             items(productsList) { product ->
                 ProductCard(
                     product,
-                    onClick = { settingsViewModel.addEditProduct(product) }
+                    onClick = { onAction(SettingsAction.AddEditProduct(product)) }
                 )
             }
         }
@@ -190,7 +192,7 @@ fun Settings(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(top = 4.dp),
-            onClick = { settingsViewModel.addEditProduct(null) }
+            onClick = { onAction(SettingsAction.AddEditProduct(null)) }
         ) {
             Text(
                 text = "Add Product",

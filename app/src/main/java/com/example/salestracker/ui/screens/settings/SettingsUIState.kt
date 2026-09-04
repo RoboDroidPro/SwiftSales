@@ -7,5 +7,8 @@ data class SettingsUIState(
     val productPrice: String = "",
     val productNotes: String = "",
     val productInStock: Boolean = false,
-    val productOrderIndex: String = ""
+    val productOrderIndex: String = "",
+    val productError: String? = null,
+    val priceError: String? = null,
+    val indexError: String? = null,
 )
