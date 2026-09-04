@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -162,11 +161,10 @@ fun AddProductSheet(
         if (uIState.deleteProductError != null) {
             Text(
                 text = uIState.deleteProductError,
-                fontSize = 18.sp,
                 fontWeight = FontWeight.W800,
-                fontFamily = FontFamily.SansSerif,
                 color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(vertical = 24.dp)
+                modifier = Modifier.padding(vertical = 24.dp),
+                style = MaterialTheme.typography.titleLarge
             )
         }
     }

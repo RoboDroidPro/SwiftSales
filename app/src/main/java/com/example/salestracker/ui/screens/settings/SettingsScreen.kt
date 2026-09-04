@@ -33,7 +33,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -129,23 +128,28 @@ fun Settings(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        Text(
-            text = if (!uIState.deleteAllError)
-                "Here you can Add/Remove/Edit your products. Each of the Products" +
+        Column(modifier = Modifier.padding(8.dp)) {
+            Text(
+                text = "Here you can Add/Remove/Edit your products. Each of the Products" +
                         " listed here will appear in the Add Sale screen's Product field dropdown. The price is optional." +
                         " It will be used to autofill the 'Price' field when you add a sale. " +
-                        "'Price' field will not autofill, or will be inaccurate if you don't specify it here. " +
-                        "Click any product to view its details, or edit it." +
-                        " To delete, click the product, then in the edit screen, click the trash icon."
-             else "Delete All Failed. These products still have references in the Sales List. Delete those first.",
-//            fontSize = if (!uIState.deleteAllError) 18.sp else 28.sp,
-            fontWeight = FontWeight.W600,
-            color = if (uIState.deleteAllError) MaterialTheme.colorScheme.error else Color.Unspecified,
-            modifier = Modifier.padding(8.dp),
-            style = if (uIState.deleteAllError) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.titleLarge
-        )
+                        "Click any product to view its details, or edit it.",
+                fontWeight = FontWeight.W600,
+                style = MaterialTheme.typography.titleLarge
+            )
 
-        Spacer(Modifier.height(20.dp))
+            if (uIState.deleteAllError) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = "Delete All Failed. Some products are still used in sales records. Delete those sales first.",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
 
         LazyColumn(
             modifier = Modifier
@@ -158,7 +162,7 @@ fun Settings(
                     shape = RoundedCornerShape(12.dp)  // slightly larger radius for modern feel
                 )
                 .background(
-                    color = MaterialTheme.colorScheme.surfaceContainer,  // ← THE FIX
+                    color = MaterialTheme.colorScheme.surfaceContainer,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .padding(12.dp) // inner padding

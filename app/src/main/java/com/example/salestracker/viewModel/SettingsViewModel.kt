@@ -43,7 +43,6 @@ class SettingsViewModel @Inject constructor(
     val showAddProductSheet = _showAddProductSheet.asStateFlow()
 
     fun onAction(action: SettingsAction) {
-        _settingsUIState.update { it.copy(deleteProductError = null, deleteAllError = false) }
         when (action) {
             is SettingsAction.AddEditProduct -> addEditProduct(action.product)
             SettingsAction.DeleteAllProducts -> deleteAll()
@@ -51,7 +50,9 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.ProductInStockToggle -> {
                 _settingsUIState.update { state ->
                     state.copy(
-                        productInStock = !state.productInStock
+                        productInStock = !state.productInStock,
+                        deleteProductError = null,
+                        deleteAllError = false
                     )
                 }
             }
@@ -59,7 +60,9 @@ class SettingsViewModel @Inject constructor(
                 _settingsUIState.update {
                     it.copy(
                         productOrderIndex = action.newIndex,
-                        indexError = null
+                        indexError = null,
+                        deleteProductError = null,
+                        deleteAllError = false
                     )
                 }
             }
@@ -67,7 +70,9 @@ class SettingsViewModel @Inject constructor(
                 _settingsUIState.update {
                     it.copy(
                         productName = action.newName,
-                        productError = null
+                        productError = null,
+                        deleteProductError = null,
+                        deleteAllError = false
                     )
                 }
             }
@@ -75,6 +80,8 @@ class SettingsViewModel @Inject constructor(
                 _settingsUIState.update {
                     it.copy(
                         productNotes = action.newNotes,
+                        deleteProductError = null,
+                        deleteAllError = false
                     )
                 }
             }
@@ -82,11 +89,16 @@ class SettingsViewModel @Inject constructor(
                 _settingsUIState.update {
                     it.copy(
                         productPrice = action.newPrice,
-                        priceError = if (action.newPrice.toSwiftCurrency() == null) "Invalid price" else null
+                        priceError = if (action.newPrice.isNotBlank() && action.newPrice.toSwiftCurrency() == null) "Invalid price" else null,
+                        deleteProductError = null,
+                        deleteAllError = false
                     )
                 }
             }
-            SettingsAction.SaveProductClicked -> drawerSaveClicked()
+            SettingsAction.SaveProductClicked -> {
+                _settingsUIState.update { it.copy(deleteProductError = null, deleteAllError = false) }
+                drawerSaveClicked()
+            }
             SettingsAction.DeleteAllCancel -> _settingsUIState.update { it.copy(showDeleteAll = false) }
             SettingsAction.DeleteAllClicked -> _settingsUIState.update { it.copy(showDeleteAll = true) }
         }
@@ -97,7 +109,10 @@ class SettingsViewModel @Inject constructor(
         if (product == null) {
             currentProductID = null
             _settingsUIState.update {
-                SettingsUIState()
+                SettingsUIState(
+                    productOrderIndex = "1",
+                    productInStock = true
+                )
             }
         } else {
             currentProductID = product.id
@@ -121,12 +136,12 @@ class SettingsViewModel @Inject constructor(
     fun drawerSaveClicked() {
         Log.d(SETTAG, "drawer save clicked")
 
-        val priceInt = _settingsUIState.value.productPrice.toSwiftCurrency()
-        val productError = if (_settingsUIState.value.productName.isBlank()) "Product name required" else null
-        val priceError = if (_settingsUIState.value.productPrice.isBlank()) "Price required"
-        else if (priceInt == null) "Invalid price"
-        else null
-        val indexError = if (settingsUIState.value.productOrderIndex.toIntOrNull() == null) "Invalid Order Index" else null
+        val currentState = _settingsUIState.value
+        val priceInt = currentState.productPrice.toSwiftCurrency()
+
+        val productError = if (currentState.productName.isBlank()) "Product name required" else null
+        val priceError = if (currentState.productPrice.isNotBlank() && priceInt == null) "Invalid price" else null
+        val indexError = if (currentState.productOrderIndex.toIntOrNull() == null) "Invalid Order Index" else null
 
         if (productError == null &&
             priceError == null &&
@@ -135,11 +150,11 @@ class SettingsViewModel @Inject constructor(
             saveProduct(
                 Product(
                     id = currentProductID ?: UUID.randomUUID().toString(),
-                    name = _settingsUIState.value.productName,
-                    defaultPrice = _settingsUIState.value.productPrice.toSwiftCurrency() ?: 0,
-                    notes = _settingsUIState.value.productNotes,
-                    inStock = _settingsUIState.value.productInStock,
-                    orderIndex = _settingsUIState.value.productOrderIndex.toIntOrNull() ?: 0
+                    name = currentState.productName,
+                    defaultPrice = priceInt ?: 0,
+                    notes = currentState.productNotes,
+                    inStock = currentState.productInStock,
+                    orderIndex = currentState.productOrderIndex.toIntOrNull() ?: 0
                 )
             )
         } else {
