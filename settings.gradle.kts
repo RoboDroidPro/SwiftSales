@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Sales Tracker"
+rootProject.name = "SwiftSales"
 include(":app")

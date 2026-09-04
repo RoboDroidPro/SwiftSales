@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 fun SalesNavDrawer(
     onNavToSettings: () -> Unit = {},
     drawerState: DrawerState = DrawerState(DrawerValue.Closed),
-    headerTitle: String = "Sales Tracker",
+    headerTitle: String = "SwiftSales",
     content: @Composable () -> Unit = {  }
 ) {
 
@@ -48,7 +48,7 @@ fun SalesNavDrawer(
 
 @Composable
 fun SalesDrawerSheet(
-    headerTitle: String = "Sales Tracker",
+    headerTitle: String = "SwiftSales",
     onSettingsClick: () -> Unit = {},
     ) {
     ModalDrawerSheet(
@@ -78,7 +78,7 @@ fun SalesDrawerSheet(
 @Composable
 fun DrawerHeader(
     modifier: Modifier = Modifier,
-    headerTitle: String = "Sales Master"
+    headerTitle: String = "SwiftSales"
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

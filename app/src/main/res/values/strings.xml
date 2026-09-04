@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sales Tracker</string>
+    <string name="app_name">SwiftSales</string>
 
     <string name="add_sale">Add Sale</string>
     <string name="save_success">Sale saved.</string>

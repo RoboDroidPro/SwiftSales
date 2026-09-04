@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SalesAppBar(
-    title: String = "Sales Tracker",
+    title: String = "SwiftSales",
     onNavigationIconClicked: () -> Unit = {},
     navigationIcon: @Composable (() -> Unit) = { IconButton(onClick = onNavigationIconClicked) { Icon(Icons.Default.Menu, contentDescription = "Open Navigation Drawer") } },
     moreTopBarActions: @Composable (RowScope.() -> Unit) = {},
