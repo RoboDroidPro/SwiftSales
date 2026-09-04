@@ -48,7 +48,6 @@ fun AddEditSaleScreen(
     onNavigateToAllSales: (String?) -> Unit, //accepts a success code string
     viewModel: AddSaleViewModel = hiltViewModel(),
     snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    screenTitle: String = "Add Edit Sale"
 ) {
 
     val addEditUIState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -88,7 +87,7 @@ fun AddEditSaleScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             SalesAppBar(
-                screenTitle,
+                addEditUIState.screenTitle,
                 {  },
                 navigationIcon = {
                     IconButton(onClick = { viewModel.onAction(AddSaleAction.BackClicked) })
@@ -128,9 +127,9 @@ fun AddEditSale(
 
     if (state.showDialog) {
         DeleteDialog(
-            title = "Abandon Changes?",
-            contentText = "Any changes you have made will be discarded if you don't save them.",
-            confirmText = "Abandon changes",
+            title = "Discard Changes?",
+            contentText = "You have unsaved changes. Do you want to discard them",
+            confirmText = "Discard changes",
             onConfirm = {
                 onAction(AddSaleAction.DialogAnswer(true))
             },

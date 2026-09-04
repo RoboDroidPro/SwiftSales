@@ -76,7 +76,11 @@ fun SaleItemCard(
                             SaleItemAction.ProductChanged(product)
                         )
                     )
-                }
+                },
+                isDropdownError = itemState.productError != null, // Highlights the box in red
+                supportingText = {
+                    itemState.productError?.let { Text(it) } // Shows the error message below the box
+                },
             )
 
             Row(

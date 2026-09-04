@@ -21,6 +21,8 @@ import com.example.salestracker.data.model.Product
 fun ProductDropdown(
     selectedProduct: String,
     selectedProductChanged: (Product) -> Unit,
+    isDropdownError: Boolean = false,
+    supportingText: @Composable (() -> Unit)? = null,
     productOptions: List<Product>
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -37,6 +39,8 @@ fun ProductDropdown(
             onValueChange = {},
             label = { Text("Product") },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+            isError = isDropdownError, // Highlights the box in red
+            supportingText = supportingText,
             modifier = Modifier
                 .menuAnchor()
                 .fillMaxWidth()

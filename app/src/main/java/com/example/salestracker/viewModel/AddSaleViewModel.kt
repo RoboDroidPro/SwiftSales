@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.salestracker.data.model.Product
 import com.example.salestracker.data.model.SaleEvent
 import com.example.salestracker.data.model.SaleItem
 import com.example.salestracker.data.repository.ProductRepository
@@ -72,6 +73,7 @@ class AddSaleViewModel @Inject constructor(
                     originalSale = existingSale.saleEvent.id
                     _addSaleUIState.update {
                         it.copy(
+                            screenTitle = "Edit Sale",
                             date = existingSale.saleEvent.date,
                             buyer = existingSale.saleEvent.buyer,
                             totalSalePrice = existingSale.saleEvent.totalSalePrice.toSwiftString(),
@@ -185,7 +187,9 @@ class AddSaleViewModel @Inject constructor(
                                 (saleItemState.quantity ?: 1),
                                 action.newProduct.defaultPrice
                             ),
-                            unitPrice = action.newProduct.defaultPrice.toSwiftString()
+                            unitPrice = action.newProduct.defaultPrice.toSwiftString(),
+                            productError = null,
+                            unitPriceError = null
                         )
                         is SaleItemAction.UnitPriceChanged -> {
                             val productPrice = action.newPrice.toSwiftCurrency()
@@ -245,7 +249,8 @@ class AddSaleViewModel @Inject constructor(
         val itemsError = if (_addSaleUIState.value.saleItems.isEmpty()) "Add at least one item!" else null
 
         if (buyerError == null &&
-            itemsError == null
+            itemsError == null &&
+            itemFieldsValid()
         ) {
             viewModelScope.launch {
                 Log.d(TAG, "viewModelScope.launch called")
@@ -293,6 +298,27 @@ class AddSaleViewModel @Inject constructor(
                     itemsError = itemsError
                 )
             }
+        }
+    }
+
+    private fun itemFieldsValid(): Boolean {
+        _addSaleUIState.update { state ->
+            val newItems = state.saleItems.map { item ->
+                val unitPriceError = when {
+                    item.unitPrice.isBlank() -> "Unit Price Required"
+                    item.unitPrice.toSwiftCurrency() == null -> "Invalid price"
+                    else -> null
+                }
+                val productError = if (item.product == Product()) "Product Field Required" else null
+                item.copy(
+                    unitPriceError = unitPriceError,
+                    productError = productError
+                )
+            }
+            state.copy(saleItems = newItems)
+        }
+        return _addSaleUIState.value.saleItems.all {
+            it.unitPriceError == null && it.productError == null
         }
     }
 }

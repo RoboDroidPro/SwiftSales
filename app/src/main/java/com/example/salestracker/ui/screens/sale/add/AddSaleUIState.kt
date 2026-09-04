@@ -4,6 +4,7 @@ import com.example.salestracker.data.model.Product
 import java.util.UUID
 
 data class AddSaleUIState(
+    val screenTitle: String = "Add Sale",
     val date: String = "",
     val buyer: String = "",
     val totalSalePrice: String = "",

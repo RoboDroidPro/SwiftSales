@@ -147,7 +147,6 @@ fun SaleNavGraph(
                     navController.popBackStack()
 
                 },
-                screenTitle = "AddEditSale"
             )
         }
 
