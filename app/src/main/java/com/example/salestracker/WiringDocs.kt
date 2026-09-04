@@ -7,7 +7,7 @@ package com.example.salestracker
 
 /**
  * Possible upgrade is to add an inventory tracking system that will decrease
- * inventory every time you sell something. It would mean adding a Inventory table,
+ * inventory every time you sell something. It would mean adding an Inventory table,
  * having a way to tell the app that you bought something and how much, and
  * then get the app to automatically put OUT OF STOCK on any that is finished.
  */
@@ -21,6 +21,6 @@ package com.example.salestracker
  * has all its stuff inside it.
  * [com.example.salestracker.ui.screens.AllSalesScreen]
  * [com.example.salestracker.ui.screens.sale.add.AddEditSaleScreen]
- *
+ * [com.example.salestracker.ui.screens.settings.SettingsScreen]
  *
  */
