@@ -61,7 +61,7 @@ fun DatePicker(
     }
 
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = initialDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        initialSelectedDateMillis = initialDate.atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli()
     )
 
     val displayValue = remember(value) {
@@ -90,7 +90,7 @@ fun DatePicker(
                     onClick = {
                         datePickerState.selectedDateMillis?.let { millis ->
                             val date = Instant.ofEpochMilli(millis)
-                                .atZone(ZoneId.systemDefault())
+                                .atZone(ZoneId.of("UTC"))
                                 .toLocalDate()
                             onValueChange(date.format(DateTimeFormatter.ISO_LOCAL_DATE))
                         }
