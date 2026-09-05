@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Sales Tracker</string>
+
+    <string name="add_sale">Add Sale</string>
+    <string name="save_success">Sale saved.</string>
+    <string name="edit_success">Changes saved.</string>
+</resources>
