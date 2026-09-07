@@ -14,6 +14,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.salestracker.R
 import com.example.salestracker.data.model.Product
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +39,7 @@ fun ProductDropdown(
             readOnly = true,
             value = selectedProduct,
             onValueChange = {},
-            label = { Text("Product") },
+            label = { Text(stringResource(R.string.product_label)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             isError = isDropdownError, // Highlights the box in red
             supportingText = supportingText,
@@ -55,7 +57,7 @@ fun ProductDropdown(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            if (product.inStock) product.name else "${product.name} (out of stock)",
+                            if (product.inStock) product.name else "${product.name} ${stringResource(R.string.out_of_stock_suffix)}",
                             color = if (product.inStock) {
                                 MaterialTheme.colorScheme.onSurface  // Normal text color
                             } else {

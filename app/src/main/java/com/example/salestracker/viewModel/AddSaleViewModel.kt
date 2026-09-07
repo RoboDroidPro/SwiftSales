@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.salestracker.R
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.data.model.SaleEvent
 import com.example.salestracker.data.model.SaleItem
@@ -73,7 +74,7 @@ class AddSaleViewModel @Inject constructor(
                     originalSale = existingSale.saleEvent.id
                     _addSaleUIState.update {
                         it.copy(
-                            screenTitle = "Edit Sale",
+                            screenTitle = R.string.edit_sale_title,
                             date = existingSale.saleEvent.date,
                             buyer = existingSale.saleEvent.buyer,
                             totalSalePrice = existingSale.saleEvent.totalSalePrice.toSwiftString(),
@@ -199,7 +200,7 @@ class AddSaleViewModel @Inject constructor(
                                     saleItemState.quantity ?: 1,
                                     productPrice ?: 0
                                 ),
-                                unitPriceError = if (productPrice == null) "Invalid price" else null
+                                unitPriceError = if (productPrice == null) R.string.invalid_price_error else null
                             )
                         }
                         is SaleItemAction.QuantityChanged -> {
@@ -245,8 +246,8 @@ class AddSaleViewModel @Inject constructor(
     fun saveSale(){ // removed the boolean return, and its return statements below, because it is no longer necessary
         Log.d(TAG, "saveSale called")
 
-        val buyerError = if (_addSaleUIState.value.buyer.isBlank()) "Buyer field required!" else null
-        val itemsError = if (_addSaleUIState.value.saleItems.isEmpty()) "Add at least one item!" else null
+        val buyerError = if (_addSaleUIState.value.buyer.isBlank()) R.string.buyer_required_error else null
+        val itemsError = if (_addSaleUIState.value.saleItems.isEmpty()) R.string.add_one_item_error else null
 
         if (buyerError == null &&
             itemsError == null &&
@@ -305,11 +306,11 @@ class AddSaleViewModel @Inject constructor(
         _addSaleUIState.update { state ->
             val newItems = state.saleItems.map { item ->
                 val unitPriceError = when {
-                    item.unitPrice.isBlank() -> "Unit Price Required"
-                    item.unitPrice.toSwiftCurrency() == null -> "Invalid price"
+                    item.unitPrice.isBlank() -> R.string.unit_price_required_error
+                    item.unitPrice.toSwiftCurrency() == null -> R.string.invalid_price_error
                     else -> null
                 }
-                val productError = if (item.product == Product()) "Product Field Required" else null
+                val productError = if (item.product == Product()) R.string.product_required_error else null
                 item.copy(
                     unitPriceError = unitPriceError,
                     productError = productError

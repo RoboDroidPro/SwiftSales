@@ -29,9 +29,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.salestracker.R
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.ui.components.DatePicker
 import com.example.salestracker.ui.components.DeleteDialog
@@ -87,11 +89,11 @@ fun AddEditSaleScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             SalesAppBar(
-                addEditUIState.screenTitle,
+                stringResource(addEditUIState.screenTitle),
                 {  },
                 navigationIcon = {
                     IconButton(onClick = { viewModel.onAction(AddSaleAction.BackClicked) })
-                    { Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") }
+                    { Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back_button_description)) }
                 }
             )
         },
@@ -104,7 +106,7 @@ fun AddEditSaleScreen(
                     //thus, we only need to call save.
                 },
                 icon = Icons.Filled.DoneOutline,
-                contentDescription = "Save Sale, Go to AllSales"
+                contentDescription = stringResource(R.string.save_sale_description)
             )
         },
     ) { paddingValues ->
@@ -127,13 +129,13 @@ fun AddEditSale(
 
     if (state.showDialog) {
         DeleteDialog(
-            title = "Discard Changes?",
-            contentText = "You have unsaved changes. Do you want to discard them",
-            confirmText = "Discard changes",
+            title = stringResource(R.string.discard_changes_title),
+            contentText = stringResource(R.string.discard_changes_text),
+            confirmText = stringResource(R.string.discard_action),
             onConfirm = {
                 onAction(AddSaleAction.DialogAnswer(true))
             },
-            cancelText = "Save changes",
+            cancelText = stringResource(R.string.save_changes_action),
             onCancel = { onAction(AddSaleAction.DialogAnswer(false)) }
         )
     }
@@ -148,7 +150,7 @@ fun AddEditSale(
             DatePicker(
                 value = state.date,
                 onValueChange = { onAction(AddSaleAction.DateChanged(it)) },
-                label = "Date",
+                label = stringResource(R.string.date_label),
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -156,10 +158,10 @@ fun AddEditSale(
             OutlinedTextField(
                 value = state.buyer,
                 onValueChange = { onAction(AddSaleAction.BuyerChanged(it)) },
-                label = { Text("Buyer") }, //todo I removed a modifier fill max. see if that makes trouble
+                label = { Text(stringResource(R.string.buyer_label)) }, //todo I removed a modifier fill max. see if that makes trouble
                 isError = state.buyerError != null, // Highlights the box in red
                 supportingText = {
-                    state.buyerError?.let { Text(it) } // Shows the error message below the box
+                    state.buyerError?.let { Text(stringResource(it)) } // Shows the error message below the box
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -169,7 +171,7 @@ fun AddEditSale(
             OutlinedTextField(
                 value = state.totalSalePrice,
                 onValueChange = {},
-                label = { Text("Total Sale Price") },
+                label = { Text(stringResource(R.string.total_sale_price_label)) },
                 readOnly = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -178,7 +180,7 @@ fun AddEditSale(
             OutlinedTextField(
                 value = state.saleNotes,
                 onValueChange = { onAction(AddSaleAction.SaleNotesChanged(it)) },
-                label = { Text("Notes (optional)") },
+                label = { Text(stringResource(R.string.notes_optional_label)) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -194,7 +196,7 @@ fun AddEditSale(
         if (state.itemsError != null) {
             item {
                 Text(
-                    text = state.itemsError,
+                    text = stringResource(state.itemsError),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.padding(start = 16.dp)
@@ -211,7 +213,7 @@ fun AddEditSale(
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text("Add Product to Sale")
+                Text(stringResource(R.string.add_product_to_sale))
             }
         }
     }

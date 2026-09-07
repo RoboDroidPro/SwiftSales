@@ -6,15 +6,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import com.example.salestracker.R
 
 @Composable
 fun DeleteDialog(
-    title: String = "Delete",
-    contentText: String = "Are you sure you want to delete?",
-    confirmText: String = "Delete Anyway",
+    title: String = stringResource(R.string.delete_action),
+    contentText: String = stringResource(R.string.delete_product_dialog_content),
+    confirmText: String = stringResource(R.string.delete_action),
     onConfirm: () -> Unit,
-    cancelText: String = "Cancel",
+    cancelText: String = stringResource(R.string.cancel_action),
     onCancel: () -> Unit
 ) {
 

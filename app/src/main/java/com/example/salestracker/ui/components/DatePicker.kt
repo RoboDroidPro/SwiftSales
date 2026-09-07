@@ -21,6 +21,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.salestracker.R
 import com.example.salestracker.utils.DateUtils
 import java.time.Instant
 import java.time.LocalDate
@@ -77,7 +79,7 @@ fun DatePicker(
         interactionSource = interactionSource,
         trailingIcon = {
             IconButton(onClick = { showDialog = true }) {
-                Icon(Icons.Default.CalendarMonth, contentDescription = "Select Date")
+                Icon(Icons.Default.CalendarMonth, contentDescription = stringResource(R.string.select_date_description))
             }
         }
     )
@@ -97,12 +99,12 @@ fun DatePicker(
                         showDialog = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok_action))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel_action))
                 }
             }
         ) {

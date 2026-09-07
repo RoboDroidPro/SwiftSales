@@ -19,8 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.salestracker.R
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.ui.components.ProductDropdown
 
@@ -52,14 +54,14 @@ fun SaleItemCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Item $cardNumber Details",
+                    text = stringResource(R.string.item_details_title, cardNumber),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
                 IconButton(onClick = { onAction(AddSaleAction.RemoveSaleItem(itemState.saleItemId)) }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = "Remove Item",
+                        contentDescription = stringResource(R.string.remove_item_description),
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
@@ -79,7 +81,7 @@ fun SaleItemCard(
                 },
                 isDropdownError = itemState.productError != null, // Highlights the box in red
                 supportingText = {
-                    itemState.productError?.let { Text(it) } // Shows the error message below the box
+                    itemState.productError?.let { Text(stringResource(it)) } // Shows the error message below the box
                 },
             )
 
@@ -99,14 +101,14 @@ fun SaleItemCard(
                             )
                         )
                     },
-                    label = { Text("Unit Price") },
+                    label = { Text(stringResource(R.string.unit_price_label)) },
                     modifier = Modifier.weight(1.2f),
                     prefix = { Text("$") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
                     isError = itemState.unitPriceError != null,
                     supportingText = {
-                        itemState.unitPriceError?.let { Text(it) } // Shows the error message below the box
+                        itemState.unitPriceError?.let { Text(stringResource(it)) } // Shows the error message below the box
                     },
                 )
 
@@ -123,7 +125,7 @@ fun SaleItemCard(
                             )
                         )
                     },
-                    label = { Text("Qty") },
+                    label = { Text(stringResource(R.string.quantity_label)) },
                     modifier = Modifier.width(70.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true
@@ -135,7 +137,7 @@ fun SaleItemCard(
                 OutlinedTextField(
                     value = itemState.lineTotal,
                     onValueChange = {}, // no need. Read only field
-                    label = { Text("Total") },
+                    label = { Text(stringResource(R.string.total_label)) },
                     modifier = Modifier.weight(1f),
                     prefix = { Text("$") },
                     readOnly = true,

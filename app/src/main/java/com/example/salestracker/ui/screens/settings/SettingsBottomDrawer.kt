@@ -26,12 +26,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.salestracker.R
 import com.example.salestracker.ui.components.DeleteDialog
 import com.example.salestracker.ui.components.StockStatusRow
 
@@ -45,13 +47,13 @@ fun AddProductSheet(
 
     if (showDeleteDialog) {
         DeleteDialog(
-            title = "Delete Product?",
-            contentText = "Are you sure you want to delete this product? Only products with NO SALE RECORDS can be deleted.",
+            title = stringResource(R.string.delete_product_dialog_title),
+            contentText = stringResource(R.string.delete_product_dialog_content),
             onConfirm = {
                 showDeleteDialog = false
                 onAction(SettingsAction.DeleteProduct)
             },
-            confirmText = "Delete",
+            confirmText = stringResource(R.string.delete_action),
             onCancel = { showDeleteDialog = false}
         )
     }
@@ -66,7 +68,7 @@ fun AddProductSheet(
     ) {
 
         Text(
-            text = if(uIState.showDelete) "Edit Product" else "Add Product",
+            text = if(uIState.showDelete) stringResource(R.string.edit_product_title) else stringResource(R.string.add_product_title),
             fontSize = 24.sp,
             fontWeight = FontWeight.ExtraBold
         )
@@ -76,10 +78,10 @@ fun AddProductSheet(
             onValueChange = {
                 if (it.length <= 40) onAction(SettingsAction.ProductNameChanged(it))
             },
-            label = { Text("Product Name") },
+            label = { Text(stringResource(R.string.product_name_label)) },
             supportingText = {
                 Text(
-                    text = uIState.productError ?: "${uIState.productName.length} / 40",
+                    text = uIState.productError?.let { stringResource(it) } ?: "${uIState.productName.length} / 40",
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = if (uIState.productError == null) TextAlign.End else null,
                 )
@@ -93,11 +95,11 @@ fun AddProductSheet(
         OutlinedTextField(
             value = uIState.productPrice,
             onValueChange = { onAction(SettingsAction.ProductPriceChanged(it)) },
-            label = { Text("Default Price") },
+            label = { Text(stringResource(R.string.default_price_label)) },
             modifier = Modifier.fillMaxWidth(),
             isError = uIState.priceError != null,
             supportingText = {
-                uIState.priceError?.let { Text(it) }
+                uIState.priceError?.let { Text(stringResource(it)) }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
         )
@@ -105,7 +107,7 @@ fun AddProductSheet(
         OutlinedTextField(
             value = uIState.productNotes,
             onValueChange = { onAction(SettingsAction.ProductNotesChanged(it)) },
-            label = { Text("Product Notes") },
+            label = { Text(stringResource(R.string.product_notes_label)) },
             modifier = Modifier
                 .fillMaxWidth()
         )
@@ -118,17 +120,17 @@ fun AddProductSheet(
         OutlinedTextField(
             value = uIState.productOrderIndex,
             onValueChange = { onAction(SettingsAction.ProductIndexChanged(it)) },
-            label = { Text("Order Index") },
+            label = { Text(stringResource(R.string.order_index_label)) },
             modifier = Modifier.fillMaxWidth(),
             isError = uIState.indexError != null,
             supportingText = {
-                uIState.indexError?.let { Text(it) }
+                uIState.indexError?.let { Text(stringResource(it)) }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
         Text(
-            text = "NOTE: This field is for ordering. The higher the number entered, the lower on the list it will appear. Number 1 goes at the top.",
+            text = stringResource(R.string.order_index_instruction),
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         )
@@ -138,8 +140,8 @@ fun AddProductSheet(
                 onClick = { onAction(SettingsAction.SaveProductClicked) }
             ) {
                 Row {
-                    Text(text = "Save")
-                    Icon(imageVector = Icons.Filled.DoneOutline, contentDescription = "Save")
+                    Text(text = stringResource(R.string.save_action))
+                    Icon(imageVector = Icons.Filled.DoneOutline, contentDescription = stringResource(R.string.save_action))
                 }
             }
 
@@ -151,7 +153,7 @@ fun AddProductSheet(
                 {
                     Icon(
                         imageVector = Icons.Filled.Delete,
-                        contentDescription = "Delete Product",
+                        contentDescription = stringResource(R.string.delete_product_description),
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
@@ -160,7 +162,7 @@ fun AddProductSheet(
 
         if (uIState.deleteProductError != null) {
             Text(
-                text = uIState.deleteProductError,
+                text = stringResource(uIState.deleteProductError),
                 fontWeight = FontWeight.W800,
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(vertical = 24.dp),

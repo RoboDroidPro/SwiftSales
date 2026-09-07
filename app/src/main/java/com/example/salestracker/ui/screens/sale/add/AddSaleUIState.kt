@@ -1,10 +1,11 @@
 package com.example.salestracker.ui.screens.sale.add
 
+import com.example.salestracker.R
 import com.example.salestracker.data.model.Product
 import java.util.UUID
 
 data class AddSaleUIState(
-    val screenTitle: String = "Add Sale",
+    val screenTitle: Int = R.string.add_sale_title,
     val date: String = "",
     val buyer: String = "",
     val totalSalePrice: String = "",
@@ -12,9 +13,9 @@ data class AddSaleUIState(
     val saleItems: List<SaleItemState> = listOf(SaleItemState()),
     val showDialog: Boolean = false,
 
-    val buyerError: String? = null,
-    val totalSalePriceError: String? = null,
-    val itemsError: String? = null
+    val buyerError: Int? = null,
+    val totalSalePriceError: Int? = null,
+    val itemsError: Int? = null
 )
 
 data class SaleItemState(
@@ -23,6 +24,6 @@ data class SaleItemState(
     val lineTotal: String = "",
     val unitPrice: String = "",
     val quantity: Int? = null,
-    val productError: String? = null,
-    val unitPriceError: String? = null,
+    val productError: Int? = null,
+    val unitPriceError: Int? = null,
 )

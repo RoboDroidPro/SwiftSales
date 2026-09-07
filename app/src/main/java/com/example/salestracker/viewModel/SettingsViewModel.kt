@@ -3,6 +3,7 @@ package com.example.salestracker.viewModel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.salestracker.R
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.data.repository.ProductRepository
 import com.example.salestracker.ui.screens.settings.SETTAG
@@ -89,7 +90,7 @@ class SettingsViewModel @Inject constructor(
                 _settingsUIState.update {
                     it.copy(
                         productPrice = action.newPrice,
-                        priceError = if (action.newPrice.isNotBlank() && action.newPrice.toSwiftCurrency() == null) "Invalid price" else null,
+                        priceError = if (action.newPrice.isNotBlank() && action.newPrice.toSwiftCurrency() == null) R.string.invalid_price_error else null,
                         deleteProductError = null,
                         deleteAllError = false
                     )
@@ -139,9 +140,9 @@ class SettingsViewModel @Inject constructor(
         val currentState = _settingsUIState.value
         val priceInt = currentState.productPrice.toSwiftCurrency()
 
-        val productError = if (currentState.productName.isBlank()) "Product name required" else null
-        val priceError = if (currentState.productPrice.isNotBlank() && priceInt == null) "Invalid price" else null
-        val indexError = if (currentState.productOrderIndex.toIntOrNull() == null) "Invalid Order Index" else null
+        val productError = if (currentState.productName.isBlank()) R.string.product_name_required_error else null
+        val priceError = if (currentState.productPrice.isNotBlank() && priceInt == null) R.string.invalid_price_error else null
+        val indexError = if (currentState.productOrderIndex.toIntOrNull() == null) R.string.invalid_order_index_error else null
 
         if (productError == null &&
             priceError == null &&
@@ -200,7 +201,7 @@ class SettingsViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.e(SETTAG, "Error deleting product: ${e.message}")
                 _settingsUIState.update {
-                    it.copy(deleteProductError = "Cannot delete: This product is used in existing sales. Delete the sales first.")
+                    it.copy(deleteProductError = R.string.cannot_delete_product_error)
                 }
             }
         }

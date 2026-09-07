@@ -33,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.salestracker.R
 import com.example.salestracker.data.model.Product
 import com.example.salestracker.ui.components.DeleteDialog
 import com.example.salestracker.ui.components.SalesAppBar
@@ -86,12 +88,12 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             SalesAppBar(
-                title = "Settings",
+                title = stringResource(R.string.settings_title),
                 navigationIcon = {
                     IconButton(
                         onClick = onBackClicked
                     ) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back_button_description))
                     }
                 }
             )
@@ -115,12 +117,12 @@ fun Settings(
 ) {
     if (uIState.showDeleteAll) {
         DeleteDialog(
-            title = "Delete All",
-            contentText = "Are you sure you want to delete ALL the products? Only products with NO SALE records can be deleted.",    //,
+            title = stringResource(R.string.delete_all_products),
+            contentText = stringResource(R.string.delete_all_products_confirmation),
             onConfirm = {
                 onAction(SettingsAction.DeleteAllProducts)
             },
-            confirmText = "Delete",
+            confirmText = stringResource(R.string.delete_action),
             onCancel = { onAction(SettingsAction.DeleteAllCancel) }
         )
     }
@@ -130,10 +132,7 @@ fun Settings(
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(
-                text = "Here you can Add/Remove/Edit your products. Each of the Products" +
-                        " listed here will appear in the Add Sale screen's Product field dropdown. The price is optional." +
-                        " It will be used to autofill the 'Price' field when you add a sale. " +
-                        "Click any product to view its details, or edit it.",
+                text = stringResource(R.string.settings_instructions),
                 fontWeight = FontWeight.W600,
                 style = MaterialTheme.typography.titleLarge
             )
@@ -141,7 +140,7 @@ fun Settings(
             if (uIState.deleteAllError) {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Delete All Failed. Some products are still used in sales records. Delete those sales first.",
+                    text = stringResource(R.string.delete_all_failed),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
@@ -187,7 +186,7 @@ fun Settings(
             )
         ) {
             Text(
-                text = "Delete All",
+                text = stringResource(R.string.delete_all_products),
                 fontSize = 16.sp
             )
         }
@@ -200,7 +199,7 @@ fun Settings(
             onClick = { onAction(SettingsAction.AddEditProduct(null)) }
         ) {
             Text(
-                text = "Add Product",
+                text = stringResource(R.string.add_product),
                 fontSize = 16.sp
             )
         }

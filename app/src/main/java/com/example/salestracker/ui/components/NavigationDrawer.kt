@@ -27,9 +27,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.salestracker.R
 
 @Composable
 fun SalesNavDrawer(
@@ -68,8 +70,8 @@ fun SalesDrawerSheet(
             DrawerNavButton(
                 navButtonClick = onSettingsClick,
                 buttonIcon = Icons.Default.Settings,
-                buttonLabel = "Settings",
-                buttonIconContentDescription = "Go to Settings"
+                buttonLabel = stringResource(R.string.settings_label),
+                buttonIconContentDescription = stringResource(R.string.go_to_settings_description)
             )
         }
     }

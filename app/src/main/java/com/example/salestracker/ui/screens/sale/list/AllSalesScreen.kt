@@ -33,10 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.salestracker.R
 import com.example.salestracker.SalesListItem
 import com.example.salestracker.ui.components.DeleteDialog
 import com.example.salestracker.ui.components.SaleFAB
@@ -97,16 +99,20 @@ fun AllSalesScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             SalesAppBar(
-                title = if (isSelectionMode) "${salesUIState.selectedSaleEventIds.size} Selected" else "All Sales",
+                title = if (isSelectionMode) {
+                    stringResource(R.string.selected_count, salesUIState.selectedSaleEventIds.size)
+                } else {
+                    stringResource(R.string.all_sales_title)
+                },
                 onNavigationIconClicked = onMenuClick,
                 navigationIcon = {
                     if (isSelectionMode) {
                         IconButton(onClick = { viewModel.onAction(AllSalesAction.ClearSelection) }) {
-                            Icon(Icons.Default.Close, contentDescription = "Clear Selection")
+                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.clear_selection_description))
                         }
                     } else {
                         IconButton(onClick = onMenuClick) {
-                            Icon(Icons.Default.Menu, contentDescription = "Open Navigation Drawer")
+                            Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.open_nav_drawer_description))
                         }
                     }
                 },
@@ -118,7 +124,7 @@ fun AllSalesScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.Delete,
-                                contentDescription = "Delete Selected"
+                                contentDescription = stringResource(R.string.delete_selected_description)
                             )
                         }
                         if (salesUIState.selectedSaleEventIds.size < salesUIState.allSaleEventWithItems.size) {
@@ -128,7 +134,7 @@ fun AllSalesScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.SelectAll,
-                                    contentDescription = "Select All"
+                                    contentDescription = stringResource(R.string.select_all_description)
                                 )
                             }
                         }
@@ -178,10 +184,13 @@ fun AllSales(
 
     if (allSalesUIState.isConfirmingDeletion) {
         DeleteDialog(
-            title = "Delete Sales",
-            contentText = "Are you sure you want to permanently delete ${allSalesUIState.selectedSaleEventIds.size}" +
-                    " sale${if (allSalesUIState.selectedSaleEventIds.size > 1) "s" else ""}?",
-            confirmText = "Yes, Delete",
+            title = stringResource(R.string.delete_sales_title),
+            contentText = stringResource(
+                R.string.delete_sales_confirmation,
+                allSalesUIState.selectedSaleEventIds.size,
+                if (allSalesUIState.selectedSaleEventIds.size > 1) "s" else ""
+            ),
+            confirmText = stringResource(R.string.delete_action),
             onConfirm = {
                 onAction(AllSalesAction.DeleteSelectedSales)
             },

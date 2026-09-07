@@ -4,4 +4,76 @@
     <string name="add_sale">Add Sale</string>
     <string name="save_success">Sale saved.</string>
     <string name="edit_success">Changes saved.</string>
+    <string name="ok_action">OK</string>
+    <string name="cancel_action">Cancel</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_title">Settings</string>
+    <string name="back_button_description">Back</string>
+    <string name="delete_all_products">Delete All</string>
+    <string name="delete_all_products_confirmation">Are you sure you want to delete ALL the products? Only products with NO SALE records can be deleted.</string>
+    <string name="delete_action">Delete</string>
+    <string name="delete_all_failed">Delete All Failed. Some products are still used in sales records. Delete those sales first.</string>
+    <string name="settings_instructions">Here you can Add/Remove/Edit your products. Each of the Products listed here will appear in the Add Sale screen\'s Product field dropdown. The price is optional. It will be used to autofill the \'Price\' field when you add a sale. Click any product to view its details, or edit it.</string>
+    <string name="add_product">Add Product</string>
+
+    <!-- Product Details / Add Product Sheet -->
+    <string name="delete_product_dialog_title">Delete Product?</string>
+    <string name="delete_product_dialog_content">Are you sure you want to delete this product? Only products with NO SALE RECORDS can be deleted.</string>
+    <string name="edit_product_title">Edit Product</string>
+    <string name="add_product_title">Add Product</string>
+    <string name="product_name_label">Product Name</string>
+    <string name="default_price_label">Default Price</string>
+    <string name="product_notes_label">Product Notes</string>
+    <string name="order_index_label">Order Index</string>
+    <string name="order_index_instruction">NOTE: This field is for ordering. The higher the number entered, the lower on the list it will appear. Number 1 goes at the top.</string>
+    <string name="save_action">Save</string>
+    <string name="delete_product_description">Delete Product</string>
+    <string name="in_stock_label">IN STOCK</string>
+
+    <!-- Add/Edit Sale Screen -->
+    <string name="discard_changes_title">Discard Changes?</string>
+    <string name="discard_changes_text">You have unsaved changes. Do you want to discard them</string>
+    <string name="discard_action">Discard changes</string>
+    <string name="save_changes_action">Save changes</string>
+    <string name="date_label">Date</string>
+    <string name="buyer_label">Buyer</string>
+    <string name="total_sale_price_label">Total Sale Price</string>
+    <string name="notes_optional_label">Notes (optional)</string>
+    <string name="add_product_to_sale">Add Product to Sale</string>
+    <string name="save_sale_description">Save Sale, Go to AllSales</string>
+    <string name="select_date_description">Select Date</string>
+
+    <!-- All Sales Screen -->
+    <string name="selected_count">%1$d Selected</string>
+    <string name="all_sales_title">All Sales</string>
+    <string name="clear_selection_description">Clear Selection</string>
+    <string name="open_nav_drawer_description">Open Navigation Drawer</string>
+    <string name="delete_selected_description">Delete Selected</string>
+    <string name="select_all_description">Select All</string>
+    <string name="delete_sales_title">Delete Sales</string>
+    <string name="delete_sales_confirmation">Are you sure you want to permanently delete %1$d sale%2$s?</string>
+
+    <!-- Sale Item Card -->
+    <string name="item_details_title">Item %1$d Details</string>
+    <string name="remove_item_description">Remove Item</string>
+    <string name="unit_price_label">Unit Price</string>
+    <string name="quantity_label">Qty</string>
+    <string name="total_label">Total</string>
+    <string name="product_label">Product</string>
+    <string name="out_of_stock_suffix">(out of stock)</string>
+
+    <!-- Navigation Drawer -->
+    <string name="settings_label">Settings</string>
+    <string name="go_to_settings_description">Go to Settings</string>
+    <string name="add_sale_title">Add Sale</string>
+    <string name="edit_sale_title">Edit Sale</string>
+    <string name="buyer_required_error">Buyer field required!</string>
+    <string name="add_one_item_error">Add at least one item!</string>
+    <string name="unit_price_required_error">Unit Price Required</string>
+    <string name="invalid_price_error">Invalid price</string>
+    <string name="product_required_error">Product Field Required</string>
+    <string name="product_name_required_error">Product name required</string>
+    <string name="invalid_order_index_error">Invalid Order Index</string>
+    <string name="cannot_delete_product_error">Cannot delete: This product is used in existing sales. Delete the sales first.</string>
 </resources>

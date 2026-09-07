@@ -20,9 +20,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.salestracker.R
 import com.example.salestracker.data.model.SaleEventWithItems
 import com.example.salestracker.utils.toSwiftString
 
@@ -138,7 +140,7 @@ fun SalesListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "TOTAL",
+                    text = stringResource(R.string.total_label),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.secondary

@@ -12,16 +12,18 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.salestracker.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SalesAppBar(
-    title: String = "SwiftSales",
+    title: String = stringResource(R.string.app_name),
     onNavigationIconClicked: () -> Unit = {},
-    navigationIcon: @Composable (() -> Unit) = { IconButton(onClick = onNavigationIconClicked) { Icon(Icons.Default.Menu, contentDescription = "Open Navigation Drawer") } },
+    navigationIcon: @Composable (() -> Unit) = { IconButton(onClick = onNavigationIconClicked) { Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.open_nav_drawer_description)) } },
     moreTopBarActions: @Composable (RowScope.() -> Unit) = {},
     scrollBehaviour: TopAppBarScrollBehavior? = null,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors()
