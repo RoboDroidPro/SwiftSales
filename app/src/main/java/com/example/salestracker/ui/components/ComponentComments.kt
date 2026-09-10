@@ -11,7 +11,7 @@ package com.example.salestracker.ui.components
  * [com.example.salestracker.MainActivity] calls [com.example.salestracker.ui.navigation.SaleNavGraph]
  *
  * [SalesNavDrawer] in file "NavigationDrawer.kt"
- * [SalesNavDrawer] calls [com.example.salestracker.ui.screens.AllSalesScreen]
+ * [SalesNavDrawer] calls [com.example.salestracker.ui.screens.sale.list.AllSalesScreen]
  * or [com.example.salestracker.ui.screens.NewSaleScreen]
  *
  */

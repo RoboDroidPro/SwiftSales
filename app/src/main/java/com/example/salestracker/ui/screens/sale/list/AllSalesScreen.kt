@@ -1,4 +1,4 @@
-package com.example.salestracker.ui.screens
+package com.example.salestracker.ui.screens.sale.list
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
@@ -44,8 +44,6 @@ import com.example.salestracker.ui.components.DeleteDialog
 import com.example.salestracker.ui.components.SaleFAB
 import com.example.salestracker.ui.components.SalesAppBar
 import com.example.salestracker.ui.navigation.SNACKBAR_MSG_KEY
-import com.example.salestracker.ui.screens.sale.list.AllSalesAction
-import com.example.salestracker.ui.screens.sale.list.SalesUIState
 import com.example.salestracker.viewModel.AllSalesViewModel
 
 private const val TAG = "ArduinoASS"

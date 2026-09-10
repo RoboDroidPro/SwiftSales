@@ -19,7 +19,7 @@ package com.example.salestracker
  * @see com.example.salestracker.ui.navigation.SaleNavGraph
  * SaleNavGraph has the screens. Each of those is a self-contained that
  * has all its stuff inside it.
- * [com.example.salestracker.ui.screens.AllSalesScreen]
+ * [com.example.salestracker.ui.screens.sale.list.AllSalesScreen]
  * [com.example.salestracker.ui.screens.sale.add.AddEditSaleScreen]
  * [com.example.salestracker.ui.screens.settings.SettingsScreen]
  *
