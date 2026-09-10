@@ -34,8 +34,8 @@
     <!-- Add/Edit Sale Screen -->
     <string name="discard_changes_title">Discard Changes?</string>
     <string name="discard_changes_text">You have unsaved changes. Do you want to discard them</string>
-    <string name="discard_action">Discard changes</string>
-    <string name="save_changes_action">Save changes</string>
+    <string name="discard_action">Discard</string>
+    <string name="save_changes_action">Save</string>
     <string name="date_label">Date</string>
     <string name="buyer_label">Buyer</string>
     <string name="total_sale_price_label">Total Sale Price</string>

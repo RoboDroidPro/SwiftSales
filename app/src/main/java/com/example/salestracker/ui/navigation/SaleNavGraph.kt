@@ -144,7 +144,7 @@ fun SaleNavGraph(
                             previousHandle?.set(SNACKBAR_MSG_KEY, msgRes)
                         }
                     }
-                    navController.popBackStack()
+                    navController.popBackStack(SalesListDes, inclusive = false)
 
                 },
             )
@@ -153,7 +153,7 @@ fun SaleNavGraph(
         //Settings
         composable<SettingsDes> {
             SettingsScreen(
-                onBackClicked = { navController.popBackStack() }
+                onBackClicked = { navController.popBackStack(SalesListDes, inclusive = false) }
             )
         }
     }
