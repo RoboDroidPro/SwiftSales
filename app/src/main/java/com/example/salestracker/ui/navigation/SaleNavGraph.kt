@@ -15,9 +15,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.salestracker.R
 import com.example.salestracker.ui.components.SalesNavDrawer
-import com.example.salestracker.ui.screens.sale.list.AllSalesScreen
 import com.example.salestracker.ui.screens.sale.add.AddEditSaleScreen
+import com.example.salestracker.ui.screens.sale.list.AllSalesScreen
 import com.example.salestracker.ui.screens.settings.SettingsScreen
+import com.example.salestracker.ui.screens.stats.StatsScreen
 import com.example.salestracker.viewModel.AllSalesViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -108,6 +109,14 @@ fun SaleNavGraph(
                         drawerState.close()
                     }
                 },
+                onNavToStats = {
+                    navController.navigate(StatsDes) {
+                        popUpTo(SalesListDes) { inclusive = false}
+                    }
+                    coroutineScope.launch {
+                        drawerState.close()
+                    }
+                },
                 drawerState = drawerState
             ) {
                 AllSalesScreen(
@@ -117,8 +126,33 @@ fun SaleNavGraph(
                         }
                     },
                     onMenuClick = { coroutineScope.launch { drawerState.open() } },
+                    onStatsClick = { navController.navigate(StatsDes) },
                     viewModel = allSalesViewModel,
                     savedStateHandle = parentSavedStateHandle  // new param
+                )
+            }
+        }
+
+        //Stats Screen
+        composable<StatsDes> {
+            SalesNavDrawer(
+                onNavToSettings = {
+                    navController.navigate(SettingsDes) {
+                        popUpTo(SalesListDes) { inclusive = false}
+                    }
+                    coroutineScope.launch {
+                        drawerState.close()
+                    }
+                },
+                onNavToStats = {
+                    coroutineScope.launch {
+                        drawerState.close()
+                    }
+                },
+                drawerState = drawerState
+            ) {
+                StatsScreen(
+                    onMenuClick = { coroutineScope.launch { drawerState.open() } }
                 )
             }
         }

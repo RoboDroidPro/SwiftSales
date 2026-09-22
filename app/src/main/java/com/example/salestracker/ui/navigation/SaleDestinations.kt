@@ -11,3 +11,6 @@ data class AddEditSaleDes(val id: String? = null)
 @Serializable
 object SettingsDes
 
+@Serializable
+object StatsDes
+

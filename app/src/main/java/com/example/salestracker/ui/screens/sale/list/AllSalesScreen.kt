@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.SelectAll
@@ -54,6 +55,7 @@ fun AllSalesScreen(
     modifier: Modifier = Modifier,
     onSaleClicked: (String?) -> Unit,
     onMenuClick: () -> Unit,
+    onStatsClick: () -> Unit = {},
     snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
     viewModel: AllSalesViewModel = hiltViewModel(),
     savedStateHandle: SavedStateHandle
@@ -135,6 +137,13 @@ fun AllSalesScreen(
                                     contentDescription = stringResource(R.string.select_all_description)
                                 )
                             }
+                        }
+                    } else {
+                        IconButton(onClick = onStatsClick) {
+                            Icon(
+                                imageVector = Icons.Default.BarChart,
+                                contentDescription = stringResource(R.string.go_to_stats_description)
+                            )
                         }
                     }
                 },

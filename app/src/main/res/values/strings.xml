@@ -76,4 +76,30 @@
     <string name="product_name_required_error">Product name required</string>
     <string name="invalid_order_index_error">Invalid Order Index</string>
     <string name="cannot_delete_product_error">Cannot delete: This product is used in existing sales. Delete the sales first.</string>
+
+    <!-- Stats & Export Screen -->
+    <string name="stats_title">Stats &amp; Reports</string>
+    <string name="go_to_stats_description">Go to Stats &amp; Reports</string>
+    <string name="export_data_action">Export Data</string>
+    <string name="filter_all_time">All Time</string>
+    <string name="filter_today">Today</string>
+    <string name="filter_this_week">This Week</string>
+    <string name="filter_this_month">This Month</string>
+    <string name="filter_custom">Custom</string>
+    <string name="clerk_name_label">Clerk / Salesperson Name (Optional)</string>
+    <string name="summary_section_title">Summary Totals</string>
+    <string name="total_sales_count_label">Total Sales</string>
+    <string name="total_revenue_label">Total Income</string>
+    <string name="total_items_sold_label">Items Sold</string>
+    <string name="products_breakdown_title">Products Sold Breakdown</string>
+    <string name="detailed_sales_title">Detailed Sales Receipts</string>
+    <string name="no_sales_in_period">No sales found for the selected time period.</string>
+    <string name="export_dialog_title">Export Report</string>
+    <string name="export_copy_text">Copy Text Report</string>
+    <string name="export_share_text">Share Text via App</string>
+    <string name="export_pdf">Export PDF Document</string>
+    <string name="export_csv">Export CSV (Spreadsheet)</string>
+    <string name="export_quickbooks">Export QuickBooks (.iif)</string>
+    <string name="report_copied_toast">Report copied to clipboard!</string>
+    <string name="report_preview_title">Report Text Preview</string>
 </resources>

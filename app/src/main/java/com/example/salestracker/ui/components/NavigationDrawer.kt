@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -36,13 +37,20 @@ import com.example.salestracker.R
 @Composable
 fun SalesNavDrawer(
     onNavToSettings: () -> Unit = {},
+    onNavToStats: () -> Unit = {},
     drawerState: DrawerState = DrawerState(DrawerValue.Closed),
     headerTitle: String = "SwiftSales",
     content: @Composable () -> Unit = {  }
 ) {
 
     ModalNavigationDrawer(
-        drawerContent = { SalesDrawerSheet(headerTitle = headerTitle, onNavToSettings) },
+        drawerContent = {
+            SalesDrawerSheet(
+                headerTitle = headerTitle,
+                onSettingsClick = onNavToSettings,
+                onStatsClick = onNavToStats
+            )
+        },
         drawerState = drawerState,
         content = content
     )
@@ -52,6 +60,7 @@ fun SalesNavDrawer(
 fun SalesDrawerSheet(
     headerTitle: String = "SwiftSales",
     onSettingsClick: () -> Unit = {},
+    onStatsClick: () -> Unit = {},
     ) {
     ModalDrawerSheet(
         modifier = Modifier
@@ -62,11 +71,12 @@ fun SalesDrawerSheet(
             .padding(vertical = 8.dp)) {
             DrawerHeader(headerTitle = headerTitle)
             Spacer(Modifier.height(40.dp))
-//            DrawerNavButton(
-//                buttonIcon = Icons.Default.Star,
-//                buttonLabel = "Star",
-//                buttonIconContentDescription = "Star"
-//            )
+            DrawerNavButton(
+                navButtonClick = onStatsClick,
+                buttonIcon = Icons.Default.BarChart,
+                buttonLabel = stringResource(R.string.stats_title),
+                buttonIconContentDescription = stringResource(R.string.go_to_stats_description)
+            )
             DrawerNavButton(
                 navButtonClick = onSettingsClick,
                 buttonIcon = Icons.Default.Settings,
