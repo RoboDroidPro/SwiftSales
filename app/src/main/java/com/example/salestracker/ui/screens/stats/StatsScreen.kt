@@ -19,7 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Share
@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,7 +61,7 @@ import com.example.salestracker.viewModel.StatsViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsScreen(
-    onMenuClick: () -> Unit = {},
+    onNavIconClick: () -> Unit = {},
     viewModel: StatsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -113,9 +114,9 @@ fun StatsScreen(
             SalesAppBar(
                 title = stringResource(R.string.stats_title),
                 navigationIcon = {
-                    IconButton(onClick = onMenuClick) {
+                    IconButton(onClick = onNavIconClick) {
                         Icon(
-                            imageVector = Icons.Default.Menu,
+                            imageVector = Icons.Filled.Home,
                             contentDescription = stringResource(R.string.open_nav_drawer_description)
                         )
                     }
@@ -380,7 +381,7 @@ fun StatsContent(
             Text(
                 text = uiState.reportText,
                 style = MaterialTheme.typography.bodySmall.copy(
-                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                    fontFamily = FontFamily.Monospace,
                     fontSize = 11.sp
                 )
             )

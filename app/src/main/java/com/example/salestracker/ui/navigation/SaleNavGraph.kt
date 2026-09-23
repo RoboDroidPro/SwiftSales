@@ -135,26 +135,9 @@ fun SaleNavGraph(
 
         //Stats Screen
         composable<StatsDes> {
-            SalesNavDrawer(
-                onNavToSettings = {
-                    navController.navigate(SettingsDes) {
-                        popUpTo(SalesListDes) { inclusive = false}
-                    }
-                    coroutineScope.launch {
-                        drawerState.close()
-                    }
-                },
-                onNavToStats = {
-                    coroutineScope.launch {
-                        drawerState.close()
-                    }
-                },
-                drawerState = drawerState
-            ) {
-                StatsScreen(
-                    onMenuClick = { coroutineScope.launch { drawerState.open() } }
-                )
-            }
+            StatsScreen(
+                onNavIconClick = { navController.popBackStack(SalesListDes, inclusive = false) }
+            )
         }
 
         //AddEditSale Screen

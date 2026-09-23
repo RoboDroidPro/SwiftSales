@@ -21,7 +21,7 @@ data class StatsUIState(
     val startDate: String = "",
     val endDate: String = "",
     val clerkName: String = "",
-    val allSaleEventWithItems: List<SaleEventWithItems> = emptyList(),
+    val allSaleEventWithItems: List<SaleEventWithItems> = emptyList(), //Todo this might be unnecessary. Can put it in viewModel as a private val
     val filteredSaleEventWithItems: List<SaleEventWithItems> = emptyList(),
     val totalRevenueCents: Int = 0,
     val totalSalesCount: Int = 0,

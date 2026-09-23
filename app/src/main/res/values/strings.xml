@@ -48,7 +48,7 @@
     <string name="selected_count">%1$d Selected</string>
     <string name="all_sales_title">All Sales</string>
     <string name="clear_selection_description">Clear Selection</string>
-    <string name="open_nav_drawer_description">Open Navigation Drawer</string>
+    <string name="open_nav_drawer_description">Navigate back to Home</string>
     <string name="delete_selected_description">Delete Selected</string>
     <string name="select_all_description">Select All</string>
     <string name="delete_sales_title">Delete Sales</string>

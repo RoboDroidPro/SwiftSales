@@ -139,27 +139,27 @@ class StatsViewModel @Inject constructor(
     ): List<SaleEventWithItems> {
         val today = LocalDate.now()
 
-        return sales.filter { saleWithItems ->
-            val saleDate = try {
+        return sales.filter { saleWithItems -> //each sale goes through this block individually
+            val saleDate = try {  //variable with calendar value of the date, formatted, or null if date is invalid(corrupted)
                 LocalDate.parse(saleWithItems.saleEvent.date, DateTimeFormatter.ISO_LOCAL_DATE)
             } catch (e: Exception) {
-                null
+                null  //if date is corrupted, pass it on as true so the user sees it(signifies something went very wrong)
             } ?: return@filter true
 
-            when (filterType) {
-                DateFilterType.ALL_TIME -> true
-                DateFilterType.TODAY -> saleDate == today
-                DateFilterType.THIS_WEEK -> {
+            when (filterType) { //filters out the sale based on the filter type
+                DateFilterType.ALL_TIME -> true  //returns true on ALL sales
+                DateFilterType.TODAY -> saleDate == today //returns true if the sale date is today
+                DateFilterType.THIS_WEEK -> { //returns true if sale date is within this week
                     val monday = today.with(DayOfWeek.MONDAY)
                     val sunday = today.with(DayOfWeek.SUNDAY)
                     !saleDate.isBefore(monday) && !saleDate.isAfter(sunday)
                 }
-                DateFilterType.THIS_MONTH -> {
+                DateFilterType.THIS_MONTH -> {  //returns true if sale date is within this month
                     val firstDay = today.withDayOfMonth(1)
                     val lastDay = today.withDayOfMonth(today.lengthOfMonth())
                     !saleDate.isBefore(firstDay) && !saleDate.isAfter(lastDay)
                 }
-                DateFilterType.CUSTOM -> {
+                DateFilterType.CUSTOM -> {  //returns true if sale date is within custom dates selected by the user
                     val start = try { LocalDate.parse(startDateStr, DateTimeFormatter.ISO_LOCAL_DATE) } catch (e: Exception) { LocalDate.MIN }
                     val end = try { LocalDate.parse(endDateStr, DateTimeFormatter.ISO_LOCAL_DATE) } catch (e: Exception) { LocalDate.MAX }
                     !saleDate.isBefore(start) && !saleDate.isAfter(end)
