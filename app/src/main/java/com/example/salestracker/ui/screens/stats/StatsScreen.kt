@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Share
@@ -36,6 +38,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -316,6 +319,8 @@ fun StatsContent(
                     modifier = Modifier.padding(end = 4.dp)
                 )
                 Text(stringResource(R.string.export_data_action))
+                Spacer(modifier = Modifier.width(6.dp))
+                BetaBadge()
             }
         }
 
@@ -426,6 +431,26 @@ fun MetricCard(
 }
 
 @Composable
+fun BetaBadge(
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        color = MaterialTheme.colorScheme.tertiaryContainer,
+        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+        shape = RoundedCornerShape(4.dp),
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(R.string.beta_tag),
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Bold,
+            fontSize = 10.sp,
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+        )
+    }
+}
+
+@Composable
 fun ExportOptionsDialog(
     onDismiss: () -> Unit,
     onCopyText: () -> Unit,
@@ -436,12 +461,48 @@ fun ExportOptionsDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.export_dialog_title)) },
+        title = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(stringResource(R.string.export_dialog_title))
+                BetaBadge()
+            }
+        },
         text = {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f)
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 4.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = stringResource(R.string.export_beta_disclaimer),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
+                    }
+                }
+
                 TextButton(
                     onClick = onCopyText,
                     modifier = Modifier.fillMaxWidth()
@@ -452,7 +513,8 @@ fun ExportOptionsDialog(
                     ) {
                         Icon(Icons.Default.ContentCopy, contentDescription = null)
                         Spacer(Modifier.width(12.dp))
-                        Text(stringResource(R.string.export_copy_text))
+                        Text(stringResource(R.string.export_copy_text), modifier = Modifier.weight(1f))
+                        BetaBadge()
                     }
                 }
 
@@ -466,7 +528,8 @@ fun ExportOptionsDialog(
                     ) {
                         Icon(Icons.Default.Share, contentDescription = null)
                         Spacer(Modifier.width(12.dp))
-                        Text(stringResource(R.string.export_share_text))
+                        Text(stringResource(R.string.export_share_text), modifier = Modifier.weight(1f))
+                        BetaBadge()
                     }
                 }
 
@@ -480,7 +543,11 @@ fun ExportOptionsDialog(
                     ) {
                         Icon(Icons.Default.PictureAsPdf, contentDescription = null)
                         Spacer(Modifier.width(12.dp))
-                        Text(stringResource(R.string.export_pdf))
+                        Text(
+                            text = stringResource(R.string.export_pdf),
+                            modifier = Modifier.weight(1f)
+                        )
+                        BetaBadge()
                     }
                 }
 
@@ -494,7 +561,11 @@ fun ExportOptionsDialog(
                     ) {
                         Icon(Icons.Default.TableChart, contentDescription = null)
                         Spacer(Modifier.width(12.dp))
-                        Text(stringResource(R.string.export_csv))
+                        Text(
+                            text = stringResource(R.string.export_csv),
+                            modifier = Modifier.weight(1f)
+                        )
+                        BetaBadge()
                     }
                 }
 
@@ -508,7 +579,11 @@ fun ExportOptionsDialog(
                     ) {
                         Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = null)
                         Spacer(Modifier.width(12.dp))
-                        Text(stringResource(R.string.export_quickbooks))
+                        Text(
+                            text = stringResource(R.string.export_quickbooks),
+                            modifier = Modifier.weight(1f)
+                        )
+                        BetaBadge()
                     }
                 }
             }

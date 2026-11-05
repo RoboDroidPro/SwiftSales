@@ -100,6 +100,8 @@
     <string name="export_pdf">Export PDF Document</string>
     <string name="export_csv">Export CSV (Spreadsheet)</string>
     <string name="export_quickbooks">Export QuickBooks (.iif)</string>
+    <string name="beta_tag">BETA</string>
+    <string name="export_beta_disclaimer">Export formats are currently in Beta. Please verify generated files.</string>
     <string name="report_copied_toast">Report copied to clipboard!</string>
     <string name="report_preview_title">Report Text Preview</string>
 </resources>
