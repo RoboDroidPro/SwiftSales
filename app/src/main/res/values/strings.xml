@@ -7,15 +7,17 @@
     <string name="ok_action">OK</string>
     <string name="cancel_action">Cancel</string>
 
-    <!-- Settings Screen -->
-    <string name="settings_title">Settings</string>
+    <!-- Settings / Product Catalog Screen -->
+    <string name="settings_title">Product Catalog</string>
     <string name="back_button_description">Back</string>
     <string name="delete_all_products">Delete All</string>
     <string name="delete_all_products_confirmation">Are you sure you want to delete ALL the products? Only products with NO SALE records can be deleted.</string>
     <string name="delete_action">Delete</string>
     <string name="delete_all_failed">Delete All Failed. Some products are still used in sales records. Delete those sales first.</string>
-    <string name="settings_instructions">Here you can Add/Remove/Edit your products. Each of the Products listed here will appear in the Add Sale screen\'s Product field dropdown. The price is optional. It will be used to autofill the \'Price\' field when you add a sale. Click any product to view its details, or edit it.</string>
+    <string name="settings_instructions">Here you can manage your product catalog. Each product listed here will appear in the Add Sale screen\'s product field dropdown. Default prices autofill automatically. Click any product to view or edit its details.</string>
     <string name="add_product">Add Product</string>
+    <string name="no_products_settings_empty">No products yet. Click \"Add Product\" to add your first product.</string>
+    <string name="no_products_dropdown_placeholder">There are no products in your catalog. Go to \"Product Catalog\" to add one.</string>
 
     <!-- Product Details / Add Product Sheet -->
     <string name="delete_product_dialog_title">Delete Product?</string>
@@ -64,8 +66,8 @@
     <string name="out_of_stock_suffix">(out of stock)</string>
 
     <!-- Navigation Drawer -->
-    <string name="settings_label">Settings</string>
-    <string name="go_to_settings_description">Go to Settings</string>
+    <string name="settings_label">Product Catalog</string>
+    <string name="go_to_settings_description">Go to Product Catalog</string>
     <string name="add_sale_title">Add Sale</string>
     <string name="edit_sale_title">Edit Sale</string>
     <string name="buyer_required_error">Buyer field required!</string>

@@ -53,25 +53,39 @@ fun ProductDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            productOptions.forEach { product ->
+            if (productOptions.isEmpty()) {
                 DropdownMenuItem(
                     text = {
                         Text(
-                            if (product.inStock) product.name else "${product.name} ${stringResource(R.string.out_of_stock_suffix)}",
-                            color = if (product.inStock) {
-                                MaterialTheme.colorScheme.onSurface  // Normal text color
-                            } else {
-                                MaterialTheme.colorScheme.onSurfaceVariant  // Greyed out (perfect M3 gray!)
-                            },
-                            style = MaterialTheme.typography.bodyLarge //Todo added by Grok
+                            text = stringResource(R.string.no_products_dropdown_placeholder),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     },
-                    onClick = {
-                        selectedProductChanged(product)
-                        expanded = false
-                    },
-                    enabled = product.inStock
+                    onClick = { expanded = false },
+                    enabled = false
                 )
+            } else {
+                productOptions.forEach { product ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                if (product.inStock) product.name else "${product.name} ${stringResource(R.string.out_of_stock_suffix)}",
+                                color = if (product.inStock) {
+                                    MaterialTheme.colorScheme.onSurface  // Normal text color
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant  // Greyed out (perfect M3 gray!)
+                                },
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        },
+                        onClick = {
+                            selectedProductChanged(product)
+                            expanded = false
+                        },
+                        enabled = product.inStock
+                    )
+                }
             }
         }
     }

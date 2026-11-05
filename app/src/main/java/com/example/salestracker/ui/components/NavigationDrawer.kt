@@ -13,6 +13,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
@@ -79,7 +81,7 @@ fun SalesDrawerSheet(
             )
             DrawerNavButton(
                 navButtonClick = onSettingsClick,
-                buttonIcon = Icons.Default.Settings,
+                buttonIcon = Icons.Outlined.Category,
                 buttonLabel = stringResource(R.string.settings_label),
                 buttonIconContentDescription = stringResource(R.string.go_to_settings_description)
             )
