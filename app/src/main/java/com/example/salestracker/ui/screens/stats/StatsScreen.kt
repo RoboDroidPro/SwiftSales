@@ -281,7 +281,7 @@ fun StatsContent(
                                 modifier = Modifier.weight(1f)
                             )
                             Text(
-                                text = "${prod.totalQuantity} sold ($${prod.totalRevenueCents.toSwiftString()})",
+                                text = stringResource(R.string.product_units_sold_format, prod.totalQuantity, prod.totalRevenueCents.toSwiftString()),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }

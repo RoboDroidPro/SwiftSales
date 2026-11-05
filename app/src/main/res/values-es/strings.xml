@@ -1,0 +1,127 @@
+<resources>
+    <string name="app_name">SwiftSales</string>
+
+    <string name="add_sale">Agregar venta</string>
+    <string name="save_success">Venta guardada.</string>
+    <string name="edit_success">Cambios guardados.</string>
+    <string name="ok_action">Aceptar</string>
+    <string name="cancel_action">Cancelar</string>
+
+    <!-- Configuración / Pantalla de catálogo de productos -->
+    <string name="settings_title">Catálogo</string>
+    <string name="back_button_description">Atras</string>
+    <string name="delete_all_products">Eliminar todo</string>
+    <string name="delete_all_products_confirmation">¿Estás seguro de que deseas eliminar TODOS los productos? Solo se pueden eliminar los productos que NO tengan registros de ventas.</string>
+    <string name="delete_action">Eliminar</string>
+    <string name="delete_all_failed">No se pudo eliminar todo. Algunos productos todavía se utilizan en registros de ventas. Primero debes eliminar esas ventas.</string>
+    <string name="settings_instructions">Aquí puedes administrar tu catálogo de productos. Cada producto que aparezca aquí estará disponible en el menú desplegable de productos de la pantalla Agregar venta. Los precios predeterminados se completan automáticamente. Selecciona cualquier producto para editar sus detalles.</string>
+    <string name="add_product">Agregar producto</string>
+    <string name="no_products_settings_empty">Todavía no hay productos. Selecciona \"Agregar producto\" para añadir el primero.</string>
+    <string name="no_products_dropdown_placeholder">No hay productos en tu catálogo. Ve a \"Catálogo de productos\" para agregar uno.</string>
+
+    <!-- Detalles del producto / Hoja para agregar productos -->
+    <string name="delete_product_dialog_title">¿Eliminar producto?</string>
+    <string name="delete_product_dialog_content">¿Estás seguro de que deseas eliminar este producto? Solo se pueden eliminar los productos que NO tengan registros de ventas.</string>
+    <string name="edit_product_title">Editar producto</string>
+    <string name="add_product_title">Agregar producto</string>
+    <string name="product_name_label">Nombre del producto</string>
+    <string name="default_price_label">Precio predeterminado</string>
+    <string name="product_notes_label">Notas del producto</string>
+    <string name="order_index_label">Orden en la lista</string>
+    <string name="order_index_instruction">NOTA: Este campo determina el orden de los productos en la lista. Cuanto mayor sea el número, más abajo aparecerá el producto. El número 1 aparece primero.</string>
+    <string name="save_action">Guardar</string>
+    <string name="delete_product_description">Eliminar producto</string>
+    <string name="in_stock_label">EN EXISTENCIA</string>
+
+    <!-- Pantalla para agregar/editar ventas -->
+    <string name="discard_changes_title">¿Descartar cambios?</string>
+    <string name="discard_changes_text">Tienes cambios sin guardar. ¿Deseas descartarlos?</string>
+    <string name="discard_action">Descartar</string>
+    <string name="save_changes_action">Guardar</string>
+    <string name="date_label">Fecha</string>
+    <string name="buyer_label">Cliente</string>
+    <string name="total_sale_price_label">Precio total de la venta</string>
+    <string name="notes_optional_label">Notas (opcional)</string>
+    <string name="add_product_to_sale">Agregar producto a la venta</string>
+    <string name="save_sale_description">Guardar venta e ir a Todas las ventas</string>
+    <string name="select_date_description">Seleccionar fecha</string>
+
+    <!-- Pantalla de todas las ventas -->
+    <string name="selected_count">%1$d seleccionados</string>
+    <string name="all_sales_title">Todas las ventas</string>
+    <string name="clear_selection_description">Quitar selección</string>
+    <string name="open_nav_drawer_description">Volver al inicio</string>
+    <string name="delete_selected_description">Eliminar seleccionados</string>
+    <string name="select_all_description">Seleccionar todo</string>
+    <string name="delete_sales_title">Eliminar ventas</string>
+    <string name="delete_sales_confirmation">¿Estás seguro de que deseas eliminar permanentemente %1$d venta%2$s?</string>
+
+    <!-- Tarjeta de artículo de venta -->
+    <string name="item_details_title">Detalles del artículo %1$d</string>
+    <string name="remove_item_description">Quitar artículo</string>
+    <string name="unit_price_label">Precio unitario</string>
+    <string name="quantity_label">Cant.</string>
+    <string name="total_label">Total</string>
+    <string name="product_label">Producto</string>
+    <string name="out_of_stock_suffix">(agotado)</string>
+
+    <!-- Menú de navegación -->
+    <string name="settings_label">Catálogo de productos</string>
+    <string name="go_to_settings_description">Ir al catálogo de productos</string>
+    <string name="add_sale_title">Agregar venta</string>
+    <string name="edit_sale_title">Editar venta</string>
+    <string name="buyer_required_error">¡El campo Cliente es obligatorio!</string>
+    <string name="add_one_item_error">¡Agrega al menos un artículo!</string>
+    <string name="unit_price_required_error">El precio unitario es obligatorio</string>
+    <string name="invalid_price_error">Precio no válido</string>
+    <string name="product_required_error">El campo Producto es obligatorio</string>
+    <string name="product_name_required_error">El nombre del producto es obligatorio</string>
+    <string name="invalid_order_index_error">Orden en la lista no válido</string>
+    <string name="cannot_delete_product_error">No se puede eliminar: Este producto se utiliza en ventas existentes.</string>
+
+    <!-- Pantalla de estadísticas y exportación -->
+    <string name="stats_title">Estadísticas e informes</string>
+    <string name="go_to_stats_description">Ir a Estadísticas e informes</string>
+    <string name="export_data_action">Exportar</string>
+    <string name="filter_all_time">Todos</string>
+    <string name="filter_today">Hoy</string>
+    <string name="filter_this_week">Esta semana</string>
+    <string name="filter_this_month">Este mes</string>
+    <string name="filter_custom">Personalizado</string>
+    <string name="clerk_name_label">Nombre del vendedor (opcional)</string>
+    <string name="summary_section_title">Resumen de totales</string>
+    <string name="total_sales_count_label">Total de ventas</string>
+    <string name="total_revenue_label">Ingresos totales</string>
+    <string name="total_items_sold_label">Artículos vendidos</string>
+    <string name="products_breakdown_title">Desglose de productos vendidos</string>
+    <string name="product_units_sold_format">%1$d vendidos ($%2$s)</string>
+    <string name="detailed_sales_title">Recibos detallados</string>
+    <string name="no_sales_in_period">No se encontraron ventas durante el período seleccionado.</string>
+    <string name="export_dialog_title">Exportar informe</string>
+    <string name="export_copy_text">Copiar informe de texto</string>
+    <string name="export_share_text">Compartir texto mediante otra aplicación</string>
+    <string name="export_pdf">Exportar documento PDF</string>
+    <string name="export_csv">Exportar CSV (hoja de cálculo)</string>
+    <string name="export_quickbooks">Exportar QuickBooks (.iif)</string>
+    <string name="beta_tag">BETA</string>
+    <string name="export_beta_disclaimer">Los formatos de exportación están actualmente en fase beta. Verifica los archivos generados.</string>
+    <string name="report_copied_toast">¡Informe copiado al portapapeles!</string>
+    <string name="report_preview_title">Vista previa del informe de texto</string>
+
+    <!-- Cadenas de informes de exportación -->
+    <string name="report_header_title">INFORME SWIFTSALES</string>
+    <string name="report_clerk_label">Cajero / Vendedor: %1$s</string>
+    <string name="report_period_label">Período: %1$s</string>
+    <string name="report_generated_label">Generado: %1$s</string>
+    <string name="report_total_sales">Total de ventas: %1$d</string>
+    <string name="report_total_income">Ingresos totales: $%1$s</string>
+    <string name="report_total_items_sold">Artículos vendidos: %1$d</string>
+    <string name="report_product_breakdown_item">• %1$s: %2$d unidades ($%3$s)</string>
+    <string name="report_product_breakdown_item_sold">• %1$s: %2$d unidades vendidas ($%3$s)</string>
+    <string name="report_receipt_header">%1$d. Fecha: %2$s | Cliente: %3$s</string>
+    <string name="report_receipt_item">   - %1$d x %2$s a $%3$s = $%4$s</string>
+    <string name="report_receipt_notes">   Notas: %1$s</string>
+    <string name="report_csv_headers">ID de venta,Fecha,Cliente,Precio total,Nombre del producto,Cantidad,Precio unitario,Total de línea,Notas</string>
+    <string name="share_report_title">Compartir informe de ventas</string>
+    <string name="period_to">a</string>
+</resources>

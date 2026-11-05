@@ -1,7 +1,9 @@
 package com.example.salestracker.viewModel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.salestracker.R
 import com.example.salestracker.data.model.SaleEventWithItems
 import com.example.salestracker.data.repository.SaleRepository
 import com.example.salestracker.ui.screens.stats.DateFilterType
@@ -10,6 +12,7 @@ import com.example.salestracker.ui.screens.stats.StatsAction
 import com.example.salestracker.ui.screens.stats.StatsUIState
 import com.example.salestracker.utils.ReportExporter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -21,7 +24,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StatsViewModel @Inject constructor(
-    private val saleRepo: SaleRepository
+    private val saleRepo: SaleRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -116,6 +120,7 @@ class StatsViewModel @Inject constructor(
 
         val periodText = getPeriodText(state.filterType, state.startDate, state.endDate)
         val reportText = ReportExporter.generateTextReport(
+            context = context,
             clerkName = state.clerkName,
             periodText = periodText,
             sales = filtered
@@ -170,11 +175,11 @@ class StatsViewModel @Inject constructor(
 
     fun getPeriodText(filterType: DateFilterType, startStr: String, endStr: String): String {
         return when (filterType) {
-            DateFilterType.ALL_TIME -> "All Time"
-            DateFilterType.TODAY -> "Today (${LocalDate.now()})"
-            DateFilterType.THIS_WEEK -> "This Week"
-            DateFilterType.THIS_MONTH -> "This Month (${LocalDate.now().month.name} ${LocalDate.now().year})"
-            DateFilterType.CUSTOM -> "$startStr to $endStr"
+            DateFilterType.ALL_TIME -> context.getString(R.string.filter_all_time)
+            DateFilterType.TODAY -> "${context.getString(R.string.filter_today)} (${LocalDate.now()})"
+            DateFilterType.THIS_WEEK -> context.getString(R.string.filter_this_week)
+            DateFilterType.THIS_MONTH -> "${context.getString(R.string.filter_this_month)} (${LocalDate.now().month.name} ${LocalDate.now().year})"
+            DateFilterType.CUSTOM -> "$startStr ${context.getString(R.string.period_to)} $endStr"
         }
     }
 }

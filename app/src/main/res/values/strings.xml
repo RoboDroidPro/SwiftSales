@@ -16,8 +16,8 @@
     <string name="delete_all_failed">Delete All Failed. Some products are still used in sales records. Delete those sales first.</string>
     <string name="settings_instructions">Here you can manage your product catalog. Each product listed here will appear in the Add Sale screen\'s product field dropdown. Default prices autofill automatically. Click any product to view or edit its details.</string>
     <string name="add_product">Add Product</string>
-    <string name="no_products_settings_empty">No products yet. Click \"Add Product\" to add your first product.</string>
-    <string name="no_products_dropdown_placeholder">There are no products in your catalog. Go to \"Product Catalog\" to add one.</string>
+    <string name="no_products_settings_empty">No products yet. Click \"Add Product\".</string>
+    <string name="no_products_dropdown_placeholder">No products in Catalog! Go to \"Product Catalog\" to add one.</string>
 
     <!-- Product Details / Add Product Sheet -->
     <string name="delete_product_dialog_title">Delete Product?</string>
@@ -94,6 +94,7 @@
     <string name="total_revenue_label">Total Income</string>
     <string name="total_items_sold_label">Items Sold</string>
     <string name="products_breakdown_title">Products Sold Breakdown</string>
+    <string name="product_units_sold_format">%1$d sold ($%2$s)</string>
     <string name="detailed_sales_title">Detailed Sales Receipts</string>
     <string name="no_sales_in_period">No sales found for the selected time period.</string>
     <string name="export_dialog_title">Export Report</string>
@@ -106,4 +107,21 @@
     <string name="export_beta_disclaimer">Export formats are currently in Beta. Please verify generated files.</string>
     <string name="report_copied_toast">Report copied to clipboard!</string>
     <string name="report_preview_title">Report Text Preview</string>
+
+    <!-- Export Report Strings -->
+    <string name="report_header_title">SWIFTSALES REPORT</string>
+    <string name="report_clerk_label">Clerk / Salesperson: %1$s</string>
+    <string name="report_period_label">Period: %1$s</string>
+    <string name="report_generated_label">Generated: %1$s</string>
+    <string name="report_total_sales">Total Sales: %1$d</string>
+    <string name="report_total_income">Total Income: $%1$s</string>
+    <string name="report_total_items_sold">Total Items Sold: %1$d</string>
+    <string name="report_product_breakdown_item">• %1$s: %2$d units ($%3$s)</string>
+    <string name="report_product_breakdown_item_sold">• %1$s: %2$d units sold ($%3$s)</string>
+    <string name="report_receipt_header">%1$d. Date: %2$s | Buyer: %3$s</string>
+    <string name="report_receipt_item">   - %1$d x %2$s @ $%3$s = $%4$s</string>
+    <string name="report_receipt_notes">   Notes: %1$s</string>
+    <string name="report_csv_headers">Sale ID,Date,Buyer,Total Price,Product Name,Quantity,Unit Price,Line Total,Notes</string>
+    <string name="share_report_title">Share Sales Report</string>
+    <string name="period_to">to</string>
 </resources>

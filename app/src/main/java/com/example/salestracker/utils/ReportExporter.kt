@@ -19,6 +19,7 @@ import java.time.LocalDate
 object ReportExporter {
 
     fun generateTextReport(
+        context: Context,
         clerkName: String,
         periodText: String,
         sales: List<SaleEventWithItems>
@@ -41,49 +42,49 @@ object ReportExporter {
 
         val sb = StringBuilder()
         sb.appendLine("========================================")
-        sb.appendLine("          SWIFTSALES REPORT             ")
+        sb.appendLine("          ${context.getString(R.string.report_header_title)}             ")
         sb.appendLine("========================================")
         if (clerkName.isNotBlank()) {
-            sb.appendLine("Clerk / Salesperson: $clerkName")
+            sb.appendLine(context.getString(R.string.report_clerk_label, clerkName))
         }
-        sb.appendLine("Period: $periodText")
-        sb.appendLine("Generated: ${LocalDate.now()}")
+        sb.appendLine(context.getString(R.string.report_period_label, periodText))
+        sb.appendLine(context.getString(R.string.report_generated_label, LocalDate.now().toString()))
         sb.appendLine()
         sb.appendLine("----------------------------------------")
-        sb.appendLine("SUMMARY TOTALS")
+        sb.appendLine(context.getString(R.string.summary_section_title).uppercase())
         sb.appendLine("----------------------------------------")
-        sb.appendLine("Total Sales: $totalSalesCount")
-        sb.appendLine("Total Income: $${totalRevenue.toSwiftString()}")
-        sb.appendLine("Total Items Sold: $totalItemsSold")
+        sb.appendLine(context.getString(R.string.report_total_sales, totalSalesCount))
+        sb.appendLine(context.getString(R.string.report_total_income, totalRevenue.toSwiftString()))
+        sb.appendLine(context.getString(R.string.report_total_items_sold, totalItemsSold))
         sb.appendLine()
 
         if (productMap.isNotEmpty()) {
             sb.appendLine("----------------------------------------")
-            sb.appendLine("PRODUCTS SOLD BREAKDOWN")
+            sb.appendLine(context.getString(R.string.products_breakdown_title).uppercase())
             sb.appendLine("----------------------------------------")
             productMap.forEach { (prodName, pair) ->
-                sb.appendLine("• $prodName: ${pair.first} units ($${pair.second.toSwiftString()})")
+                sb.appendLine(context.getString(R.string.report_product_breakdown_item, prodName, pair.first, pair.second.toSwiftString()))
             }
             sb.appendLine()
         }
 
         sb.appendLine("----------------------------------------")
-        sb.appendLine("DETAILED SALES RECEIPTS")
+        sb.appendLine(context.getString(R.string.detailed_sales_title).uppercase())
         sb.appendLine("----------------------------------------")
         if (sales.isEmpty()) {
-            sb.appendLine("No sales found for this period.")
+            sb.appendLine(context.getString(R.string.no_sales_in_period))
         } else {
             sales.forEachIndexed { index, saleWithItems ->
                 val sale = saleWithItems.saleEvent
-                sb.appendLine("${index + 1}. Date: ${sale.date} | Buyer: ${sale.buyer}")
-                sb.appendLine("   Total: $${sale.totalSalePrice.toSwiftString()}")
-                sb.appendLine("   Items:")
+                sb.appendLine(context.getString(R.string.report_receipt_header, index + 1, sale.date, sale.buyer))
+                sb.appendLine("   ${context.getString(R.string.total_label)}: $${sale.totalSalePrice.toSwiftString()}")
+                sb.appendLine("   ${context.getString(R.string.products_breakdown_title)}:")
                 saleWithItems.items.forEach { item ->
                     val unitPrice = if (item.saleItem.quantity > 0) item.saleItem.salePrice / item.saleItem.quantity else 0
-                    sb.appendLine("    - ${item.saleItem.quantity} x ${item.product.name} @ $${unitPrice.toSwiftString()} = $${item.saleItem.salePrice.toSwiftString()}")
+                    sb.appendLine(context.getString(R.string.report_receipt_item, item.saleItem.quantity, item.product.name, unitPrice.toSwiftString(), item.saleItem.salePrice.toSwiftString()))
                 }
                 if (!sale.saleNotes.isNullOrBlank()) {
-                    sb.appendLine("   Notes: ${sale.saleNotes}")
+                    sb.appendLine(context.getString(R.string.report_receipt_notes, sale.saleNotes))
                 }
                 sb.appendLine()
             }
@@ -94,7 +95,7 @@ object ReportExporter {
 
     fun copyToClipboard(context: Context, text: String) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("SwiftSales Report", text)
+        val clip = ClipData.newPlainText(context.getString(R.string.report_header_title), text)
         clipboard.setPrimaryClip(clip)
         Toast.makeText(context, context.getString(R.string.report_copied_toast), Toast.LENGTH_SHORT).show()
     }
@@ -105,7 +106,7 @@ object ReportExporter {
             putExtra(Intent.EXTRA_TEXT, text)
             type = "text/plain"
         }
-        val shareIntent = Intent.createChooser(sendIntent, "Share Sales Report")
+        val shareIntent = Intent.createChooser(sendIntent, context.getString(R.string.share_report_title))
         context.startActivity(shareIntent)
     }
 
@@ -169,16 +170,16 @@ object ReportExporter {
             }
         }
 
-        canvas.drawText("SWIFTSALES - SALES REPORT", margin, y, titlePaint)
+        canvas.drawText(context.getString(R.string.report_header_title), margin, y, titlePaint)
         y += 24f
 
         if (clerkName.isNotBlank()) {
-            canvas.drawText("Clerk / Salesperson: $clerkName", margin, y, headerPaint)
+            canvas.drawText(context.getString(R.string.report_clerk_label, clerkName), margin, y, headerPaint)
             y += 18f
         }
-        canvas.drawText("Period: $periodText", margin, y, subHeaderPaint)
+        canvas.drawText(context.getString(R.string.report_period_label, periodText), margin, y, subHeaderPaint)
         y += 15f
-        canvas.drawText("Generated on: ${LocalDate.now()}", margin, y, subHeaderPaint)
+        canvas.drawText(context.getString(R.string.report_generated_label, LocalDate.now().toString()), margin, y, subHeaderPaint)
         y += 22f
 
         canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint)
@@ -189,13 +190,13 @@ object ReportExporter {
         val totalItemsSold = sales.sumOf { sale -> sale.items.sumOf { it.saleItem.quantity } }
 
         checkNewPage(90f)
-        canvas.drawText("SUMMARY TOTALS", margin, y, headerPaint)
+        canvas.drawText(context.getString(R.string.summary_section_title).uppercase(), margin, y, headerPaint)
         y += 20f
-        canvas.drawText("Total Sales: $totalSalesCount", margin + 10f, y, paint)
+        canvas.drawText(context.getString(R.string.report_total_sales, totalSalesCount), margin + 10f, y, paint)
         y += 16f
-        canvas.drawText("Total Income: $${totalRevenue.toSwiftString()}", margin + 10f, y, paint)
+        canvas.drawText(context.getString(R.string.report_total_income, totalRevenue.toSwiftString()), margin + 10f, y, paint)
         y += 16f
-        canvas.drawText("Total Items Sold: $totalItemsSold", margin + 10f, y, paint)
+        canvas.drawText(context.getString(R.string.report_total_items_sold, totalItemsSold), margin + 10f, y, paint)
         y += 22f
 
         canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint)
@@ -215,11 +216,11 @@ object ReportExporter {
 
         if (productMap.isNotEmpty()) {
             checkNewPage(30f + productMap.size * 18f)
-            canvas.drawText("PRODUCTS SOLD BREAKDOWN", margin, y, headerPaint)
+            canvas.drawText(context.getString(R.string.products_breakdown_title).uppercase(), margin, y, headerPaint)
             y += 20f
             productMap.forEach { (prodName, pair) ->
                 checkNewPage(18f)
-                val line = "• $prodName: ${pair.first} units sold ($${pair.second.toSwiftString()})"
+                val line = context.getString(R.string.report_product_breakdown_item_sold, prodName, pair.first, pair.second.toSwiftString())
                 canvas.drawText(line, margin + 10f, y, paint)
                 y += 18f
             }
@@ -229,30 +230,30 @@ object ReportExporter {
         }
 
         checkNewPage(30f)
-        canvas.drawText("DETAILED SALES RECEIPTS", margin, y, headerPaint)
+        canvas.drawText(context.getString(R.string.detailed_sales_title).uppercase(), margin, y, headerPaint)
         y += 20f
 
         if (sales.isEmpty()) {
-            canvas.drawText("No sales found for this period.", margin + 10f, y, paint)
+            canvas.drawText(context.getString(R.string.no_sales_in_period), margin + 10f, y, paint)
         } else {
             sales.forEachIndexed { index, saleWithItems ->
                 val sale = saleWithItems.saleEvent
                 val needed = 50f + saleWithItems.items.size * 16f
                 checkNewPage(needed)
 
-                val headerLine = "${index + 1}. Date: ${sale.date} | Buyer: ${sale.buyer} | Total: $${sale.totalSalePrice.toSwiftString()}"
+                val headerLine = context.getString(R.string.report_receipt_header, index + 1, sale.date, sale.buyer) + " | ${context.getString(R.string.total_label)}: $${sale.totalSalePrice.toSwiftString()}"
                 canvas.drawText(headerLine, margin, y, headerPaint)
                 y += 18f
 
                 saleWithItems.items.forEach { item ->
                     val unitPrice = if (item.saleItem.quantity > 0) item.saleItem.salePrice / item.saleItem.quantity else 0
-                    val itemLine = "   - ${item.saleItem.quantity} x ${item.product.name} @ $${unitPrice.toSwiftString()} = $${item.saleItem.salePrice.toSwiftString()}"
+                    val itemLine = context.getString(R.string.report_receipt_item, item.saleItem.quantity, item.product.name, unitPrice.toSwiftString(), item.saleItem.salePrice.toSwiftString())
                     canvas.drawText(itemLine, margin + 10f, y, paint)
                     y += 16f
                 }
 
                 if (!sale.saleNotes.isNullOrBlank()) {
-                    canvas.drawText("   Notes: ${sale.saleNotes}", margin + 10f, y, subHeaderPaint)
+                    canvas.drawText(context.getString(R.string.report_receipt_notes, sale.saleNotes), margin + 10f, y, subHeaderPaint)
                     y += 16f
                 }
                 y += 10f
@@ -278,12 +279,12 @@ object ReportExporter {
     ) {
         val csvFile = File(context.cacheDir, "SwiftSales_Report_${System.currentTimeMillis()}.csv")
         csvFile.printWriter().use { out ->
-            out.println("SWIFTSALES REPORT")
-            if (clerkName.isNotBlank()) out.println("Clerk,\"$clerkName\"")
-            out.println("Period,\"$periodText\"")
-            out.println("Generated,\"${LocalDate.now()}\"")
+            out.println(context.getString(R.string.report_header_title))
+            if (clerkName.isNotBlank()) out.println("\"${context.getString(R.string.report_clerk_label, clerkName)}\"")
+            out.println("\"${context.getString(R.string.report_period_label, periodText)}\"")
+            out.println("\"${context.getString(R.string.report_generated_label, LocalDate.now().toString())}\"")
             out.println()
-            out.println("Sale ID,Date,Buyer,Total Price,Product Name,Quantity,Unit Price,Line Total,Notes")
+            out.println(context.getString(R.string.report_csv_headers))
 
             sales.forEach { saleWithItems ->
                 val sale = saleWithItems.saleEvent
@@ -343,7 +344,7 @@ object ReportExporter {
             type = mimeType
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-        val shareIntent = Intent.createChooser(sendIntent, "Export Sales Report")
+        val shareIntent = Intent.createChooser(sendIntent, context.getString(R.string.share_report_title))
         context.startActivity(shareIntent)
     }
 }
