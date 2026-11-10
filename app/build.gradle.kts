@@ -13,18 +13,22 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.salestracker"
+        // Unique Play Store Application ID (replaces com.example.* to satisfy Google Play publishing policy)
+        applicationId = "com.stephentechlabs.swiftsales"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // Enable R8 code shrinking and obfuscation for production security and smaller APK size
+            isMinifyEnabled = true
+            // Enable unused resource stripping to minimize bundle size
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

@@ -22,7 +22,6 @@ import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.TableChart
@@ -54,7 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.salestracker.R
-import com.example.salestracker.SalesListItem
+import com.example.salestracker.ui.screens.sale.list.SalesListItem
 import com.example.salestracker.ui.components.DatePicker
 import com.example.salestracker.ui.components.SalesAppBar
 import com.example.salestracker.utils.ReportExporter

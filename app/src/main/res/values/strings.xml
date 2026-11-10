@@ -95,7 +95,7 @@
     <string name="total_items_sold_label">Items Sold</string>
     <string name="products_breakdown_title">Products Sold Breakdown</string>
     <string name="product_units_sold_format">%1$d sold ($%2$s)</string>
-    <string name="detailed_sales_title">Detailed Sales Receipts</string>
+    <string name="detailed_sales_title">Detailed Receipts</string>
     <string name="no_sales_in_period">No sales found for the selected time period.</string>
     <string name="export_dialog_title">Export Report</string>
     <string name="export_copy_text">Copy Text Report</string>
