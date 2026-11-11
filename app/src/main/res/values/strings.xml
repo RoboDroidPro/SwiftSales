@@ -124,4 +124,22 @@
     <string name="report_csv_headers">Sale ID,Date,Buyer,Total Price,Product Name,Quantity,Unit Price,Line Total,Notes</string>
     <string name="share_report_title">Share Sales Report</string>
     <string name="period_to">to</string>
+
+    <!-- Help & About Screen -->
+    <string name="help_about_title">Help &amp; About</string>
+    <string name="go_to_help_description">Go to Help and About</string>
+    <string name="about_section_title">About SwiftSales</string>
+    <string name="app_version_label">Version 1.0.0</string>
+    <string name="app_description">SwiftSales is a fast, offline-first sales tracking and receipt generator designed for small businesses and independent merchants.</string>
+    <string name="github_repo_label">GitHub Repository (Open Source)</string>
+    <string name="contact_email_label">Contact Support</string>
+    <string name="help_guide_title">User Guide</string>
+    <string name="help_add_sale_title">Adding a Sale</string>
+    <string name="help_add_sale_content">To add a sale, tap the \"+\" icon at the bottom right of the All Sales screen.\n\n• Date: Defaults to today, but can be set to past or future dates.\n• Buyer: Name or description of the client buying items.\n• Total Sale Price: Read-only field auto-calculated from sale items.\n• Notes: Optional notes (e.g. \"Paid via bank transfer\", tip notes, etc.).</string>
+    <string name="help_items_title">Sale Items &amp; Pricing</string>
+    <string name="help_items_content">You can add multiple items to a single sale, including repeating products with different unit prices:\n\n• Product: Select from your catalog (out-of-stock items are disabled).\n• Unit Price: Defaults to catalog price, but can be customized for discounts or special pricing.\n• Quantity: Quantity sold (defaults to 1).\n• Line Total: Automatically calculated by multiplying Unit Price and Quantity.\n• Delete Icon: Removes an item from the sale.</string>
+    <string name="help_catalog_title">Product Catalog</string>
+    <string name="help_catalog_content">Manage your products in the Product Catalog:\n\n• Add / Edit / Delete products and set default prices.\n• Mark products IN STOCK or OUT OF STOCK.\n• Set Order Index numbers to customize display order.</string>
+    <string name="help_reports_title">Stats &amp; Exporting Reports</string>
+    <string name="help_reports_content">Filter your sales by time period (Today, This Week, This Month, Custom Range), enter clerk/salesperson attribution, and export reports in PDF, CSV, or QuickBooks (.iif) formats.</string>
 </resources>

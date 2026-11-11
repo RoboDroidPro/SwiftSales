@@ -124,4 +124,22 @@
     <string name="report_csv_headers">ID de venta,Fecha,Cliente,Precio total,Nombre del producto,Cantidad,Precio unitario,Total de línea,Notas</string>
     <string name="share_report_title">Compartir informe de ventas</string>
     <string name="period_to">a</string>
+
+    <!-- Help & About Screen -->
+    <string name="help_about_title">Ayuda &amp; Info</string>
+    <string name="go_to_help_description">Ir a Ayuda e Información</string>
+    <string name="about_section_title">Acerca de SwiftSales</string>
+    <string name="app_version_label">Versión 1.0.0</string>
+    <string name="app_description">SwiftSales es una aplicación rápida y sin conexión para el registro de ventas y generación de recibos, diseñada para pequeños negocios y comerciantes independientes.</string>
+    <string name="github_repo_label">Repositorio en GitHub (Código abierto)</string>
+    <string name="contact_email_label">Contacto de soporte</string>
+    <string name="help_guide_title">Guía de usuario</string>
+    <string name="help_add_sale_title">Agregar una venta</string>
+    <string name="help_add_sale_content">Para agregar una venta, selecciona el ícono \"+\" en la esquina inferior derecha de la pantalla Todas las ventas.\n\n• Fecha: Se completa automáticamente con la fecha de hoy, pero puedes seleccionar fechas pasadas o futuras.\n• Cliente: Nombre o descripción del comprador.\n• Precio total de la venta: Campo de solo lectura calculado automáticamente a partir de los artículos.\n• Notas: Notas opcionales (ej. \"Pago por transferencia bancaria\", notas de propina, etc.).</string>
+    <string name="help_items_title">Artículos de venta y precios</string>
+    <string name="help_items_content">Puedes agregar múltiples artículos a una sola venta, e incluso repetir productos con precios unitarios diferentes:\n\n• Producto: Selecciónalo de tu catálogo (los productos agotados están desactivados).\n• Precio unitario: Se completa con el precio del catálogo, pero puedes cambiarlo para aplicar descuentos o precios especiales.\n• Cantidad: Cantidad vendida de este artículo (por defecto es 1).\n• Total de línea: Se calcula automáticamente multiplicando el Precio unitario por la Cantidad.\n• Ícono de papelera: Quita el artículo de la lista.</string>
+    <string name="help_catalog_title">Catálogo de productos</string>
+    <string name="help_catalog_content">Administra tus productos en el Catálogo de productos:\n\n• Agrega, edita o elimina productos y define sus precios predeterminados.\n• Marca productos como IN STOCK o AGOTADO.\n• Ajusta el número de orden en la lista para personalizar el orden de aparición.</string>
+    <string name="help_reports_title">Estadísticas y exportación de informes</string>
+    <string name="help_reports_content">Filtra tus ventas por período de tiempo (Hoy, Esta semana, Este mes, Rango personalizado), indica el nombre del cajero o vendedor y exporta informes en formatos PDF, CSV o QuickBooks (.iif).</string>
 </resources>

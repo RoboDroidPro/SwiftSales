@@ -10,11 +10,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Category
-import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
@@ -40,6 +39,7 @@ import com.example.salestracker.R
 fun SalesNavDrawer(
     onNavToSettings: () -> Unit = {},
     onNavToStats: () -> Unit = {},
+    onNavToHelp: () -> Unit = {},
     drawerState: DrawerState = DrawerState(DrawerValue.Closed),
     headerTitle: String = "SwiftSales",
     content: @Composable () -> Unit = {  }
@@ -50,7 +50,8 @@ fun SalesNavDrawer(
             SalesDrawerSheet(
                 headerTitle = headerTitle,
                 onSettingsClick = onNavToSettings,
-                onStatsClick = onNavToStats
+                onStatsClick = onNavToStats,
+                onHelpClick = onNavToHelp
             )
         },
         drawerState = drawerState,
@@ -63,7 +64,8 @@ fun SalesDrawerSheet(
     headerTitle: String = "SwiftSales",
     onSettingsClick: () -> Unit = {},
     onStatsClick: () -> Unit = {},
-    ) {
+    onHelpClick: () -> Unit = {},
+) {
     ModalDrawerSheet(
         modifier = Modifier
             .width(280.dp)
@@ -84,6 +86,12 @@ fun SalesDrawerSheet(
                 buttonIcon = Icons.Outlined.Category,
                 buttonLabel = stringResource(R.string.settings_label),
                 buttonIconContentDescription = stringResource(R.string.go_to_settings_description)
+            )
+            DrawerNavButton(
+                navButtonClick = onHelpClick,
+                buttonIcon = Icons.AutoMirrored.Outlined.HelpOutline,
+                buttonLabel = stringResource(R.string.help_about_title),
+                buttonIconContentDescription = stringResource(R.string.go_to_help_description)
             )
         }
     }

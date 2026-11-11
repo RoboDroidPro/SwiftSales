@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.salestracker.R
 import com.example.salestracker.ui.components.SalesNavDrawer
+import com.example.salestracker.ui.screens.help.HelpScreen
 import com.example.salestracker.ui.screens.sale.add.AddEditSaleScreen
 import com.example.salestracker.ui.screens.sale.list.AllSalesScreen
 import com.example.salestracker.ui.screens.settings.SettingsScreen
@@ -91,7 +92,6 @@ fun SaleNavGraph(
             }
             // we need an instance of the AllSalesViewModel — get it from hiltViewModel()
             val allSalesViewModel = hiltViewModel<AllSalesViewModel>(parentEntry)
-
             val parentSavedStateHandle = parentEntry.savedStateHandle
 
             LaunchedEffect(navController) {
@@ -117,6 +117,14 @@ fun SaleNavGraph(
                         drawerState.close()
                     }
                 },
+                onNavToHelp = {
+                    navController.navigate(HelpDes) {
+                        popUpTo(SalesListDes) { inclusive = false}
+                    }
+                    coroutineScope.launch {
+                        drawerState.close()
+                    }
+                },
                 drawerState = drawerState
             ) {
                 AllSalesScreen(
@@ -128,7 +136,7 @@ fun SaleNavGraph(
                     onMenuClick = { coroutineScope.launch { drawerState.open() } },
                     onStatsClick = { navController.navigate(StatsDes) },
                     viewModel = allSalesViewModel,
-                    savedStateHandle = parentSavedStateHandle  // new param
+                    savedStateHandle = parentSavedStateHandle
                 )
             }
         }
@@ -162,7 +170,6 @@ fun SaleNavGraph(
                         }
                     }
                     navController.popBackStack(SalesListDes, inclusive = false)
-
                 },
             )
         }
@@ -170,6 +177,13 @@ fun SaleNavGraph(
         //Settings
         composable<SettingsDes> {
             SettingsScreen(
+                onBackClicked = { navController.popBackStack(SalesListDes, inclusive = false) }
+            )
+        }
+
+        //Help & About
+        composable<HelpDes> {
+            HelpScreen(
                 onBackClicked = { navController.popBackStack(SalesListDes, inclusive = false) }
             )
         }

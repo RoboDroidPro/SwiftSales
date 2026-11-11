@@ -14,3 +14,6 @@ object SettingsDes
 @Serializable
 object StatsDes
 
+@Serializable
+object HelpDes
+
