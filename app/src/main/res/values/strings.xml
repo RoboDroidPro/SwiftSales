@@ -131,15 +131,26 @@
     <string name="about_section_title">About SwiftSales</string>
     <string name="app_version_label">Version 1.0.0</string>
     <string name="app_description">SwiftSales is a fast, offline-first sales tracking and receipt generator designed for small businesses and independent merchants.</string>
-    <string name="github_repo_label">GitHub Repository (Open Source)</string>
-    <string name="contact_email_label">Contact Support</string>
+    <string name="github_repo_label">GitHub Repo</string>
+    <string name="report_issue_label">Report Issue</string>
+    <string name="contact_email_label">Email Support</string>
     <string name="help_guide_title">User Guide</string>
+
     <string name="help_add_sale_title">Adding a Sale</string>
-    <string name="help_add_sale_content">To add a sale, tap the \"+\" icon at the bottom right of the All Sales screen.\n\n• Date: Defaults to today, but can be set to past or future dates.\n• Buyer: Name or description of the client buying items.\n• Total Sale Price: Read-only field auto-calculated from sale items.\n• Notes: Optional notes (e.g. \"Paid via bank transfer\", tip notes, etc.).</string>
+    <string name="help_add_sale_content">To add a sale, click the \"+\" icon in the bottom right corner of the \"All Sales\" screen.\n\nThe Add Sale form has these fields:\n• Date: Autofilled to today, but can be set to past or future dates (to give you full control).\n• Buyer: Intended for a name or description of the client buying items.\n• Total Sale Price: READ-ONLY field auto-calculated from sale items.\n• Notes: Optional notes (e.g., \"Paid via bank transfer\", tip notes, etc.).\n\nNote: If you need to sell 1 item of \"Product 1\" at a lower price and several more at a higher price, simply add another sale item for \"Product 1\" with a different Unit Price.</string>
+
+    <string name="help_edit_sale_title">Editing a Sale</string>
+    <string name="help_edit_sale_content">To edit a sale, click the sale you wish to edit in the list and make your changes. If you make changes and attempt to go back without saving, a confirmation dialog will appear to prevent accidental loss. To save changes, click \"Cancel\" on the dialog and then click \"Save\". To discard changes, click \"Discard\".</string>
+
     <string name="help_items_title">Sale Items &amp; Pricing</string>
-    <string name="help_items_content">You can add multiple items to a single sale, including repeating products with different unit prices:\n\n• Product: Select from your catalog (out-of-stock items are disabled).\n• Unit Price: Defaults to catalog price, but can be customized for discounts or special pricing.\n• Quantity: Quantity sold (defaults to 1).\n• Line Total: Automatically calculated by multiplying Unit Price and Quantity.\n• Delete Icon: Removes an item from the sale.</string>
+    <string name="help_items_content">You can add as many items as you want, even repeating the same product. Each item has these fields:\n• Product: Dropdown populated from your catalog. Out of stock items are greyed out.\n• Unit Price: Defaults to catalog price. Can be edited for discounts or custom pricing.\n• Quantity: Quantity sold (defaults to 1).\n• Line Total: Automatically calculated by multiplying Unit Price and Quantity.\n• Trash Icon: Removes the sale item.\n• \"Add Product to Sale\" button: Adds a new blank item.\n• Click \"Done\" (checkmark icon) to save the sale.</string>
+
     <string name="help_catalog_title">Product Catalog</string>
-    <string name="help_catalog_content">Manage your products in the Product Catalog:\n\n• Add / Edit / Delete products and set default prices.\n• Mark products IN STOCK or OUT OF STOCK.\n• Set Order Index numbers to customize display order.</string>
-    <string name="help_reports_title">Stats &amp; Exporting Reports</string>
-    <string name="help_reports_content">Filter your sales by time period (Today, This Week, This Month, Custom Range), enter clerk/salesperson attribution, and export reports in PDF, CSV, or QuickBooks (.iif) formats.</string>
+    <string name="help_catalog_content">Manage your products in the Product Catalog:\n• Add, edit, or delete products and set default prices.\n• Toggle IN STOCK / OUT OF STOCK status.\n• Set Order Index numbers to customize display order (higher numbers appear lower on the list).\n\nNote: Products that still have active sales records CANNOT be deleted to prevent losing historical sales info.</string>
+
+    <string name="help_reports_title">Stats &amp; Exports</string>
+    <string name="help_reports_content">In Stats &amp; Reports you can get a quick overview of your sales and export reports to PDF, CSV, or QuickBooks (.iif):\n• Timeframe Selection: Choose any time frame button to filter sales. Use \"All Time\" to view all records.\n• Clerk / Salesperson: Optional field to credit sales in exported reports.\n• Export Data Button: Select your desired export format (PDF, CSV, QuickBooks).\n• Report Preview: Check the live preview to verify all figures before exporting.</string>
+
+    <string name="help_dev_note_title">Developer Note, Privacy &amp; Control</string>
+    <string name="help_dev_note_content">I hope this app is a great help to you! As the developer, my goal was to build a simple, useful, and private solution for managing sales. Please keep these principles in mind:\n\n1. Your info is YOURS ONLY. SwiftSales is 100% offline and shares NO data without your explicit consent.\n2. YOU control the app. Features like setting future dates are deliberately unrestricted.\n3. YOU are responsible for how you use this app.\n\nIf you encounter any issues or have feedback, feel free to report an Issue on GitHub or send an email:</string>
 </resources>

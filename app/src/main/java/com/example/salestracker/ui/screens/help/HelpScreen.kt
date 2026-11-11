@@ -17,6 +17,7 @@ import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,7 +40,7 @@ import com.example.salestracker.ui.components.SalesAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HelpScreen(
-    onBackClicked: () -> Unit = {}
+    onBackClicked: () -> Unit = {},
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -108,39 +109,6 @@ fun HelpScreen(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
-
-                    Spacer(Modifier.height(4.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        OutlinedButton(
-                            onClick = {
-                                try {
-                                    uriHandler.openUri("https://github.com/stephentechlabs/SwiftSales")
-                                } catch (_: Exception) { }
-                            },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(Icons.Default.Code, contentDescription = null)
-                            Spacer(Modifier.width(6.dp))
-                            Text(stringResource(R.string.github_repo_label), style = MaterialTheme.typography.labelSmall)
-                        }
-
-                        OutlinedButton(
-                            onClick = {
-                                try {
-                                    uriHandler.openUri("mailto:support@stephentechlabs.com")
-                                } catch (_: Exception) { }
-                            },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(Icons.Default.Email, contentDescription = null)
-                            Spacer(Modifier.width(6.dp))
-                            Text(stringResource(R.string.contact_email_label), style = MaterialTheme.typography.labelSmall)
-                        }
-                    }
                 }
             }
 
@@ -158,7 +126,13 @@ fun HelpScreen(
                 content = stringResource(R.string.help_add_sale_content)
             )
 
-            // Section: Sale Items
+            // Section: Editing a Sale
+            HelpGuideCard(
+                title = stringResource(R.string.help_edit_sale_title),
+                content = stringResource(R.string.help_edit_sale_content)
+            )
+
+            // Section: Sale Items & Pricing
             HelpGuideCard(
                 title = stringResource(R.string.help_items_title),
                 content = stringResource(R.string.help_items_content)
@@ -170,11 +144,91 @@ fun HelpScreen(
                 content = stringResource(R.string.help_catalog_content)
             )
 
-            // Section: Stats & Reports
+            // Section: Stats & Exports
             HelpGuideCard(
                 title = stringResource(R.string.help_reports_title),
                 content = stringResource(R.string.help_reports_content)
             )
+
+            // --- DEVELOPER NOTE, PRIVACY & CONTROL CARD ---
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Shield,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.tertiary
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = stringResource(R.string.help_dev_note_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
+                    }
+
+                    Text(
+                        text = stringResource(R.string.help_dev_note_content),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onTertiaryContainer
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        OutlinedButton(
+                            onClick = {
+                                try {
+                                    uriHandler.openUri(GitHubRepoLink)
+                                } catch (_: Exception) { }
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(Icons.Default.Code, contentDescription = null)
+                            Spacer(Modifier.width(4.dp))
+                            Text(stringResource(R.string.github_repo_label), style = MaterialTheme.typography.labelSmall)
+                        }
+
+                        OutlinedButton(
+                            onClick = {
+                                try {
+                                    uriHandler.openUri(GitHubNewIssueLink)
+                                } catch (_: Exception) { }
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(Icons.AutoMirrored.Outlined.HelpOutline, contentDescription = null)
+                            Spacer(Modifier.width(4.dp))
+                            Text(stringResource(R.string.report_issue_label), style = MaterialTheme.typography.labelSmall)
+                        }
+
+                        OutlinedButton(
+                            onClick = {
+                                try {
+                                    uriHandler.openUri(SupportEmailLink)
+                                } catch (_: Exception) { }
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(Icons.Default.Email, contentDescription = null)
+                            Spacer(Modifier.width(4.dp))
+                            Text(stringResource(R.string.contact_email_label), style = MaterialTheme.typography.labelSmall)
+                        }
+                    }
+                }
+            }
 
             Spacer(Modifier.height(16.dp))
         }

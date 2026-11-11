@@ -126,20 +126,31 @@
     <string name="period_to">a</string>
 
     <!-- Help & About Screen -->
-    <string name="help_about_title">Ayuda &amp; Info</string>
-    <string name="go_to_help_description">Ir a Ayuda e Información</string>
+    <string name="help_about_title">Ayuda y Acerca de</string>
+    <string name="go_to_help_description">Ir a Ayuda y Acerca de</string>
     <string name="about_section_title">Acerca de SwiftSales</string>
     <string name="app_version_label">Versión 1.0.0</string>
     <string name="app_description">SwiftSales es una aplicación rápida y sin conexión para el registro de ventas y generación de recibos, diseñada para pequeños negocios y comerciantes independientes.</string>
-    <string name="github_repo_label">Repositorio en GitHub (Código abierto)</string>
-    <string name="contact_email_label">Contacto de soporte</string>
+    <string name="github_repo_label">Repo GitHub</string>
+    <string name="report_issue_label">Reportar problema</string>
+    <string name="contact_email_label">Correo soporte</string>
     <string name="help_guide_title">Guía de usuario</string>
+
     <string name="help_add_sale_title">Agregar una venta</string>
-    <string name="help_add_sale_content">Para agregar una venta, selecciona el ícono \"+\" en la esquina inferior derecha de la pantalla Todas las ventas.\n\n• Fecha: Se completa automáticamente con la fecha de hoy, pero puedes seleccionar fechas pasadas o futuras.\n• Cliente: Nombre o descripción del comprador.\n• Precio total de la venta: Campo de solo lectura calculado automáticamente a partir de los artículos.\n• Notas: Notas opcionales (ej. \"Pago por transferencia bancaria\", notas de propina, etc.).</string>
+    <string name="help_add_sale_content">Para agregar una venta, selecciona el ícono \"+\" en la esquina inferior derecha de la pantalla \"Todas las ventas\".\n\nEl formulario contiene estos campos:\n• Fecha: Se completa automáticamente con la fecha de hoy, pero puedes seleccionar fechas pasadas o futuras.\n• Cliente: Nombre o descripción del comprador.\n• Precio total de la venta: Campo de SOLO LECTURA calculado automáticamente a partir de los artículos.\n• Notas: Notas opcionales (ej. \"Pago por transferencia\", notas de propina, etc.).\n\nNota: Si necesitas vender 1 artículo a un precio menor y varios más a un precio mayor, simplemente agrega otra entrada para el mismo producto con un Precio unitario diferente.</string>
+
+    <string name="help_edit_sale_title">Editar una venta</string>
+    <string name="help_edit_sale_content">Para editar una venta, selecciona la venta a editar en la lista y haz los cambios. Si has hecho cambios y presionas \"Atrás\" sin guardar, aparecerá una ventana de confirmación para evitar que pierdas información. Si quieres guardar los cambios, selecciona \"Cancelar\" y luego \"Guardar\". Si deseas descartarlos, selecciona \"Descartar\".</string>
+
     <string name="help_items_title">Artículos de venta y precios</string>
-    <string name="help_items_content">Puedes agregar múltiples artículos a una sola venta, e incluso repetir productos con precios unitarios diferentes:\n\n• Producto: Selecciónalo de tu catálogo (los productos agotados están desactivados).\n• Precio unitario: Se completa con el precio del catálogo, pero puedes cambiarlo para aplicar descuentos o precios especiales.\n• Cantidad: Cantidad vendida de este artículo (por defecto es 1).\n• Total de línea: Se calcula automáticamente multiplicando el Precio unitario por la Cantidad.\n• Ícono de papelera: Quita el artículo de la lista.</string>
+    <string name="help_items_content">Puedes agregar tantos artículos como desees, incluso repitiendo el mismo producto. Cada artículo tiene estos campos:\n• Producto: Menú desplegable con tus productos del catálogo. Los productos agotados se muestran desactivados.\n• Precio unitario: Se completa con el precio del catálogo, pero puedes cambiarlo para aplicar descuentos.\n• Cantidad: Cantidad vendida (por defecto 1).\n• Total de línea: Calculado automáticamente multiplicando Precio unitario por Cantidad.\n• Ícono de papelera: Quita el artículo de la venta.\n• Botón \"Agregar producto a la venta\": Agrega un nuevo artículo en blanco.\n• Presiona \"Guardar\" (ícono de verificación) para guardar la venta.</string>
+
     <string name="help_catalog_title">Catálogo de productos</string>
-    <string name="help_catalog_content">Administra tus productos en el Catálogo de productos:\n\n• Agrega, edita o elimina productos y define sus precios predeterminados.\n• Marca productos como IN STOCK o AGOTADO.\n• Ajusta el número de orden en la lista para personalizar el orden de aparición.</string>
-    <string name="help_reports_title">Estadísticas y exportación de informes</string>
-    <string name="help_reports_content">Filtra tus ventas por período de tiempo (Hoy, Esta semana, Este mes, Rango personalizado), indica el nombre del cajero o vendedor y exporta informes en formatos PDF, CSV o QuickBooks (.iif).</string>
+    <string name="help_catalog_content">Administra tus productos en el Catálogo de productos:\n• Agrega, edita o elimina productos y define sus precios predeterminados.\n• Cambia el estado a EN EXISTENCIA o AGOTADO.\n• Ajusta el número de Orden en la lista para personalizar el orden de aparición.\n\nNota: Los productos que aún se mencionan en ventas guardadas NO se pueden eliminar para evitar que pierdas información de tus ventas pasadas.</string>
+
+    <string name="help_reports_title">Estadísticas &amp; Exportar</string>
+    <string name="help_reports_content">En Estadísticas tienes un reporte rápido de tus ventas, así como la opción de exportarlas a PDF, CSV o QuickBooks (.iif):\n• Selección de filtro: Puedes escoger un filtro de tiempo para mostrar solo las ventas del período determinado. Si no ves ventas, intenta usar \"Todo el período\".\n• Vendedor: El campo Vendedor se usa para incluir tu nombre en el reporte. Útil si eres empleado y deseas especificar quién realizó las ventas.\n• Exportar datos: Cuando hayas revisado la vista previa y estés satisfecho, selecciona \"Exportar datos\" y escoge el formato adecuado.\n• Vista previa: Revisa la vista previa para asegurar que los datos a exportar sean correctos.</string>
+
+    <string name="help_dev_note_title">Nota del Desarrollador, Privacidad y Control</string>
+    <string name="help_dev_note_content">Espero que esta aplicación sea de gran ayuda para ti. Como desarrollador, mi meta fue producir una solución sencilla, útil y privada para la gestión de ventas. Por favor recuerda estos principios:\n\n1. Tu información es SÓLO TUYA. Esta aplicación es 100% desconectada e independiente de internet y NO transmite ninguna información sin tu aprobación.\n2. TÚ estás en control de la aplicación (por ejemplo, acciones como hacer una venta en una fecha futura no están restringidas).\n3. TÚ eres responsable por tu uso de esta aplicación.\n\nSi encuentras algún problema o tienes alguna sugerencia, puedes reportar un \"Issue\" en GitHub o enviar un correo electrónico:</string>
 </resources>
