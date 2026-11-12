@@ -66,20 +66,20 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("androidx.room:room-runtime:2.7.2")
-    ksp("androidx.room:room-compiler:2.7.2")
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 
     //Navigation
-    implementation("androidx.navigation:navigation-compose:2.9.5")
+    implementation(libs.androidx.navigation.compose)
 
     // Add this (BOM will provide the version) Added for icons' unresolved reference
-    implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.androidx.compose.material.icons.extended)
 
     // --- Hilt ---
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     // Hilt + Jetpack Compose integration
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.androidx.hilt.navigation.compose)
 
     //added for serialization
     implementation(libs.kotlinx.serialization.json)
