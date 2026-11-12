@@ -29,6 +29,7 @@ import com.example.salestracker.R
 import com.example.salestracker.data.model.SaleEventWithItems
 import com.example.salestracker.utils.toSwiftString
 
+// Removed experimental api annotation because Android Studio flagged it as unnecessary
 @Composable
 fun SalesListItem(
     modifier: Modifier = Modifier,
