@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.salestracker.R
 import com.example.salestracker.data.model.Product
+import androidx.compose.material3.MenuAnchorType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,8 +29,6 @@ fun ProductDropdown(
     productOptions: List<Product>
 ) {
     var expanded by remember { mutableStateOf(false) }
-
-//    val productOptions: List<ProductItem> = emptyList()
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -44,9 +43,8 @@ fun ProductDropdown(
             isError = isDropdownError, // Highlights the box in red
             supportingText = supportingText,
             modifier = Modifier
-                .menuAnchor()
+                .menuAnchor(type = MenuAnchorType.PrimaryNotEditable)
                 .fillMaxWidth()
-//                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)   //replace the above menuAnchor with this better version
         )
 
         ExposedDropdownMenu(
