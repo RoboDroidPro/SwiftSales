@@ -83,10 +83,10 @@ fun AllSalesScreen(
 
     val context = LocalContext.current
     LaunchedEffect(Unit) {
-        Log.d(TAG, "Inside Launched effect Snackbar")
+        // Log.d(TAG, "Inside Launched effect Snackbar")
         savedStateHandle.getStateFlow<Int?>(SNACKBAR_MSG_KEY, null).collect { msgRes ->
             if (msgRes != null) {
-                Log.d(TAG, "allSales snackbar event collected: $msgRes")
+                // Log.d(TAG, "allSales snackbar event collected: $msgRes")
                 snackBarHostState.showSnackbar(context.getString(msgRes))
                 savedStateHandle[SNACKBAR_MSG_KEY] = null
             }

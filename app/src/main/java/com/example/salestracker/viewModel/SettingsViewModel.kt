@@ -135,7 +135,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun drawerSaveClicked() {
-        Log.d(SETTAG, "drawer save clicked")
+        // Log.d(SETTAG, "drawer save clicked")
 
         val currentState = _settingsUIState.value
         val priceInt = currentState.productPrice.toSwiftCurrency()
@@ -185,7 +185,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun saveProduct(product: Product) {
-        Log.d(SETTAG, "save product called with product ${product.name}")
+        // Log.d(SETTAG, "save product called with product ${product.name}")
         viewModelScope.launch {
             repository.upsertProductItem(product)
         }

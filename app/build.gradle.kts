@@ -10,14 +10,14 @@ plugins {
 
 android {
     namespace = "com.example.salestracker"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         // Unique Play Store Application ID (replaces com.example.* to satisfy Google Play publishing policy)
         applicationId = "com.stephentechlabs.swiftsales"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 1
+        targetSdk = 36  //updated to 36 to fix play console error
+        versionCode = 2
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

@@ -205,7 +205,7 @@ class AddSaleViewModel @Inject constructor(
                         }
                         is SaleItemAction.QuantityChanged -> {
                             val cleanedQty = action.newQuantity.replace(" 1", "")
-                            Log.d(TAG, "cleanedQty: $cleanedQty")
+                            // Log.d(TAG, "cleanedQty: $cleanedQty")
                             saleItemState.copy(
                                 quantity = cleanedQty.toIntOrNull(),
                                 lineTotal = calculatePrice(
@@ -244,7 +244,7 @@ class AddSaleViewModel @Inject constructor(
     }
 
     fun saveSale(){ // removed the boolean return, and its return statements below, because it is no longer necessary
-        Log.d(TAG, "saveSale called")
+        // Log.d(TAG, "saveSale called")
 
         val buyerError = if (_addSaleUIState.value.buyer.isBlank()) R.string.buyer_required_error else null
         val itemsError = if (_addSaleUIState.value.saleItems.isEmpty()) R.string.add_one_item_error else null
@@ -254,7 +254,7 @@ class AddSaleViewModel @Inject constructor(
             itemFieldsValid()
         ) {
             viewModelScope.launch {
-                Log.d(TAG, "viewModelScope.launch called")
+                // Log.d(TAG, "viewModelScope.launch called")
                 val saleEventId = originalSale ?: UUID.randomUUID().toString()
 
                 // 1. Create the Header (Entity)
@@ -265,7 +265,7 @@ class AddSaleViewModel @Inject constructor(
                     totalSalePrice = uiState.value.totalSalePrice.toSwiftCurrency() ?: 0,
                     saleNotes = uiState.value.saleNotes
                 )
-                Log.d(TAG, "event created")
+                // Log.d(TAG, "event created")
 
                 // 2. Create the Items (List of Entities)
                 val items = uiState.value.saleItems.map { itemState ->

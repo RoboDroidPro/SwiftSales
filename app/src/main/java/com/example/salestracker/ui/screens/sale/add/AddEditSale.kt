@@ -63,13 +63,13 @@ fun AddEditSaleScreen(
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.addEditEvents.collect { event ->
-            Log.d(TAG, "AddEditEvent collection: [$event]")
+            // Log.d(TAG, "AddEditEvent collection: [$event]")
             when(event) {
                 is AddEditUIEvent.ShowSnackbar -> {
                     snackBarHostState.showSnackbar(
                         context.getString(event.messageRes)
                     )
-                    Log.d(TAG, "addEditEvent is show snackbar '${context.getString(event.messageRes)}'")
+                    // Log.d(TAG, "addEditEvent is show snackbar '${context.getString(event.messageRes)}'")
                 }
                 /**
                  * This below contains the navigateBack event sent from [AddSaleViewModel.saveSale]
@@ -79,7 +79,7 @@ fun AddEditSaleScreen(
                  */
                 is AddEditUIEvent.NavigateBack -> {
                     onNavigateToAllSales(event.resultCode)   //calls onNavigate passing the result code passed from the event flow
-                    Log.d(TAG, "addEditEvent is nav back '${event.resultCode}'")
+                    // Log.d(TAG, "addEditEvent is nav back '${event.resultCode}'")
                 }
             }
         }
@@ -104,7 +104,7 @@ fun AddEditSaleScreen(
         floatingActionButton = {
             SaleFAB(
                 onFABClick = {
-                    Log.d("ArduinoNewSale", "AddEdit.FabClick")
+                    // Log.d("ArduinoNewSale", "AddEdit.FabClick")
                     viewModel.saveSale() // saveSale() starts the navigation to allSales.
                     //thus, we only need to call save.
                 },
