@@ -4,11 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -61,7 +63,8 @@ fun AddProductSheet(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(700.dp) //todo possibly this should be removed and replaced with something more flexible. Maybe a fill max width on the modal sheet plus padding at the top
+            .fillMaxHeight(0.85f)
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 12.dp)
             .imePadding(),
         verticalArrangement = Arrangement.spacedBy(8.dp),

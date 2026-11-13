@@ -132,8 +132,8 @@
     <string name="app_version_label">Versión 1.0.0</string>
     <string name="app_description">SwiftSales es una aplicación rápida y sin conexión para el registro de ventas y generación de recibos, diseñada para pequeños negocios y comerciantes independientes.</string>
     <string name="github_repo_label">Repo GitHub</string>
-    <string name="report_issue_label">Reportar problema</string>
-    <string name="contact_email_label">Correo soporte</string>
+    <string name="report_issue_label">Reportar "Issue" en GitHub</string>
+    <string name="contact_email_label">Contactar soporte</string>
     <string name="help_guide_title">Guía de usuario</string>
 
     <string name="help_add_sale_title">Agregar una venta</string>

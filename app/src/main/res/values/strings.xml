@@ -132,7 +132,7 @@
     <string name="app_version_label">Version 1.0.0</string>
     <string name="app_description">SwiftSales is a fast, offline-first sales tracking and receipt generator designed for small businesses and independent merchants.</string>
     <string name="github_repo_label">GitHub Repo</string>
-    <string name="report_issue_label">Report Issue</string>
+    <string name="report_issue_label">Report Issue on GitHub</string>
     <string name="contact_email_label">Email Support</string>
     <string name="help_guide_title">User Guide</string>
 
