@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.salestracker"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         // Unique Play Store Application ID (replaces com.example.* to satisfy Google Play publishing policy)

@@ -1,6 +1,7 @@
 package com.example.salestracker.ui.screens.sale.list
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,7 @@ import com.example.salestracker.R
 import com.example.salestracker.data.model.SaleEventWithItems
 import com.example.salestracker.utils.toSwiftString
 
-// Removed experimental api annotation because Android Studio flagged it as unnecessary
+@OptIn(ExperimentalFoundationApi::class)  //Removing this may or may not cause build errors
 @Composable
 fun SalesListItem(
     modifier: Modifier = Modifier,
