@@ -184,47 +184,52 @@ fun HelpScreen(
                         color = MaterialTheme.colorScheme.onTertiaryContainer
                     )
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        OutlinedButton(
-                            onClick = {
-                                try {
-                                    uriHandler.openUri(GitHubRepoLink)
-                                } catch (_: Exception) { }
-                            },
-                            modifier = Modifier.weight(1f)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            Icon(Icons.Default.Code, contentDescription = null)
-                            Spacer(Modifier.width(2.dp))
-                            Text(stringResource(R.string.github_repo_label), style = MaterialTheme.typography.labelSmall)
+                            OutlinedButton(
+                                onClick = {
+                                    try {
+                                        uriHandler.openUri(GitHubRepoLink)
+                                    } catch (_: Exception) { }
+                                },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Icon(Icons.Default.Code, contentDescription = null)
+                                Spacer(Modifier.width(4.dp))
+                                Text(stringResource(R.string.github_repo_label), style = MaterialTheme.typography.labelSmall)
+                            }
+
+                            OutlinedButton(
+                                onClick = {
+                                    try {
+                                        uriHandler.openUri(SupportEmailLink)
+                                    } catch (_: Exception) { }
+                                },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Icon(Icons.Default.Email, contentDescription = null)
+                                Spacer(Modifier.width(4.dp))
+                                Text(stringResource(R.string.contact_email_label), style = MaterialTheme.typography.labelSmall)
+                            }
                         }
 
                         OutlinedButton(
                             onClick = {
                                 try {
-                                    uriHandler.openUri(SupportEmailLink)
+                                    uriHandler.openUri(GitHubNewIssueLink)
                                 } catch (_: Exception) { }
                             },
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Icon(Icons.Default.Email, contentDescription = null)
-                            Spacer(Modifier.width(2.dp))
-                            Text(stringResource(R.string.contact_email_label), style = MaterialTheme.typography.labelSmall)
+                            Icon(Icons.AutoMirrored.Outlined.HelpOutline, contentDescription = null)
+                            Spacer(Modifier.width(4.dp))
+                            Text(stringResource(R.string.report_issue_label), style = MaterialTheme.typography.labelSmall)
                         }
-                    }
-                    OutlinedButton(
-                        onClick = {
-                            try {
-                                uriHandler.openUri(GitHubNewIssueLink)
-                            } catch (_: Exception) { }
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Icon(Icons.AutoMirrored.Outlined.HelpOutline, contentDescription = null)
-                        Spacer(Modifier.width(4.dp))
-                        Text(stringResource(R.string.report_issue_label), style = MaterialTheme.typography.labelSmall)
                     }
                 }
             }

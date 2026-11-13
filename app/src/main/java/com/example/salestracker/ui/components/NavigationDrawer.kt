@@ -18,7 +18,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -42,9 +41,8 @@ fun SalesNavDrawer(
     onNavToHelp: () -> Unit = {},
     drawerState: DrawerState = DrawerState(DrawerValue.Closed),
     headerTitle: String = "SwiftSales",
-    content: @Composable () -> Unit = {  }
+    content: @Composable () -> Unit = {}
 ) {
-
     ModalNavigationDrawer(
         drawerContent = {
             SalesDrawerSheet(
@@ -67,14 +65,17 @@ fun SalesDrawerSheet(
     onHelpClick: () -> Unit = {},
 ) {
     ModalDrawerSheet(
-        modifier = Modifier
-            .width(280.dp)
+        drawerContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        modifier = Modifier.width(280.dp)
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
             DrawerHeader(headerTitle = headerTitle)
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(24.dp))
+
             DrawerNavButton(
                 navButtonClick = onStatsClick,
                 buttonIcon = Icons.Default.BarChart,
@@ -110,14 +111,14 @@ fun DrawerHeader(
     ) {
         Text(
             text = headerTitle,
-            fontSize = 28.sp,
+            fontSize = 26.sp,
             fontWeight = FontWeight.ExtraBold,
-//            color = MaterialTheme.colorScheme.primary, // Use theme's teal color
-            modifier = modifier//.padding(20.dp)
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(bottom = 12.dp)
         )
         HorizontalDivider(
-            thickness = 2.dp,
-//            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f) // Light teal divider
+            thickness = 1.5.dp,
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
         )
     }
 }
@@ -128,14 +129,14 @@ fun DrawerNavButton(
     buttonIcon: ImageVector = Icons.Default.Add,
     buttonIconContentDescription: String = "Add",
     buttonLabel: String = "Add",
-    iconTintColor: Color = LocalContentColor.current
+    iconTintColor: Color = MaterialTheme.colorScheme.primary
 ) {
     TextButton(
         onClick = navButtonClick,
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(horizontal = 12.dp, vertical = 4.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -145,15 +146,14 @@ fun DrawerNavButton(
                 imageVector = buttonIcon,
                 contentDescription = buttonIconContentDescription,
                 tint = iconTintColor,
-                modifier = Modifier
-                    .size(40.dp)
+                modifier = Modifier.size(28.dp)
             )
             Text(
                 text = buttonLabel,
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 22.sp),
-                color = iconTintColor,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(start = 16.dp)
-
             )
         }
     }
