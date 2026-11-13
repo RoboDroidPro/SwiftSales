@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
@@ -26,7 +27,12 @@ fun SalesAppBar(
     navigationIcon: @Composable (() -> Unit) = { IconButton(onClick = onNavigationIconClicked) { Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.open_nav_drawer_description)) } },
     moreTopBarActions: @Composable (RowScope.() -> Unit) = {},
     scrollBehaviour: TopAppBarScrollBehavior? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors()
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+    )
 ) {
     TopAppBar(
         title = { Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold) },
